@@ -1,7 +1,8 @@
 /* header */
 body{
     height: 100vh; /* Thiết lập chiều cao của body là 100% chiều cao của viewport */
-    overflow: hidden
+    /* tắt thuộc tính fix cố định trang web */
+    /* overflow: hidden */
 }
 header{
     background-color: #4F4F4F;
