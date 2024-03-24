@@ -24,7 +24,7 @@ class UserController extends Controller
             $request->session()->put('user_name', $user->name);
             $request->session()->put('logged_in', true);
             if ($user->role === 1) {
-                return view('admin.home');
+                return redirect()->route('product');
             }
             return redirect()->route('home');
         }else {
