@@ -19,16 +19,22 @@
                     Đăng ký ngay để nhận được nhiều khuyến mãi đặc biệt</p>
             </div>
             <div class="col-7 d-flex justify-content-center align-items-center register_background">
-                <form action="#" method="POST" class="register_form">
+                <form method="POST" class="register_form">
+                    @csrf
                     <div class="container">
                         <h1>Tạo tài khoản</h1>
 
-                        <input type="text" name="userName" placeholder="Nhập họ và tên" required>
-                        <input type="email" placeholder="Email" name="email" required>
-                        <input type="phone" name="phone" placeholder="Số điện thoại" required>
-                        <input type="text" name="nameLogin" placeholder="Tên đăng nhập" required>
-                        <input type="password" placeholder="Mật khẩu" name="password" required>
-                        <input type="password" placeholder="Xác nhận mật khẩu" name="vnpassword" required>
+                        <input type="text" name="userName" placeholder="Nhập họ và tên" required minlength="3" value="{{old('userName')}}">
+                        <input type="email" placeholder="Email" name="email" required value="{{old('email')}}">
+                        @error('email')
+                            <p style="color: red">{{$message}}</p>
+                        @enderror
+                        <input type="phone" name="phone" placeholder="Số điện thoại" required minlength="10" value="{{old('phone')}}">
+                        <input type="password" placeholder="Mật khẩu" name="password" required minlength="8">
+                        <input type="password" placeholder="Xác nhận mật khẩu" name="vnpassword" required minlength="8">
+                        @error('vnpassword')
+                            <p style="color: red">{{$message}}</p>
+                        @enderror
 
                         <div class="row">
                             <div class="col-1"></div>

@@ -28,4 +28,8 @@ class Users extends Model
         ->first();
         return $user ? $user : null;
     }
+
+    public function addUser($data){
+        DB::insert('INSERT INTO users (email, name, password, role, phone_number, status) VALUES (?, ?, ?, ?, ?, ?)', $data);
+    }
 }

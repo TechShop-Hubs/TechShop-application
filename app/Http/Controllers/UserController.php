@@ -16,10 +16,6 @@ class UserController extends Controller
         $this->users = new Users();
     }
 
-    public function index(){
-        return view('login');
-    }
-
     public function login(Request $request)
     {
         $userDetail = $this->users->getDetail($request->email, $request->password);
@@ -28,5 +24,27 @@ class UserController extends Controller
         }else {
             return back()->withInput($request->only('email'));
         }
+    }
+
+    public function register(Request $request){
+        $request->validate([
+            'email' => 'required|email|unique:users',
+            'password' => 'required',
+            'vnpassword' => 'required|same:password',
+        ], [
+            'email.unique' => 'Email đã tồn tại trên hệ thống.',
+            'vnpassword.same' => 'Mật khẩu và mật khẩu xác nhận không khớp.'
+        ]);
+        $dataInsert = [
+            $request->email,
+            $request->userName,
+            $request->password,
+            0,
+            $request->phone,
+            1
+        ];
+        $this->users->addUser($dataInsert);
+
+        return redirect()->route('home');
     }
 }
