@@ -18,8 +18,14 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-        $userDetail = $this->users->getDetail($request->email, $request->password);
-        if (!empty($userDetail)) {
+        $user = $this->users->getDetail($request->email, $request->password);
+        if (!empty($user)) {
+            $request->session()->put('user_id', $user->id);
+            $request->session()->put('user_name', $user->name);
+            $request->session()->put('logged_in', true);
+            if ($user->role === 1) {
+                return view('admin.home');
+            }
             return redirect()->route('home');
         }else {
             return back()->withInput($request->only('email'));
@@ -45,6 +51,6 @@ class UserController extends Controller
         ];
         $this->users->addUser($dataInsert);
 
-        return redirect()->route('home');
+        return redirect()->route('login');
     }
 }

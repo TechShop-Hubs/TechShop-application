@@ -20,7 +20,7 @@ Route::get('/', function () {
 
 Route::get('/home', function () {
     return view('clients.home');
-});
+})->name('home');
 
 Route::get('/product', function () {
     return view('clients.products');
@@ -35,7 +35,7 @@ Route::get('/product/realme', function () {
 });
 Route::get('/product/samsung', function () {
     return view('clients.samsung');
-})->name('home');
+});
 
 Route::get('/login', function () {
     return view('login');
