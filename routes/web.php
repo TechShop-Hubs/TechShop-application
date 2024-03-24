@@ -15,6 +15,25 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/home', function () {
+    return view('clients.home');
+});
+
+Route::get('/product', function () {
+    return view('clients.products');
+});
+
+Route::get('/product/oppo', function () {
+    return view('clients.oppo');
+});
+
+Route::get('/product/realme', function () {
+    return view('clients.realme');
+});
+Route::get('/product/samsung', function () {
+    return view('clients.samsung');
 })->name('home');
 
 Route::get('/login', function () {
