@@ -34,7 +34,6 @@ Route::get('/product/realme', function () {
 });
 Route::get('/product/samsung', function () {
     return view('clients.samsung');
-});
 })->name('home');
 
 Route::get('/login', function () {

@@ -1,7 +1,7 @@
 <div class="row bg-dark bg-gradient text-white mt-4 m-0 p-0">
     <div class="row pt-3 m-0">
         <div class="col">
-            <img src="/assets/images/logo.png" alt="">
+            <img src="/assets/images/logo.png" alt="" style="height: 200px;">
         </div>
         <div class="col">
             <p>GIỚI THIỆU VỀ CÔNG TY</p>

@@ -10,7 +10,7 @@
 </head>
 <div class="row bg-dark bg-gradient text-white mt-4 m-0 p-0 ">
     <div class="col m-2">
-        <a href="/home"><img src="/assets/images/logo.png" alt="" style="height:50px;"></a>
+        <a href="/home"><img src="/assets/images/logo.png" alt="" style="height:60px;"></a>
     </div>
     <input class="col-5 m-3 rounded" type="text" name="search" id="" placeholder="Nhập Thứ Cần Tìm...">
     <button class="col-1 m-3 rounded bg-warning bg-gradient bg-opacity-60 m-2">
