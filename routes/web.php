@@ -35,3 +35,12 @@ Route::get('/product/realme', function () {
 Route::get('/product/samsung', function () {
     return view('clients.samsung');
 });
+})->name('home');
+
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
+
+Route::get('/register', function () {
+    return view('register');
+})->name('register');
