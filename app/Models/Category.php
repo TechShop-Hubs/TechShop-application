@@ -32,7 +32,7 @@ class Category extends Model
             return false;
         } else {
             // Nếu không, thêm dữ liệu vào cơ sở dữ liệu
-            DB::insert('INSERT INTO category (kind, brand) VALUES (?, ?)', [$data['kind'], $data['brand']]);
+           return DB::insert('INSERT INTO category (kind, brand) VALUES (?, ?)', [$data['kind'], $data['brand']]);
         }
     }
     public function updateCategory($data, $id)

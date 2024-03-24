@@ -15,8 +15,10 @@
     <div class="navbar container-fluid d-flex justify-content-between align-items-center pe-5">
         <button class="btn btn-success btn-lg" type="submit" name="create">
             <a class="text-decoration-none text-white" href="{{route('createCategory')}}">Tạo mới</a>
-
         </button>
+        @if (session('msg'))
+        <div class="alert alert-success">{{ session('msg') }}</div>
+    @endif
     </div>
     <!-- Hiển thị danh sách sản phẩm -->
     <div class="container-fluid pt-3">
