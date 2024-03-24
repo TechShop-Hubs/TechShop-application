@@ -50,12 +50,12 @@ class AdminController extends Controller
     
         $success = $this->categories->createCategory($dataInsert);
     
-        if($success){
+        if($success!=false){
             // Chuyển hướng về route 'categories' với thông báo thành công
-            return redirect()->route('categories')->with('msg', 'Thêm thành công');
+            return redirect()->route('categories')->with('msg', 'Thêm thành công danh mục thành công');
         } else {
             // Nếu dữ liệu không thể được thêm vào cơ sở dữ liệu, trở lại trang tạo mới danh mục với thông báo lỗi
-            // return redirect()->route('createCategory')->with('msg', 'Thêm thất bại');
+            return redirect()->route('createCategory')->with('msg', 'Thêm thất bại do danh mục và tên này đã tồn tại');
         }
     }
         
@@ -103,7 +103,7 @@ class AdminController extends Controller
         $data['title'] = 'Xóa danh mục';   
         $id = $request->id;
         $this->categories->deleteCategory($id);
-        return redirect()->route('categories')->with('msg',' Them thành công');
+        return redirect()->route('categories')->with('msg',' Xóa thành công');
         
     }
     public function getAllUsers(Request $request){
@@ -166,6 +166,5 @@ class AdminController extends Controller
         $banners = DB::table('banner')->paginate(5);
         return view('admin.banner', compact('data', 'banners'));
     }
-    
-    
+     
 }

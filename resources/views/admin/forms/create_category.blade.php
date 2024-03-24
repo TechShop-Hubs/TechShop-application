@@ -11,6 +11,10 @@
         </div>
     </div>
 
+    @if (session('msg'))
+        <div class="alert alert-danger">{{ session('msg') }}</div>
+    @endif
+
     @if ($errors->any())
         <div class="alert alert-danger">Dữ liệu không hợp lệ vui lòng nhập lại</div>
     @endif
