@@ -30,9 +30,12 @@
             </div>
             <div class="col-5 login_background">
                 <div class="login_background_1">
-                    <form class="login_form">
-                        <input class="login_name" type="text" name="userName" placeholder="Email - Tài khoản">
-                        <input class="login_pass" type="text" name="password" placeholder="Mật khẩu">
+                    <form method="POST" class="login_form">
+                        @csrf
+                        <input class="login_email" type="email" name="email" placeholder="Email - Tài khoản" value="{{old('email')}}"
+                            required>
+                        <input class="login_pass" type="password" name="password" placeholder="Mật khẩu" required
+                            minlength="8">
                         <button class="login_button" type="submit">Đăng nhập</button>
                     </form>
                     <a class="login_question" href="{{ route('home') }}">Bạn quên mật khẩu ?</a>
