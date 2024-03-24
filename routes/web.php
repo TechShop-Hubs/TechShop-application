@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 
 /*
@@ -20,7 +21,7 @@ Route::get('/', function () {
 
 Route::get('/home', function () {
     return view('clients.home');
-});
+})->name('home');
 
 Route::get('/product', function () {
     return view('clients.products');
@@ -35,7 +36,7 @@ Route::get('/product/realme', function () {
 });
 Route::get('/product/samsung', function () {
     return view('clients.samsung');
-})->name('home');
+});
 
 Route::get('/login', function () {
     return view('login');
@@ -45,10 +46,14 @@ Route::get('/register', function () {
     return view('register');
 })->name('register');
 
+Route::post('/login', [UserController::class, 'login']);
+
+Route::post('/register', [UserController::class, 'register']);
+
 
 Route::prefix('admin')->group(function () {
     Route::get('/product', [AdminController::class, 'index'])->name('product');
-    
+
     Route::get('/category', [AdminController::class, 'getCategories'])->name('categories');
     Route::get('/category/create', [AdminController::class, 'getFormCreateCategory'])->name('createCategory');
     Route::post('/category/create', [AdminController::class, 'postCreateCategory'])->name('postCreateCategory');
