@@ -15,8 +15,10 @@
     <div class="navbar container-fluid d-flex justify-content-between align-items-center pe-5">
         <button class="btn btn-success btn-lg" type="submit" name="create">
             <a class="text-decoration-none text-white" href="{{route('createCategory')}}">Tạo mới</a>
-
         </button>
+        @if (session('msg'))
+        <div class="alert alert-success">{{ session('msg') }}</div>
+    @endif
     </div>
     <!-- Hiển thị danh sách sản phẩm -->
     <div class="container-fluid pt-3">
@@ -24,7 +26,8 @@
             <thead>
                 <tr>
                     <th scope="col">STT</th>
-                    <th scope="col">Tên</th>
+                    <th scope="col">Loại</th>
+                    <th scope="col">Hãng</th>
                     <th class="col">Thao tác</th>
                 </tr>
             </thead>
@@ -32,10 +35,11 @@
                 @foreach ($categories as $index => $category)
                     <tr>
                         <th scope="row">{{ $index + 1 }}</th>
+                        <td>{{ $category->kind }}</td>
                         <td>{{ $category->brand }}</td>
                         <td>
                             <a href="{{route('updateCategory',['id'=>$category->id])}}" class="btn btn-warning">Cập nhật</a>
-                            <a href="#" class="btn btn-danger">Xóa</a>
+                            <a href="{{route('deleteCategory',['id'=>$category->id])}}" class="btn btn-danger">Xóa</a>
                         </td>
                     </tr>
                 @endforeach

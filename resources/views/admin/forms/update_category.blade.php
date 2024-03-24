@@ -13,11 +13,17 @@
     <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('categories')}}">Về danh sách</a></div>
 
     <form action="" method="POST">
+        @csrf
         <div class="row">
             <div class="col-4 border mt-5 d-flex flex-column gap-5">
                 <h2>Sửa danh mục</h2>
-                <input type="text" class="form-control" name="category" id="" placeholder="Tên danh mục" value="{{$category->kind}}" >
+                <label for="kind">Loại</label>
+                <input type="text" class="form-control" name="kind" id="" placeholder="Loại danh mục" value="{{$category->kind}}" >
+                <label for="brand">Hãng</label>
+                <input type="text" class="form-control" name="brand" id="" placeholder="Hãng" value="{{$category->brand}}" >
+                <input type="hidden" name="id" value="{{$category->id}}">
                 <button class="btn btn-success" type="submit">Sửa</button>
+
             </div>
         </div>
     </form>

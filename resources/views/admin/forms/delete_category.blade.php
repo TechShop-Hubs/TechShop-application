@@ -16,24 +16,25 @@
         <table>
             <thead>
                 <tr>
-                    <th>Tên</th>
-                    <th>Giá</th>
+                    <th>Loại</th>
+                    <th>Hãng</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <th>{{ $product->name }}</th>
+                    <th>{{ $category->kind }}</th>
                
-                    <td>{{ $product->price }}</td>
+                    <td>{{ $category->brand }}</td>
                 </tr>
             </tbody>
         </table>
     </div>
     <form action="" method="post">
         @csrf
-        <input type="hidden" name="delete">
+        <input type="hidden" name="delete" >
+        <input type="hidden" name="id" value="{{$category->id}}">
         <button class="btn btn-warning" type="submit">Xóa</button>
-        <button class="btn btn-secondary "><a class="text-decoration-none text-white" href="/admin/product">Hủy</a></button>
+        <button class="btn btn-secondary "><a class="text-decoration-none text-white" href="/admin/category">Hủy</a></button>
     </form>
 
 @endsection
