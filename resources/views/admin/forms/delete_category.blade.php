@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="/api/admin/product">Về danh sách</a></div>
+    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="/admin/product">Về danh sách</a></div>
     <h3 class="pt-5">Bạn có chắc chắn muốn xóa sản phẩm này</h3>
     <div class="data">
         <table>

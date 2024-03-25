@@ -12,9 +12,12 @@
         </div>
     </div>
     {{-- nav --}}
-    {{-- <div class="navbar container-fluid d-flex justify-content-between align-items-center pe-5">
-        <button class="btn btn-success btn-lg" type="submit" name="create">Tạo mới</button>
-    </div> --}}
+    <div class="navbar container-fluid d-flex justify-content-between align-items-center pe-5">
+        <a href="{{route('createUser')}}"><button class="btn btn-success btn-lg" type="submit" name="create">Tạo mới</button></a>
+    </div>
+    @if (session('msg'))
+        <div class="alert alert-success">{{ session('msg') }}</div>
+    @endif
     <!-- Hiển thị danh sách sản phẩm -->
     <div class="container-fluid pt-3">
         <table class="table">
@@ -45,7 +48,7 @@
                         <td>
                             <a href="{{ route('detailUser', ['id' => $user->id]) }}" class="btn btn-primary">Xem</a>
                             <a href="{{ route('updateUser', ['id' => $user->id]) }}" class="btn btn-warning">Cập nhật</a>
-                            <a href="#" class="btn btn-danger">Xóa</a>
+                            <a href="{{ route('deleteUser', ['id' => $user->id])}}" class="btn btn-danger">Xóa</a>
                         </td>
                     </tr>
                 @endforeach

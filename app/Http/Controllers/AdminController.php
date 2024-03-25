@@ -106,11 +106,7 @@ class AdminController extends Controller
         return redirect()->route('categories')->with('msg',' Xóa thành công');
         
     }
-    public function getAllUsers(Request $request){
-        $data['title'] = 'Danh sách người dùng';
-        $users = DB::table('users')->paginate(5); // Phân trang với mỗi trang chứa 10 sản phẩm
-        return view('admin.user', compact('data', 'users'));
-    }
+
     public function getAllOrders(Request $request){
         $data['title'] = 'Danh sách đơn hàng';
         $orders = DB::table('orders')->paginate(5); // Phân trang với mỗi trang chứa 10 sản phẩm
@@ -142,18 +138,8 @@ class AdminController extends Controller
         $product = DB::table('products')->where('id', $id)->first();
         return view('admin.forms.delete_product', compact('data', 'product'));
     }
-    public function getDetailUser($id){
-        $data['title'] = 'Chi tiết khách hàng';   
-        // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
-        $user = DB::table('users')->where('id', $id)->first();
-        return view('admin.forms.detail_user', compact('data', 'user'));
-    }
-    public function getUpdateUser($id){
-        $data['title'] = 'Chỉnh sửa thông tin khách hàng';   
-        // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
-        $user = DB::table('users')->where('id', $id)->first();
-        return view('admin.forms.update_user', compact('data', 'user'));
-    }
+ 
+
     public function getContact(){
         $data['title'] = 'Danh sách liên hệ';   
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
