@@ -81,9 +81,12 @@ class UserController extends Controller
     }
     public function getAllUsers(Request $request){
         $data['title'] = 'Danh sách người dùng';
-        $users = DB::table('users')->paginate(5); // Phân trang với mỗi trang chứa 10 sản phẩm
+        $users = DB::table('users')
+                    ->where('status', 1) // Add condition to filter by status = 1
+                    ->paginate(5); // Paginate the results with 5 users per page
         return view('admin.user', compact('data', 'users'));
     }
+    
     //tạo mới người dùng admin
     public function createUser(Request $request){
         $request->validate([

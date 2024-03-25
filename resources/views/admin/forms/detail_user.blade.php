@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="/admin/product">Về danh sách</a></div>
+    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('users')}}">Về danh sách</a></div>
     <div class="container">
         <h2>Thông tin cơ bản</h2>
         <div class="">

@@ -52,8 +52,8 @@ Route::post('/register', [UserController::class, 'register']);
 
 
 Route::prefix('admin')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('product');
-    Route::get('/product', [AdminController::class, 'index']);
+    Route::get('/', [AdminController::class, 'index']);
+    Route::get('/product', [AdminController::class, 'index'])->name('product');
 
     Route::get('/category', [AdminController::class, 'getCategories'])->name('categories');
     Route::get('/category/create', [AdminController::class, 'getFormCreateCategory'])->name('createCategory');

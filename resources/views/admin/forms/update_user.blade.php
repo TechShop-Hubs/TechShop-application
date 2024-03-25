@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="/admin/user">Về danh sách</a></div>
+    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('users')}}">Về danh sách</a></div>
     @if ($errors->any())
         <div class="alert alert-danger">Dữ liệu không hợp lệ vui lòng nhập lại</div>
     @endif
