@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClientsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +16,8 @@ use App\Http\Controllers\AdminController;
 |
 */
 
-Route::get('/', function () {
-    return view('clients.home');
-});
 
-Route::get('/clients/home', [ClientsController::class, 'index']);
+Route::get('/', [ClientsController::class, 'index'])->name('home');
 
 Route::get('/clients/products', [ClientsController::class, 'products']);
 
