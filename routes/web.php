@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ClientsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,24 +17,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home', function () {
-    return view('clients.home');
-});
+Route::get('/clients/home', [ClientsController::class, 'index']);
 
-Route::get('/product', function () {
-    return view('clients.products');
-});
+Route::get('/clients/products', [ClientsController::class, 'products']);
 
-Route::get('/product/oppo', function () {
-    return view('clients.oppo');
-});
+Route::get('/clients/iphone', [ClientsController::class, 'iphone']);
 
-Route::get('/product/realme', function () {
-    return view('clients.realme');
-});
-Route::get('/product/samsung', function () {
-    return view('clients.samsung');
-})->name('home');
+Route::get('/clients/oppo', [ClientsController::class, 'oppo']);
+
+Route::post('/clients/oppo', [ClientsController::class, 'filters']);
+
+Route::get('/clients/samsung', [ClientsController::class, 'samsung']);
 
 Route::get('/login', function () {
     return view('login');
