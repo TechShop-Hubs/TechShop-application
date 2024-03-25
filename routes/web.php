@@ -73,11 +73,16 @@ Route::prefix('admin')->group(function () {
     Route::post('/user/update/{id}', [UserController::class, 'postUpdateUser']);
 
     Route::get('/order', [AdminController::class, 'getAllOrders'])->name('orders');
+
     Route::get('/product/create', [AdminController::class, 'getFormCreateProduct'])->name('createProduct');
     Route::get('/product/{id}', [AdminController::class, 'getDetailProduct'])->name('detailProduct');
     Route::get('/product/update/{id}', [AdminController::class, 'getUpdateProduct'])->name('updateProduct');
     Route::get('/product/delete/{id}', [AdminController::class, 'getDeleteProduct'])->name('deleteProduct');
+    Route::post('/product/update/{id}', [AdminController::class, 'postUpdateProduct']);
+    Route::post('/product/delete/{id}', [AdminController::class,'postDeleteProduct']);
+
     Route::get('/contact', [AdminController::class, 'getContact'])->name('contact');
     Route::get('/banner', [AdminController::class, 'getBanner'])->name('banner');
     Route::get('/wishlist', [AdminController::class, 'getWishList'])->name('wishList');
+
 });

@@ -18,6 +18,13 @@ class Category extends Model
         $categories = DB::table('category')->distinct()->paginate(5);
         return $categories;
     }
+    public function getAllCategoriesName()
+    {
+        $categories = DB::table($this->table)
+            ->select(DB::raw("CONCAT(kind, '_', brand) AS kind_brand"), 'id')
+            ->get();
+        return $categories;
+    }
     public function createCategory($data)
     {
         // Kiểm tra xem cặp 'kind' và 'brand' đã tồn tại chưa
@@ -42,7 +49,7 @@ class Category extends Model
             ->where('kind', $data['kind'])
             ->where('brand', $data['brand'])
             ->exists();
-    
+
         // If the combination already exists, handle it accordingly
         if ($existingCategory) {
             return false; // You may want to handle this case differently

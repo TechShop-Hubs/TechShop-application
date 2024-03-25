@@ -25,7 +25,7 @@
                     </div>
                     <div class="">
                         <label for="category" class="form-label">Danh mục</label>
-                        <input type="text" class="form-control" name="category" id="" value="{{$product->category_id}}" disabled>
+                        <input type="text" class="form-control" name="category" id="" value="{{$category->kind}}_{{$category->brand}}" disabled>
                     </div>
                     <div class="">
                         <label for="quantity" class="form-label">Số lượng</label>

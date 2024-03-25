@@ -24,21 +24,21 @@ class UserController extends Controller
     public function setRole(int $role){
         // role =1 là administrator
        $this->role = $role;
-       return $this->role; 
+       return $this->role;
     }
     public function setStatus(int $status){
         // status =1 là tài khoản đang hoạt động
        $this->status = $status;
-       return $this->status; 
+       return $this->status;
     }
     public function getDetailUser($id){
-        $data['title'] = 'Chi tiết khách hàng';   
+        $data['title'] = 'Chi tiết khách hàng';
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $user = DB::table('users')->where('id', $id)->first();
         return view('admin.forms.detail_user', compact('data', 'user'));
     }
     public function getUpdateUser($id){
-        $data['title'] = 'Chỉnh sửa thông tin khách hàng';   
+        $data['title'] = 'Chỉnh sửa thông tin khách hàng';
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $user = DB::table('users')->where('id', $id)->first();
         return view('admin.forms.update_user', compact('data', 'user'));
@@ -58,7 +58,7 @@ class UserController extends Controller
         ], [
             'email.unique' => 'Email đã tồn tại trên hệ thống.',
         ]);
-    
+
         $dataInsert = [
             'email' => $request->email,
             'name' => $request->name,
@@ -67,12 +67,12 @@ class UserController extends Controller
             'phone_number' => $request->phone,
             'status' => $this->setStatus(1)
         ];
-    
+
         $this->users->updateUser($request->id, $dataInsert);
-    
+
         return redirect()->route('users')->with('msg', 'Chỉnh sửa dùng thành công');
     }
-    
+
 
 
     public function getFormCreateUser(){
@@ -86,7 +86,7 @@ class UserController extends Controller
                     ->paginate(5); // Paginate the results with 5 users per page
         return view('admin.user', compact('data', 'users'));
     }
-    
+
     //tạo mới người dùng admin
     public function createUser(Request $request){
         $request->validate([
@@ -108,12 +108,14 @@ class UserController extends Controller
         $this->users->addUser($dataInsert);
         return redirect()->route('users')->with('msg' ,'Thêm người dùng mới thành công');
     }
+
     public function getDeleteUser($id) {
-        $data['title'] = 'Xóa người dùng';   
+        $data['title'] = 'Xóa người dùng';
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $users = DB::table('users')->where('id', $id)->first();
         return view('admin.forms.delete_user', compact('data', 'users'));
     }
+
     public function postDeleteUser(Request $request){
         $id = $request->id;
         $this->users->deleteUser($id);
@@ -160,7 +162,6 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        
         return response()->json(['message' => 'User deleted successfully']);
     }
 }
