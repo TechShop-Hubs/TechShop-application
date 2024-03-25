@@ -10,7 +10,10 @@
             </div>
         </div>
     </div>
-    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="/api/admin/product">Về danh sách</a></div>
+    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('users')}}">Về danh sách</a></div>
+    @if ($errors->any())
+        <div class="alert alert-danger">Dữ liệu không hợp lệ vui lòng nhập lại</div>
+    @endif
     <div class="container">
         <form action="" method="post">
             @csrf
@@ -18,18 +21,30 @@
             <div class="">
                 <label for="name" class="form-label">Tên</label>
                 <input type="text" class="form-control" name="name" id="name" value="{{$user->name}}"  >
+                @error('name')
+                <span style="color:red">{{ $message }}</span>
+            @enderror
             </div>
             <div class="">
                 <label for="email" class="form-label">email</label>
                 <input type="text" class="form-control" name="email" id="email" value="{{$user->email}}" >
+                @error('email')
+                <span style="color:red">{{ $message }}</span>
+            @enderror
             </div>
             <div class="">
                 <label for="phone" class="form-label">Số điện thoại</label>
                 <input type="text" class="form-control" name="phone" id="" value="{{$user->phone_number}}" >
+                @error('phone')
+                <span style="color:red">{{ $message }}</span>
+            @enderror
             </div>
             <div class="pb-5">
                 <label for="password" class="form-label">Mật khẩu</label>
                 <input type="text" class="form-control" name="password" id="" value="{{$user->password}}" >
+                @error('password')
+                <span style="color:red">{{ $message }}</span>
+            @enderror
             </div>
             <button class="btn btn-success " type="submit">Lưu</button>
         </form>

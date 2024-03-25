@@ -52,6 +52,7 @@ Route::post('/register', [UserController::class, 'register']);
 
 
 Route::prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index']);
     Route::get('/product', [AdminController::class, 'index'])->name('product');
 
     Route::get('/category', [AdminController::class, 'getCategories'])->name('categories');
@@ -62,14 +63,20 @@ Route::prefix('admin')->group(function () {
     Route::get('/category/delete/{id}', [AdminController::class, 'getDeleteCategory'])->name('deleteCategory');
     Route::post('/category/delete/{id}', [AdminController::class, 'postDeleteCategory']);
 
-    Route::get('/user', [AdminController::class, 'getAllUsers'])->name('users');
+    Route::get('/user', [UserController::class, 'getAllUsers'])->name('users');
+    Route::get('/user/create', [UserController::class, 'getFormCreateUser'])->name('createUser');
+    Route::post('/user/create', [UserController::class, 'createUser']);
+    Route::get('/user/delete/{id}', [UserController::class,'getDeleteUser'])->name('deleteUser');
+    Route::post('/user/delete/{id}', [UserController::class,'postDeleteUser']);
+    Route::get('/user/{id}', [UserController::class, 'getDetailUser'])->name('detailUser');
+    Route::get('/user/update/{id}', [UserController::class, 'getUpdateUser'])->name('updateUser');
+    Route::post('/user/update/{id}', [UserController::class, 'postUpdateUser']);
+
     Route::get('/order', [AdminController::class, 'getAllOrders'])->name('orders');
     Route::get('/product/create', [AdminController::class, 'getFormCreateProduct'])->name('createProduct');
     Route::get('/product/{id}', [AdminController::class, 'getDetailProduct'])->name('detailProduct');
     Route::get('/product/update/{id}', [AdminController::class, 'getUpdateProduct'])->name('updateProduct');
     Route::get('/product/delete/{id}', [AdminController::class, 'getDeleteProduct'])->name('deleteProduct');
-    Route::get('/user/{id}', [AdminController::class, 'getDetailUser'])->name('detailUser');
-    Route::get('/user/update/{id}', [AdminController::class, 'getUpdateUser'])->name('updateUser');
     Route::get('/contact', [AdminController::class, 'getContact'])->name('contact');
     Route::get('/banner', [AdminController::class, 'getBanner'])->name('banner');
     Route::get('/wishlist', [AdminController::class, 'getWishList'])->name('wishList');

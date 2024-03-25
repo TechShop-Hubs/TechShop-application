@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="/api/admin/product">Về danh sách</a></div>
+    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('product')}}">Về danh sách</a></div>
     <div class="container">
             <div class="row">
                 <div class="col-12 col-lg-4">
@@ -76,6 +76,6 @@
                     <div id="image-container-wrapper"></div>
                 </div>
             </div>
-            <button class="btn btn-success "><a class="text-decoration-none text-white" href="/api/admin/product">Quay lại</a></button>
+            <button class="btn btn-success "><a class="text-decoration-none text-white" href="/admin/product">Quay lại</a></button>
     </div>
 @endsection

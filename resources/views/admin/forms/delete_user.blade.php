@@ -10,21 +10,23 @@
             </div>
         </div>
     </div>
-    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('categories')}}">Về danh sách</a></div>
-    <h3 class="pt-5">Bạn có chắc chắn muốn xóa sản phẩm này</h3>
+    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('users')}}">Về danh sách</a></div>
+    <h3 class="pt-5">Bạn có chắc chắn muốn xóa người dùng này</h3>
     <div class="data">
-        <table>
+        <table class="table table-colapse" >
             <thead>
                 <tr>
-                    <th>Loại</th>
-                    <th>Hãng</th>
+                    <th>Tên</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <th>{{ $category->kind }}</th>
+                    <th>{{ $users->name }}</th>
                
-                    <td>{{ $category->brand }}</td>
+                    <td>{{ $users->email }}</td>
+                    <td>{{ $users->phone_number }}</td>
                 </tr>
             </tbody>
         </table>
@@ -32,9 +34,9 @@
     <form action="" method="post">
         @csrf
         <input type="hidden" name="delete" >
-        <input type="hidden" name="id" value="{{$category->id}}">
+        <input type="hidden" name="id" value="{{$users->id}}">
         <button class="btn btn-warning" type="submit">Xóa</button>
-        <button class="btn btn-secondary "><a class="text-decoration-none text-white" href="/admin/category">Hủy</a></button>
+        <button class="btn btn-secondary "><a class="text-decoration-none text-white" href="/admin/user">Hủy</a></button>
     </form>
 
 @endsection
