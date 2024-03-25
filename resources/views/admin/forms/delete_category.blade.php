@@ -10,30 +10,31 @@
             </div>
         </div>
     </div>
-    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('product')}}">Về danh sách</a></div>
+    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('categories')}}">Về danh sách</a></div>
     <h3 class="pt-5">Bạn có chắc chắn muốn xóa sản phẩm này</h3>
     <div class="data">
         <table>
             <thead>
                 <tr>
-                    <th>Tên</th>
-                    <th>Giá</th>
+                    <th>Loại</th>
+                    <th>Hãng</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <th>{{ $product->name }}</th>
+                    <th>{{ $category->kind }}</th>
                
-                    <td>{{ $product->price }}</td>
+                    <td>{{ $category->brand }}</td>
                 </tr>
             </tbody>
         </table>
     </div>
     <form action="" method="post">
         @csrf
-        <input type="hidden" name="delete">
+        <input type="hidden" name="delete" >
+        <input type="hidden" name="id" value="{{$category->id}}">
         <button class="btn btn-warning" type="submit">Xóa</button>
-        <button class="btn btn-secondary "><a class="text-decoration-none text-white" href="/admin/product">Hủy</a></button>
+        <button class="btn btn-secondary "><a class="text-decoration-none text-white" href="/admin/category">Hủy</a></button>
     </form>
 
 @endsection

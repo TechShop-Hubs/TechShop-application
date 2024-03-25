@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="/api/admin/product">Về danh sách</a></div>
+    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('users')}}">Về danh sách</a></div>
     <div class="container">
         <h2>Thông tin cơ bản</h2>
         <div class="">
@@ -29,6 +29,6 @@
             <label for="password" class="form-label">Mật khẩu</label>
             <input type="text" class="form-control" name="password" id="" value="{{$user->password}}" disabled>
         </div>
-        <button class="btn btn-success "><a class="text-decoration-none text-white" href="/api/admin/user">Quay lại</a></button>
+        <button class="btn btn-success "><a class="text-decoration-none text-white" href="/admin/user">Quay lại</a></button>
     </div>
 @endsection

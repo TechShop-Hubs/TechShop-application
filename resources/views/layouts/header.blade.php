@@ -19,7 +19,11 @@
     </button>
     <div class="col mt-3 m-2 p-0 ms-5 ps-5">
         <b>
-            <h5><a class=" text-white" href="/login" style="text-decoration: none">Đăng Nhập</a></h5>
+            @if(session('logged_in'))
+                <h5><span class="text-white">{{ session('user_name') }}</span></h5>
+            @else
+                <h5><a class="text-white" href="/login" style="text-decoration: none">Đăng Nhập</a></h5>
+            @endif
         </b>
     </div>
     <div class="col mt-3 m-2 p-0">
