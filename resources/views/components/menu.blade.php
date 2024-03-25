@@ -9,7 +9,7 @@
         <h5><a href="/clients/iphone" class="text-black" style="text-decoration: none">Iphone</a></h5>
     </div>
     <div class="mt-2">
-        <h5><a href="/clients/oppo" class="text-black" style="text-decoration: none">Oppo</a></h5>
+        <h5><a href="/clients/laptop" class="text-black" style="text-decoration: none">Laptop</a></h5>
     </div>
     <div class="mt-2">
         <h5><a href="/clients/samsung" class="text-black" style="text-decoration: none">Samsung</a></h5>

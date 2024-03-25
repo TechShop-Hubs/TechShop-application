@@ -32,7 +32,7 @@ class ClientsController extends Controller
         $banners = DB::table('banner')->get();
 
         $products = DB::table('products')
-            ->where('name', 'Sản phẩm 2')
+            ->where('category_id', 1)
             ->get();
         // $quantity = $products->quantity_product;
         // $describe_product = $products->describe_product;
@@ -46,14 +46,14 @@ class ClientsController extends Controller
         return view('clients.iphone', compact('data', 'products', 'banners'));
     }
 
-    public function oppo(Request $request)
+    public function laptop(Request $request)
     {
-        $data['title'] = 'Oppo';
+        $data['title'] = 'Laptop';
         $banners = DB::table('banner')->get();
         $products = DB::table('products')
-            ->where('name', 'Sản phẩm 2')
+            ->where('category_id', 7)
             ->get();
-        return view('clients.oppo', compact('data', 'products', 'banners'));
+        return view('clients.laptop', compact('data', 'products', 'banners'));
     }
 
     public function filters(Request $request)
@@ -104,7 +104,7 @@ class ClientsController extends Controller
         $banners = DB::table('banner')->get();
 
         $products = DB::table('products')
-            ->where('name', 'Sản phẩm 4')
+            ->where('category_id', 2)
             ->get();
         return view('clients.samsung', compact('data', 'products', 'banners'));
     }

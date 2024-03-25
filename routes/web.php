@@ -23,9 +23,9 @@ Route::get('/clients/products', [ClientsController::class, 'products']);
 
 Route::get('/clients/iphone', [ClientsController::class, 'iphone']);
 
-Route::get('/clients/oppo', [ClientsController::class, 'oppo']);
+Route::get('/clients/laptop', [ClientsController::class, 'laptop']);
 
-Route::post('/clients/oppo', [ClientsController::class, 'filters']);
+Route::post('/clients/laptop', [ClientsController::class, 'filters']);
 
 Route::get('/clients/samsung', [ClientsController::class, 'samsung']);
 

@@ -44,17 +44,17 @@
             @foreach ($products as $product)
             <div class="row">
                 <div class="d-flex justify-content-between">
-                    <div class="d-flex m-2">
+                    <div class="d-flex m-3">
                         <h3>{{$product -> name}}</h3>
                         <p class="mt-2 ms-2">({{$product -> quantity_product}} Sản Phẩm)</p>
                     </div>
                 </div>
             </div>
             <div class="row m-3 gap-2">
-                <div class="col-3 d-flex justify-content-center border border-black rounded bg-warning bg-opacity-10 ">
+                <div class="col-12 d-flex justify-content-center border border-black rounded bg-warning bg-opacity-10 ">
                     <div class="row d-flex justify-content-center ">
                         <div class="col-12 text-center ">
-                            <img class="col mt-3 image" style="height:120px;" src="https://photo.znews.vn/w660/Uploaded/qhj_yvobvhfwbv/2018_07_18/Nguyen_Huy_Binh1.jpg" alt="">
+                            <img class="col mt-3 image" style="height:250px;" src="https://photo.znews.vn/w660/Uploaded/qhj_yvobvhfwbv/2018_07_18/Nguyen_Huy_Binh1.jpg" alt="">
                             <b class="col">
                                 <p class="name">{{$product -> name}}</p>
                             </b>
@@ -80,10 +80,9 @@
                     </div>
                 </div>
             </div>
+            <br>
+            <hr>
             @endforeach
-            <center>
-                <button class="btn btn-outline-warning m-3">Xem Thêm +</button>
-            </center>
         </div>
     </div>
 </div>
