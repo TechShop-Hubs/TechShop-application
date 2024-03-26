@@ -119,8 +119,8 @@ class AdminController extends Controller
     public function getFormCreateProduct(Request $request){
         $data['title'] = 'Tạo mới sản phẩm';
         // Lấy danh sách các danh mục không trùng lặp
-        $categories = DB::table('category')->select('kind')->distinct()->get();
-        return view('admin.forms.create_product', compact('data', 'categories'));
+        $categoryName = $this->categories->getAllCategoriesName();
+        return view('admin.forms.create_product', compact('data', 'categoryName'));
     }
     public function getDetailProduct($id){
         $data['title'] = 'Chi tiết sản phẩm';
@@ -197,6 +197,56 @@ class AdminController extends Controller
         ];
 
         $this->products->updateProduct($id, $dataInsert);
+
+        return redirect()->route('product');
+    }
+
+    public function createProduct(Request $request){
+        $request->validate([
+            'category_id' => 'required',
+            'name' => 'required',
+            'discount' => 'required',
+            'sell_price' => 'required',
+            'quantity_product' => 'required',
+            'describe_product' => 'required',
+            'screen_type' => 'required',
+            'ram' => 'required',
+            'memory' => 'required',
+            'cpu' => 'required',
+            'weight' => 'required',
+            'price' => 'required'
+        ], [
+            'category_id.required' => 'Vui lòng chọn danh mục.',
+            'name.required' => 'Vui lòng nhập tên sản phẩm.',
+            'discount.required' => 'Vui lòng nhập giảm giá.',
+            'sell_price.required' => 'Vui lòng nhập giá bán.',
+            'quantity_product.required' => 'Vui lòng nhập số lượng sản phẩm.',
+            'describe_product.required' => 'Vui lòng nhập mô tả sản phẩm.',
+            'screen_type.required' => 'Vui lòng nhập loại màn hình.',
+            'ram.required' => 'Vui lòng nhập dung lượng RAM.',
+            'memory.required' => 'Vui lòng nhập dung lượng bộ nhớ.',
+            'cpu.required' => 'Vui lòng nhập thông tin CPU.',
+            'weight.required' => 'Vui lòng nhập trọng lượng sản phẩm.',
+            'price.required' => 'Vui lòng nhập giá sản phẩm.'
+        ]);
+
+        $dataInsert = [
+            'category_id' => $request->category_id,
+            'name' => $request->name,
+            'discount' => $request->discount,
+            'sell_price' => $request->sell_price,
+            'quantity_product' => $request->quantity_product,
+            'describe_product' => $request->describe_product,
+            'screen_type' => $request->screen_type,
+            'ram' => $request->ram,
+            'memory' => $request->memory,
+            'cpu' => $request->cpu,
+            'weight' => $request->weight,
+            'price' => $request->price,
+            'status' => 1
+        ];
+
+        $this->products->createProduct($dataInsert);
 
         return redirect()->route('product');
     }
