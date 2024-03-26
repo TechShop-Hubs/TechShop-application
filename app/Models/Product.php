@@ -29,6 +29,27 @@ class Product extends Model
     ];
     protected $table = 'products';
 
+    //update
+    public function createProduct($data)
+    {
+        return DB::table($this->table)
+            ->insert([
+                'category_id' => $data['category_id'],
+                'name' => $data['name'],
+                'discount' => $data['discount'],
+                'sell_price' => $data['sell_price'],
+                'quantity_product' => $data['quantity_product'],
+                'describe_product' => $data['describe_product'],
+                'screen_type' => $data['screen_type'],
+                'ram' => $data['ram'],
+                'memory' => $data['memory'],
+                'cpu' => $data['cpu'],
+                'weight' => $data['weight'],
+                'price' => $data['price'],
+                'status' => $data['status'],
+            ]);
+    }
+
     //get detail
     public function getDetail($id)
     {

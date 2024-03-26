@@ -10,7 +10,11 @@
             </div>
         </div>
     </div>
-    <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('product')}}">Về danh sách</a></div>
+    <div class="btn btn-success mt-4 p-3"><a class="text-decoration-none text-white" href="{{ route('product') }}">Về danh
+            sách</a></div>
+            @if ($errors->any())
+            <div class="alert alert-danger">Dữ liệu không hợp lệ vui lòng nhập lại</div>
+        @endif
     <div class="container">
         <form action="" method="post">
             @csrf
@@ -21,57 +25,95 @@
                     <div class="">
                         <label for="name" class="form-label">Tên</label>
                         <input type="text" class="form-control" name="name" id="name">
+                        @error('name')
+                            <span style="color:red">{{ $message }}</span>
+                        @enderror
+
                     </div>
                     <div class="">
                         <label for="price" class="form-label">Price</label>
-                        <input type="text" class="form-control" name="price" id="price">
+                        <input type="number" class="form-control" name="price" id="price">
+                        @error('price')
+                            <span style="color:red">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="">
-                        <label for="category" class="form-label">Danh mục</label>
-                        <select class="form-select" name="category" id="category">
-                            @foreach ($categories as $index=>$item)
-                            <option value="{{$item->kind}}">{{$item->kind}}</option>
+                        <label for="category_id" class="form-label">Danh mục</label>
+                        <select class="form-control" name="category_id" id="category_id">
+                            <option value="">Chọn danh mục</option>
+                            @foreach ($categoryName as $category)
+                                <option value="{{ $category->id }}">{{ $category->kind_brand }}</option>
                             @endforeach
                         </select>
+                        @error('category_id')
+                            <span style="color:red">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="">
-                        <label for="quantity" class="form-label">Số lượng</label>
-                        <input type="number" class="form-control" name="quantity" id="quantity" min="0">
+                        <label for="quantity_product" class="form-label">Số lượng</label>
+                        <input type="number" class="form-control" name="quantity_product" id="quantity_product" min="0">
+                        @error('quantity')
+                            <span style="color:red">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="">
                         <label for="discount" class="form-label">Giảm giá</label>
                         <input type="number" class="form-control" name="discount" id="discount" min="0">
+                        @error('discount')
+                            <span style="color:red">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="">
-                        <label for="sellprice" class="form-label">Giá bán ra</label>
-                        <input type="number" class="form-control" name="sellprice" id="sellprice" min="0">
+                        <label for="sell_price" class="form-label">Giá bán ra</label>
+                        <input type="number" class="form-control" name="sell_price" id="sell_price" min="0">
+                        @error('sell_price')
+                            <span style="color:red">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
                 <div class="col-12 col-lg-4">
                     <h2>Thông tin chi tiết</h2>
                     <div class="">
-                        <label for="describe" class="form-label">Mô tả</label>
-                        <textarea class="form-control" name="describe" id="describe" rows="3"></textarea>
+                        <label for="describe_product" class="form-label">Mô tả</label>
+                        <textarea class="form-control" name="describe_product" id="describe_product" rows="3"></textarea>
+                        @error('describe_product')
+                            <span style="color:red">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="">
-                        <label for="screen-type" class="form-label">Kích thước màn hình</label>
-                        <input type="text" class="form-control" name="screen-type" id="screen-type">
+                        <label for="screen_type" class="form-label">Kích thước màn hình</label>
+                        <input type="text" class="form-control" name="screen_type" id="screen_type">
+                        @error('screen_type')
+                            <span style="color:red">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="">
                         <label for="ram" class="form-label">Ram</label>
-                        <input type="text" class="form-control" name="ram" id="ram">
+                        <input type="number" class="form-control" name="ram" id="ram">
+                        @error('ram')
+                            <span style="color:red">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="">
                         <label for="memory" class="form-label">Bộ nhớ</label>
-                        <input type="text" class="form-control" name="memory" id="memory">
+                        <input type="number" class="form-control" name="memory" id="memory">
+                        @error('memory')
+                            <span style="color:red">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="">
                         <label for="cpu" class="form-label">Cpu</label>
                         <input type="text" class="form-control" name="cpu" id="cpu">
+                        @error('cpu')
+                            <span style="color:red">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="">
                         <label for="weight" class="form-label">Trọng lượng</label>
-                        <input type="text" class="form-control" name="weight" id="weight">
+                        <input type="number" class="form-control" name="weight" id="weight">
+                        @error('weight')
+                            <span style="color:red">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
                 <div class="col-12 col-lg-4">
@@ -82,7 +124,7 @@
                     </div>
                     <div id="image-container-wrapper"></div>
                     <div class="image-field">
-                        <button type="button" id="addImageField" >Add more</button>
+                        <button type="button" id="addImageField">Add more</button>
                     </div>
                 </div>
             </div>
@@ -91,34 +133,33 @@
     </div>
 @endsection
 @section('js')
-<script>
-const addImageField = document.getElementById('addImageField');
+    <script>
+        const addImageField = document.getElementById('addImageField');
 
-addImageField.addEventListener('click', () => {
-    // Tạo một div container mới
-    const newImageContainer = document.createElement('div');
-    newImageContainer.classList.add('mb-3');
+        addImageField.addEventListener('click', () => {
+            // Tạo một div container mới
+            const newImageContainer = document.createElement('div');
+            newImageContainer.classList.add('mb-3');
 
-    // Tạo một label cho input
-    const label = document.createElement('label');
-    label.textContent = 'Image';
-    label.setAttribute('for', 'image-field');
+            // Tạo một label cho input
+            const label = document.createElement('label');
+            label.textContent = 'Image';
+            label.setAttribute('for', 'image-field');
 
-    // Tạo một input mới
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('name', 'image');
-    input.setAttribute('id', 'image-field');
-    input.classList.add('form-control');
+            // Tạo một input mới
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('name', 'image');
+            input.setAttribute('id', 'image-field');
+            input.classList.add('form-control');
 
-    // Thêm label và input vào container
-    newImageContainer.appendChild(label);
-    newImageContainer.appendChild(input);
+            // Thêm label và input vào container
+            newImageContainer.appendChild(label);
+            newImageContainer.appendChild(input);
 
-    // Thêm container vào DOM, ví dụ như sau:
-    const imageContainerWrapper = document.getElementById('image-container-wrapper');
-    imageContainerWrapper.appendChild(newImageContainer);
-});
-
-</script>
+            // Thêm container vào DOM, ví dụ như sau:
+            const imageContainerWrapper = document.getElementById('image-container-wrapper');
+            imageContainerWrapper.appendChild(newImageContainer);
+        });
+    </script>
 @endsection

@@ -71,6 +71,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/product/delete/{id}', [AdminController::class, 'getDeleteProduct'])->name('deleteProduct');
     Route::post('/product/update/{id}', [AdminController::class, 'postUpdateProduct']);
     Route::post('/product/delete/{id}', [AdminController::class,'postDeleteProduct']);
+    Route::post('/product/create', [AdminController::class, 'createProduct']);
 
     Route::get('/contact', [AdminController::class, 'getContact'])->name('contact');
     Route::get('/banner', [AdminController::class, 'getBanner'])->name('banner');
