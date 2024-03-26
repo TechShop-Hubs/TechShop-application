@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClientsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,28 +16,18 @@ use App\Http\Controllers\AdminController;
 |
 */
 
-Route::get('/', function () {
-    return view('clients.home');
-});
 
-Route::get('/home', function () {
-    return view('clients.home');
-})->name('home');
+Route::get('/', [ClientsController::class, 'index'])->name('home');
 
-Route::get('/product', function () {
-    return view('clients.products');
-});
+Route::get('/clients/products', [ClientsController::class, 'products']);
 
-Route::get('/product/oppo', function () {
-    return view('clients.oppo');
-});
+Route::get('/clients/iphone', [ClientsController::class, 'iphone']);
 
-Route::get('/product/realme', function () {
-    return view('clients.realme');
-});
-Route::get('/product/samsung', function () {
-    return view('clients.samsung');
-});
+Route::get('/clients/laptop', [ClientsController::class, 'laptop']);
+
+Route::post('/clients/laptop', [ClientsController::class, 'filters']);
+
+Route::get('/clients/samsung', [ClientsController::class, 'samsung']);
 
 Route::get('/login', function () {
     return view('login');
