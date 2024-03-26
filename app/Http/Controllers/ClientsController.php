@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ClientsController extends Controller
 {
@@ -108,4 +109,19 @@ class ClientsController extends Controller
             ->get();
         return view('clients.samsung', compact('data', 'products', 'banners'));
     }
+    public function getContact(){
+        $logged_in = session('logged_in');
+        //laays id user
+        $user_id = session('user_id');
+
+        if($logged_in) {
+            $user = DB::table('users')->where('id', $user_id)->first();
+            $data['title'] = "Liên hệ";
+            return view('clients.contact', compact('data', 'user'));
+
+        } else {
+            return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
+        }
+    }
+    
 }

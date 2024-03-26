@@ -17,7 +17,7 @@
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
         </svg>
     </button>
-    <div class="col mt-3 m-2 p-0 ms-5 ps-5">
+    <div class="col mt-3 m-2 p-0 ms-5 ps-5 d-flex justity-content-center align-items-center gap-3">
         <b>
             @if(session('logged_in'))
                 <h5><span class="text-white">{{ session('user_name') }}</span></h5>
@@ -25,6 +25,7 @@
                 <h5><a class="text-white" href="/login" style="text-decoration: none">Đăng Nhập</a></h5>
             @endif
         </b>
+        <h5><a class="text-white" href="/contact" style="text-decoration: none">Liên Hệ</a></h5>
     </div>
     <div class="col mt-3 m-2 p-0">
         <a href="/cart" class="text-white"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-bag-heart-fill" viewBox="0 0 16 16">

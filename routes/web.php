@@ -5,6 +5,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientsController;
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,6 +38,10 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return view('register');
 })->name('register');
+
+Route::get('/contact',[ClientsController::class,'getContact'] )->name('client.contact');
+
+Route::post('/contact', [AdminController::class,'createContact']);
 
 Route::post('/login', [UserController::class, 'login']);
 
@@ -74,6 +80,8 @@ Route::prefix('admin')->group(function () {
     Route::post('/product/create', [AdminController::class, 'createProduct']);
 
     Route::get('/contact', [AdminController::class, 'getContact'])->name('contact');
+    Route::get('/contact/update/{id}', [AdminController::class, 'getUpdateContact'])->name('updateContact');
+    Route::post('/contact/update/{id}', [AdminController::class, 'updateContact']);
     Route::get('/banner', [AdminController::class, 'getBanner'])->name('banner');
     Route::get('/wishlist', [AdminController::class, 'getWishList'])->name('wishList');
 

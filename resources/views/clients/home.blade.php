@@ -1,6 +1,9 @@
 <title>{{ $data['title'] }}</title>
 @include('layouts.header')
 @include('components.menu')
+@if (session('msg'))
+    <div class="alert alert-danger">{{ session('msg') }}</div>
+@endif
 <div class="container">
     @include('components.banner', ['banners' => $banners])
     <!-- Modal -->
