@@ -17,7 +17,7 @@
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
         </svg>
     </button>
-    <div class="col mt-3 m-2 p-0 ms-5 ps-5 d-flex justity-content-center align-items-center gap-3">
+    <div class="col-2 mt-3 m-2 p-0 d-flex justity-content-center align-items-center gap-3">
         <b>
             @if(session('logged_in'))
                 <h5><span class="text-white">{{ session('user_name') }}</span></h5>
@@ -32,4 +32,9 @@
                 <path d="M11.5 4v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m0 6.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132" />
             </svg></a>
     </div>
+    @if(session('logged_in'))
+    <div class="col mt-4 m-2 p-0">
+         <h5><a class="text-white" href="/logout" style="text-decoration: none">Đăng xuất</a></h5>
+    </div>
+    @endif
 </div>

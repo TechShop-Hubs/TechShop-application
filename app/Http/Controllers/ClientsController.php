@@ -175,4 +175,10 @@ class ClientsController extends Controller
         }
     }
 
+    //Logout
+    public function logout(Request $request){
+        $request->session()->flush();
+        return view('login');
+    }
+
 }
