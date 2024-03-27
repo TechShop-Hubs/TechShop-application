@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Contact;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 class AdminController extends Controller
@@ -12,9 +13,11 @@ class AdminController extends Controller
     public $data = [];
     private $categories;
     private $products;
+    private $contacts;
     public function __construct(){
         $this->categories = new Category();
         $this->products = new Product();
+        $this->contacts = new Contact();
     }
 
     public function index(Request $request)
@@ -263,6 +266,41 @@ class AdminController extends Controller
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $banners = DB::table('banner')->paginate(5);
         return view('admin.banner', compact('data', 'banners'));
+    }
+
+    // quản lý liên hệ
+    public function createContact(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email', // Kiểm tra định dạng email
+            'phone' => 'required|digits_between:10,15', // Kiểm tra số điện thoại từ 10 đến 15 chữ số
+            'message' => 'required',
+        ], [
+            'email.required' => 'Email bắt buộc nhập',
+            'email.email' => 'Email không hợp lệ',
+            'name.required' => 'Tên bắt buộc nhập',
+            'phone.required' => 'Số điện thoại bắt buộc nhập',
+            'phone.digits_between' => 'Số điện thoại phải có từ 10 đến 15 chữ số và chỉ bao gồm số',
+            'message.required' => 'Message bắt buộc nhập',
+        ]);
+        $dataInsert = [
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'phone'=>$request->phone,
+            'message'=>$request->message
+        ];
+        $this->contacts->createContact($dataInsert);
+        return redirect()->route('client.contact')->with('msg' ,'Cảm ơn bạn đã liên hệ');
+    }
+    public function updateContact(Request $request){
+        $this->contacts->updateContact($request->id,$request->status);
+        return redirect()->route('contact')->with('msg', 'Chỉnh sửa trạng thái thành công');
+    }
+    public function getUpdateContact($id){
+        $data['title'] = 'Chỉnh sửa sản phẩm';
+        // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
+        $contact = $this->contacts->getDetail($id);
+        return view('admin.forms.update_contact', compact('data', 'contact'));
     }
 
 }

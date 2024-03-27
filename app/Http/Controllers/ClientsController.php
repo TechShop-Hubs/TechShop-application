@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Users;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
 
 class ClientsController extends Controller
 {
@@ -159,4 +160,19 @@ class ClientsController extends Controller
             return view('clients.detail_product');
         }
     }
+    public function getContact(){
+        $logged_in = session('logged_in');
+        //laays id user
+        $user_id = session('user_id');
+
+        if($logged_in) {
+            $user = DB::table('users')->where('id', $user_id)->first();
+            $data['title'] = "Liên hệ";
+            return view('clients.contact', compact('data', 'user'));
+
+        } else {
+            return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
+        }
+    }
+
 }
