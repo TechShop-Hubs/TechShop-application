@@ -4,8 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientsController;
-
-
+use GuzzleHttp\Client;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +51,7 @@ Route::post('/login', [UserController::class, 'login']);
 
 Route::post('/register', [UserController::class, 'register']);
 
+Route::get('/logout', [ClientsController::class, 'logout']);
 
 Route::prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index']);
