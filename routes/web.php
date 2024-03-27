@@ -29,6 +29,8 @@ Route::post('/clients/laptop', [ClientsController::class, 'filters']);
 
 Route::get('/clients/samsung', [ClientsController::class, 'samsung']);
 
+Route::get('/detail_product/{id}', [ClientsController::class, 'getProduct'])->name('detail_product');
+
 Route::get('/login', function () {
     return view('login');
 })->name('login');
@@ -44,7 +46,6 @@ Route::post('/register', [UserController::class, 'register']);
 
 Route::prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index']);
-    Route::get('/product', [AdminController::class, 'index'])->name('product');
 
     Route::get('/category', [AdminController::class, 'getCategories'])->name('categories');
     Route::get('/category/create', [AdminController::class, 'getFormCreateCategory'])->name('createCategory');
@@ -65,6 +66,7 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/order', [AdminController::class, 'getAllOrders'])->name('orders');
 
+    Route::get('/product', [AdminController::class, 'index'])->name('product');
     Route::get('/product/create', [AdminController::class, 'getFormCreateProduct'])->name('createProduct');
     Route::get('/product/{id}', [AdminController::class, 'getDetailProduct'])->name('detailProduct');
     Route::get('/product/update/{id}', [AdminController::class, 'getUpdateProduct'])->name('updateProduct');

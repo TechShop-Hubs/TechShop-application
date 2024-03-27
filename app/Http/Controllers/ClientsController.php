@@ -4,10 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Category;
+use App\Models\Product;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class ClientsController extends Controller
 {
     public $data = [];
+    private $categories;
+    private $products;
+    public function __construct(){
+        $this->categories = new Category();
+        $this->products = new Product();
+    }
+
     public function index(Request $request)
     {
         $data['title'] = 'Home Page';
@@ -108,4 +119,16 @@ class ClientsController extends Controller
             ->get();
         return view('clients.samsung', compact('data', 'products', 'banners'));
     }
+
+    //PRODUCT
+    public function getProduct($id){
+        $data['title'] = 'Chi tiết sản phẩm';
+
+        // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
+        $product = $this->products->getDetail($id);
+        $category = DB::table('category')->where('id', $product->category_id)->first();
+
+        return view('clients.detail_product', compact('data', 'product', 'category'));
+    }
+
 }
