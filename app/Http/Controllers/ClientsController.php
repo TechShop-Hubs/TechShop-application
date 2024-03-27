@@ -4,19 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Category;
 use App\Models\Product;
+use App\Models\Users;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class ClientsController extends Controller
 {
     public $data = [];
-    private $categories;
     private $products;
+    private $users;
     public function __construct(){
-        $this->categories = new Category();
         $this->products = new Product();
+        $this->users = new Users();
     }
 
     public function index(Request $request)
@@ -126,9 +126,37 @@ class ClientsController extends Controller
 
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $product = $this->products->getDetail($id);
-        $category = DB::table('category')->where('id', $product->category_id)->first();
 
-        return view('clients.detail_product', compact('data', 'product', 'category'));
+        return view('clients.detail_product', compact('data', 'product'));
     }
 
+    public function getInformation($id){
+        $data['title'] = 'Điền thông tin';
+        if (session('logged_in')) {
+            $user = $this->users->getUser(session('user_id'));
+            return view('clients.home');
+        } else {
+            return view('clients.detail_product');
+        }
+    }
+
+    public function cart($id){
+        $data['title'] = 'Giỏ hàng';
+        if (session('logged_in')) {
+            $user = $this->users->getUser(session('user_id'));
+            return view('clients.home');
+        } else {
+            return view('clients.detail_product');
+        }
+    }
+
+    public function wishlish($id){
+        $data['title'] = 'Giỏ hàng';
+        if (session('logged_in')) {
+            $user = $this->users->getUser(session('user_id'));
+            return view('clients.home');
+        } else {
+            return view('clients.detail_product');
+        }
+    }
 }

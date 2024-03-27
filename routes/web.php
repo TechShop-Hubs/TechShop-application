@@ -30,6 +30,9 @@ Route::post('/clients/laptop', [ClientsController::class, 'filters']);
 Route::get('/clients/samsung', [ClientsController::class, 'samsung']);
 
 Route::get('/detail_product/{id}', [ClientsController::class, 'getProduct'])->name('detail_product');
+Route::get('/information/{id}', [ClientsController::class, 'getInformation'])->name('get_information');
+Route::get('/cart/{id}', [ClientsController::class, 'cart'])->name('cart');
+Route::get('/wishlish/{id}', [ClientsController::class, 'wishlish'])->name('wishlish');
 
 Route::get('/login', function () {
     return view('login');

@@ -13,10 +13,10 @@
                 <p class="sell_price">{{ $product->sell_price }}đ</p>
                 <h3 style="color: red">{{ $product->sell_price * (1 - $product->discount / 100) }}đ</h3>
                 <p>Tiết kiệm đến {{ $product->discount }}% cho khách hàng</p>
-                <a class="btn btn-danger btn-lg mt-5" href="#">Mua ngay</a>
-                <div class="calltoaction mt-1">
-                    <button class="btn btn-warning  btn-lg">Thêm vào giỏ hàng</button>
-                    <button class="btn btn-lg btn-info">Yêu thích</button>
+                <a class="btn btn-danger btn-lg w-100 mt-5" href="/information/{{ $product->id }}">Mua ngay</a>
+                <div class="calltoaction mt-2">
+                    <a class="btn btn-warning btn-lg me-3" href="/cart/{{ $product->id }}">Thêm vào giỏ hàng</a>
+                    <a class="btn btn-lg btn-info" style="width: 11rem" href="/wishlish/{{ $product->id }}">Yêu thích</a>
                 </div>
             </div>
             <div class="col-4 specification">
