@@ -4,11 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Product;
+use App\Models\Users;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 
 class ClientsController extends Controller
 {
     public $data = [];
+    private $products;
+    private $users;
+    public function __construct(){
+        $this->products = new Product();
+        $this->users = new Users();
+    }
+
     public function index(Request $request)
     {
         $data['title'] = 'Home Page';
@@ -109,6 +120,46 @@ class ClientsController extends Controller
             ->get();
         return view('clients.samsung', compact('data', 'products', 'banners'));
     }
+
+    //PRODUCT
+    public function getProduct($id){
+        $data['title'] = 'Chi tiết sản phẩm';
+
+        // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
+        $product = $this->products->getDetail($id);
+
+        return view('clients.detail_product', compact('data', 'product'));
+    }
+
+    public function getInformation($id){
+        $data['title'] = 'Điền thông tin';
+        if (session('logged_in')) {
+            $user = $this->users->getUser(session('user_id'));
+            return view('clients.home');
+        } else {
+            return view('clients.detail_product');
+        }
+    }
+
+    public function cart($id){
+        $data['title'] = 'Giỏ hàng';
+        if (session('logged_in')) {
+            $user = $this->users->getUser(session('user_id'));
+            return view('clients.home');
+        } else {
+            return view('clients.detail_product');
+        }
+    }
+
+    public function wishlish($id){
+        $data['title'] = 'Giỏ hàng';
+        if (session('logged_in')) {
+            $user = $this->users->getUser(session('user_id'));
+            return view('clients.home');
+        } else {
+            return view('clients.detail_product');
+        }
+    }
     public function getContact(){
         $logged_in = session('logged_in');
         //laays id user
@@ -123,5 +174,5 @@ class ClientsController extends Controller
             return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
         }
     }
-    
+
 }

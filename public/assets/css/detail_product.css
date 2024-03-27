@@ -1,0 +1,34 @@
+
+.frame{
+    border: solid 1px black;
+    width: 85rem;
+    height: fit-content;
+    margin-left: 5rem;
+    border-radius: 2rem;
+}
+
+.larger{
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.sell_price{
+    font-size: 20px;
+    color: gray;
+    text-decoration: line-through;
+}
+
+p{
+    font-size: 20px;
+}
+
+.specification{
+    border: solid 1px black;
+    border-radius: 1rem;
+    height: fit-content;
+}
+
+.agr p{
+    font-weight: bold;
+}
+

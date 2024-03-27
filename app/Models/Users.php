@@ -22,6 +22,14 @@ class Users extends Model
     ];
     protected $table = 'users';
 
+    public function getUser($id)
+    {
+        $user = DB::table($this->table)
+            ->select('*')
+            ->where('id', '=', $id)
+            ->first();
+        return $user ? $user : null;
+    }
 
     //login
     public function getDetail($email, $password)
@@ -66,6 +74,6 @@ class Users extends Model
                      'status' => $data['status']
                  ]);
     }
-    
+
 
 }
