@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Users;
+use App\Models\Category;
+use App\Models\Orders;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -15,9 +17,13 @@ class ClientsController extends Controller
     public $data = [];
     private $products;
     private $users;
+    private $orders;
+    private $categories;
     public function __construct(){
         $this->products = new Product();
         $this->users = new Users();
+        $this->categories = new Category();
+        $this->orders = new Orders();
     }
 
     public function index(Request $request)
@@ -131,13 +137,20 @@ class ClientsController extends Controller
         return view('clients.detail_product', compact('data', 'product'));
     }
 
-    public function getInformation($id){
-        $data['title'] = 'Điền thông tin';
+    //CHECKOUT
+    public function checkout($id){
         if (session('logged_in')) {
+            $data['title'] = 'Xác nhận thông tin';
             $user = $this->users->getUser(session('user_id'));
-            return view('clients.home');
+            $product = $this->products->getDetail($id);
+            $category = DB::table('category')->where('id', $product->category_id)->first();
+            $fee = 15000;
+            if ($product->discount > 5) {
+                $fee = 20000;
+            }
+            return view('clients.checkout', compact('data', 'product', 'user', 'category', 'fee'));
         } else {
-            return view('clients.detail_product');
+            return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện đặt hàng');
         }
     }
 
@@ -181,4 +194,35 @@ class ClientsController extends Controller
         return view('login');
     }
 
+    public function order(Request $request, $id){
+        $request->validate([
+            'name' => 'required',
+            'phone_number' => 'required',
+            'address' => 'required',
+        ], [
+            'name.required' => 'Tên bắt buộc nhập',
+            'phone_number.required' => 'Số điện thoại bắt buộc nhập',
+            'address.required' => 'Địa chỉ bắt buộc nhập',
+        ]);
+
+        $dataInsert = [
+            'user_id' => session('user_id'),
+            'name' => $request->name,
+            'phone_number' => $request->phone_number,
+            'address' => $request->address,
+            'payment_method' => $request->payment_method,
+            'quantity' => $request->quantity,
+            'total_price' => $request->total_price,
+            'order_date' => date('Y-m-d'),
+            'status' => 'Đơn hàng mới'
+        ];
+
+        $this->orders->insertOrder($dataInsert);
+
+        if ( $request->payment_method == 'Online') {
+            return redirect()->route('home')->with('msg', 'Bạn chọn thanh toán online');
+        }
+
+        return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng thành công');
+    }
 }
