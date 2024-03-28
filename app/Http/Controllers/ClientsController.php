@@ -175,7 +175,6 @@ class ClientsController extends Controller
             return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
         }
     }
-
     // cart
     public function getCart(){
         $logged_in = session('logged_in');
@@ -203,6 +202,11 @@ class ClientsController extends Controller
         else {
             return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
         }
+    }
+    //Logout
+    public function logout(Request $request){
+        $request->session()->flush();
+        return view('login');
     }
 
 }

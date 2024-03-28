@@ -159,6 +159,7 @@ class UserController extends Controller
 
         return redirect()->route('login');
     }
+    
     public function destroy(User $user)
     {
         $user->delete();

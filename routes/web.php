@@ -7,6 +7,7 @@ use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\CartController;
 
 
+use GuzzleHttp\Client;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,7 @@ Route::post('/login', [UserController::class, 'login']);
 
 Route::post('/register', [UserController::class, 'register']);
 
+Route::get('/logout', [ClientsController::class, 'logout']);
 
 Route::prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index']);
