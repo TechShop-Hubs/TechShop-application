@@ -12,9 +12,9 @@
         </div>
     </div>
     {{-- nav --}}
-    <div class="navbar container-fluid d-flex justify-content-between align-items-center pe-5">
+    {{-- <div class="navbar container-fluid d-flex justify-content-between align-items-center pe-5">
         <button class="btn btn-success btn-lg" type="submit" name="create">Tạo mới</button>
-    </div>
+    </div> --}}
     <!-- Hiển thị danh sách sản phẩm -->
     <div class="container-fluid pt-3">
         <table class="table">
@@ -39,9 +39,9 @@
                         <td>{{$order->status}}</td>
                         <td>{{$order->total_price}}</td>
                         <td>
-                            <a href="#" class="btn btn-primary">Xem</a>
-                            <a href="#" class="btn btn-warning">Cập nhật</a>
-                            {{-- <a href="#" class="btn btn-danger">Xóa</a> --}}
+                            <a href="/order/detail/{{ $order->id }}" class="btn btn-primary">Xem</a>
+                            <a href="/order/update/{{ $order->id }}" class="btn btn-warning">Cập nhật</a>
+                            <a href="/order/delete/{{ $order->id }}" class="btn btn-danger">Xóa</a>
                         </td>
                     </tr>
                 @endforeach
