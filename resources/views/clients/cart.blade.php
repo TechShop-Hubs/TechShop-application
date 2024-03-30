@@ -29,10 +29,20 @@
                     <th scope="row">{{ $index + 1 }}</th>
                     <td>{{ $cart->product_name }}</td>
                     <td>Hình ảnh lấy từ bảng image nha</td>
-                    <td>
-                        <button type="button" class="btn btn-sm btn-secondary" onclick="updateQuantity({{ $cart->id }}, {{ $cart->product_quantity - 1 }})">-</button>
+                    <td class="d-flex flex-row gap-3">
+                        <form action="{{route('reduceQuantity')}}" method="post" >
+                            @csrf
+                            <input type="hidden" name="cart_id" value="{{$cart->cart_id}}">
+                            <input type="hidden" name="product_quantity" value="{{$cart->product_quantity}}">
+                            <button type="submit" class="btn btn-sm btn-secondary">-</button>
+                        </form>
                         {{ $cart->product_quantity }}
-                        <button type="button" class="btn btn-sm btn-primary" onclick="updateQuantity({{ $cart->id }}, {{ $cart->product_quantity + 1 }})">+</button>
+                        <form action="{{route('increaseQuantity')}}" method="post">
+                            @csrf
+                            <input type="hidden" name="cart_id" value="{{$cart->cart_id}}">
+                            <input type="hidden" name="product_quantity" value="{{$cart->product_quantity}}">
+                            <button type="submit" class="btn btn-sm btn-primary">+</button>
+                        </form>
                     </td>
                     <td>{{ $cart->sell_price * ($cart->discount / 100) }}</td>
                     <td>{{ $cart->product_quantity * $cart->sell_price * ($cart->discount / 100) }}</td>

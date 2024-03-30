@@ -37,8 +37,8 @@ Route::get('/detail_product/{id}', [ClientsController::class, 'getProduct'])->na
 Route::get('/information/{id}', [ClientsController::class, 'getInformation'])->name('get_information');
 
 Route::get('/cart', [ClientsController::class, 'getCart'])->name('cart');
-// Route::post('/update-quantity/{cart}', [CartController::class,'updateQuantity'])->name('updateQuantity');
-Route::post('/cart/{id}', [CartController::class,'removeFromCart'])->name('reduceQuantity');
+Route::post('/cart-reduce', [CartController::class, 'reduceQuantity'])->name('reduceQuantity');
+Route::post('/cart-increase', [CartController::class, 'increaseQuantity'])->name('increaseQuantity');
 
 Route::get('/wishlish/{id}', [ClientsController::class, 'wishlish'])->name('wishlish');
 
