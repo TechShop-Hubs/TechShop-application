@@ -5,8 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\CartController;
-
-
+use App\Http\Controllers\PaymentController;
 use GuzzleHttp\Client;
 
 /*
@@ -29,7 +28,7 @@ Route::get('/clients/iphone', [ClientsController::class, 'iphone']);
 
 Route::get('/clients/laptop', [ClientsController::class, 'laptop']);
 
-Route::post('/clients/laptop', [ClientsController::class, 'filters']);
+Route::post('/clupdateCartients/laptop', [ClientsController::class, 'filters']);
 
 Route::get('/clients/samsung', [ClientsController::class, 'samsung']);
 
@@ -38,10 +37,14 @@ Route::get('/detail_product/{id}', [ClientsController::class, 'getProduct'])->na
 Route::get('/checkout/{id}', [ClientsController::class, 'checkout'])->name('checkout');
 Route::post('/checkout/{id}', [ClientsController::class, 'order'])->name('order');
 
-Route::get('/cart/{id}', [ClientsController::class, 'cart'])->name('cart');
+// Route::get('/cart/{id}', [ClientsController::class, 'cart'])->name('cart');
 Route::get('/cart', [ClientsController::class, 'getCart'])->name('cart');
+
 Route::post('/cart-reduce', [CartController::class, 'reduceQuantity'])->name('reduceQuantity');
 Route::post('/cart-increase', [CartController::class, 'increaseQuantity'])->name('increaseQuantity');
+Route::post('/update-cart', [CartController::class, 'updateCart'])->name('updateCart');
+
+Route::post('/momo', [PaymentController::class, 'momoPayment'])->name('momoPayment');
 
 Route::get('/wishlish/{id}', [ClientsController::class, 'wishlish'])->name('wishlish');
 

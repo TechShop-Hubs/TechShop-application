@@ -12,7 +12,7 @@ use App\Models\Orders;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
-
+use App\Http\Controllers\PaymentController;
 class ClientsController extends Controller
 {
     public $data = [];
@@ -139,31 +139,31 @@ class ClientsController extends Controller
     }
 
     //CHECKOUT
-    public function checkout($id){
+    public function checkout($id, Request $request){
         if (session('logged_in')) {
+            // option 1 với nút mua ngay ở trang chi tiết sản phẩm
             $data['title'] = 'Xác nhận thông tin';
             $user = $this->users->getUser(session('user_id'));
+            if($request->product_id){
+                $id = $request->product_id;
+            }
             $product = $this->products->getDetail($id);
             $category = DB::table('category')->where('id', $product->category_id)->first();
             $fee = 15000;
             if ($product->discount > 5) {
                 $fee = 20000;
             }
-            return view('clients.checkout', compact('data', 'product', 'user', 'category', 'fee'));
+            // Lấy giá trị số lượng từ yêu cầu
+            $quantity = $request->quantity;
+            return view('clients.checkout', compact('data', 'product', 'user', 'category', 'fee', 'quantity'));
+            // option 2 với nút từ trang cart
         } else {
             return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện đặt hàng');
         }
     }
+    
 
-    // public function cart($id){
-    //     $data['title'] = 'Giỏ hàng';
-    //     if (session('logged_in')) {
-    //         $user = $this->users->getUser(session('user_id'));
-    //         return view('clients.home');
-    //     } else {
-    //         return view('clients.detail_product');
-    //     }
-    // }
+
 
     public function wishlish($id){
         $data['title'] = 'Giỏ hàng';
@@ -200,6 +200,7 @@ class ClientsController extends Controller
         ->select(
             'carts.id AS cart_id', // Đổi tên trường id của carts thành cart_id
             'carts.*',
+            'carts.status AS cart_status',
             'products.*',
             'products.name AS product_name',
             'users.*'
@@ -245,13 +246,87 @@ class ClientsController extends Controller
             'status' => 'Đơn hàng mới',
             'destroy' => 0
         ];
-
-        $this->orders->insertOrder($dataInsert);
-
-        if ( $request->payment_method == 'Online') {
-            return redirect()->route('home')->with('msg', 'Bạn chọn thanh toán online');
+        if($request->payment_method == 'COD') {
+            $this->orders->insertOrder($dataInsert);
+            return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng thành công');
         }
 
-        return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng thành công');
+
+        if ($request->payment_method == 'momo') {
+            
+            function execPostRequest($url, $data)
+            {
+                $ch = curl_init($url);
+                var_dump($ch);
+                if ($ch === false) {
+                    die('Curl initialization failed');
+                }
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt(
+                    $ch,
+                    CURLOPT_HTTPHEADER,
+                    array(
+                        'Content-Type: application/json',
+                        'Content-Length: ' . strlen($data)
+                    )
+                );
+                curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+                $result = curl_exec($ch);
+                if ($result === false) {
+                    die('Curl execution failed: ' . curl_error($ch));
+                }
+                curl_close($ch);
+                return $result;
+            }
+            $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
+            $partnerCode = 'MOMOBKUN20180529';
+            $accessKey = 'klm05TvNBzhg7h7j';
+            $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
+            $orderInfo = "Thanh toán qua MoMo";
+            $amount = $request->total_price;
+            $orderId = time() . "";
+            $redirectUrl = "http://127.0.0.1:8000/cart";
+            // $ipnUrl = "http://127.0.0.1:8000/cart";
+            $extraData = "";
+            $partnerCode = $partnerCode;
+            $accessKey = $accessKey;
+            $serectkey = $secretKey;
+            $orderId = $orderId; // Mã đơn hàng
+            $orderInfo = $orderInfo;
+            $amount = $amount;
+            $ipnUrl = $ipnUrl;
+            $redirectUrl = $redirectUrl;
+            $extraData = $extraData;
+            $requestId = time() . "";
+            $requestType = "payWithATM";
+            $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
+            $signature = hash_hmac("sha256", $rawHash, $serectkey);
+            $data = array(
+                'partnerCode' => $partnerCode,
+                'partnerName' => "Test",
+                "storeId" => "MomoTestStore",
+                'requestId' => $requestId,
+                'amount' => $amount,
+                'orderId' => $orderId,
+                'orderInfo' => $orderInfo,
+                'redirectUrl' => $redirectUrl,
+                'ipnUrl' => $ipnUrl,
+                'lang' => 'vi',
+                'extraData' => $extraData,
+                'requestType' => $requestType,
+                'signature' => $signature
+            );
+            $result = execPostRequest($endpoint, json_encode($data));
+            $jsonResult = json_decode($result, true);
+            if (isset($jsonResult['payUrl'])) {
+                return redirect($jsonResult['payUrl']);
+            } else {
+                echo "Error: Missing payUrl in the response.";
+            }
+        
+        }
     }
 }

@@ -31,6 +31,7 @@ class CartController extends Controller
         $cart->save();
         return redirect()->route('cart')->with('msg', 'Cart item quantity updated');
     }
+  
     
     
 }

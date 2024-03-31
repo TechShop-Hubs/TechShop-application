@@ -39,7 +39,7 @@
                             <label for="payment_method" class="form-label"><b>Chọn phương thức thanh toán</b></label>
                             <select class="form-select" name="payment_method">
                                 <option value="COD" selected>COD</option>
-                                <option value="Online">Trực tuyến</option>
+                                <option value="momo">Trực tuyến</option>
                             </select>
                         </div>
                     </div>
@@ -67,10 +67,10 @@
                             <label for="" class="form-label"><b>Số lượng</b></label>
                             <div class="number">
                                 <span class="minus sp">-</span>
-                                <input type="number" class="form-control" value="1" id="count" name="quantity"
-                                    readonly />
+                                <input type="number" class="form-control" value="{{ isset($quantity) ? $quantity : '1' }}" id="count" name="quantity" readonly />
                                 <span class="plus sp">+</span>
                             </div>
+                            
                         </div>
                         <div class="col-6">
                             <label for="" class="form-label"><b>Phí vận chuyển</b></label>
