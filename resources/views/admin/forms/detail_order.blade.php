@@ -48,11 +48,7 @@
                     </div>
                     <div class="">
                         <label for="status" class="form-label">Status</label>
-                        <select class="form-control" name="status" id="status">
-                            @foreach($statusArr as $status)
-                                <option value="{{ $status }}" {{ $status == $order->status ? 'selected' : ''}}>{{ $status}}</option>
-                            @endforeach
-                        </select>
+                        <input type="text" class="form-control" value="{{$order->status}}" readonly>
                     </div>
                 </div>
                 <div class="col-6">
@@ -74,9 +70,6 @@
                         <?php $count++; ?>
                     @endforeach
                 </div>
-            </div>
-            <div class="mt-3">
-                <button class="btn btn-success" type="submit">Sửa</button>
             </div>
         </form>
     </div>

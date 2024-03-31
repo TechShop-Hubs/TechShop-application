@@ -75,7 +75,7 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/order', [AdminController::class, 'getAllOrders'])->name('orders');
     Route::get('/order/{id}', [AdminController::class, 'getDetailOrder'])->name('detailOrder');
-    Route::get('/order/update/{id}', [AdminController::class, 'getUpdateProduct'])->name('updateOrder');
+    Route::get('/order/update/{id}', [AdminController::class, 'getUpdateOrder'])->name('updateOrder');
     Route::get('/order/delete/{id}', [AdminController::class, 'getDeleteOrder'])->name('deleteOrder');
     Route::post('/order/update/{id}', [AdminController::class, 'postUpdateOrder']);
     Route::post('/order/delete/{id}', [AdminController::class,'postDeleteOrder']);
