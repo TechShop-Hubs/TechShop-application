@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
@@ -141,15 +142,15 @@ class ClientsController extends Controller
         }
     }
 
-    public function cart($id){
-        $data['title'] = 'Giỏ hàng';
-        if (session('logged_in')) {
-            $user = $this->users->getUser(session('user_id'));
-            return view('clients.home');
-        } else {
-            return view('clients.detail_product');
-        }
-    }
+    // public function cart($id){
+    //     $data['title'] = 'Giỏ hàng';
+    //     if (session('logged_in')) {
+    //         $user = $this->users->getUser(session('user_id'));
+    //         return view('clients.home');
+    //     } else {
+    //         return view('clients.detail_product');
+    //     }
+    // }
 
     public function wishlish($id){
         $data['title'] = 'Giỏ hàng';
@@ -174,7 +175,34 @@ class ClientsController extends Controller
             return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
         }
     }
-
+    // cart
+    public function getCart(){
+        $logged_in = session('logged_in');
+        $total_price = 0;
+        //laays id user
+        $user_id = session('user_id');
+        $carts = DB::table('carts')
+        ->leftJoin('products', 'carts.product_id', '=', 'products.id')
+        ->leftJoin('users', 'carts.user_id', '=', 'users.id')
+        ->select(
+            'carts.id AS cart_id', // Đổi tên trường id của carts thành cart_id
+            'carts.*',
+            'products.*',
+            'products.name AS product_name', 
+            'users.*'
+        )
+        ->where('carts.user_id', $user_id)
+        ->get();
+        // dd($carts);
+        // dd($cart);
+        if($logged_in){
+            $data['title'] = 'Giỏ hàng';
+            return view('clients.cart',compact('data','carts','total_price'));
+        }
+        else {
+            return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
+        }
+    }
     //Logout
     public function logout(Request $request){
         $request->session()->flush();

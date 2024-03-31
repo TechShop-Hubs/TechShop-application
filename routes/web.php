@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientsController;
+use App\Http\Controllers\CartController;
+
+
 use GuzzleHttp\Client;
 
 /*
@@ -32,7 +35,11 @@ Route::get('/clients/samsung', [ClientsController::class, 'samsung']);
 
 Route::get('/detail_product/{id}', [ClientsController::class, 'getProduct'])->name('detail_product');
 Route::get('/information/{id}', [ClientsController::class, 'getInformation'])->name('get_information');
-Route::get('/cart/{id}', [ClientsController::class, 'cart'])->name('cart');
+
+Route::get('/cart', [ClientsController::class, 'getCart'])->name('cart');
+Route::post('/cart-reduce', [CartController::class, 'reduceQuantity'])->name('reduceQuantity');
+Route::post('/cart-increase', [CartController::class, 'increaseQuantity'])->name('increaseQuantity');
+
 Route::get('/wishlish/{id}', [ClientsController::class, 'wishlish'])->name('wishlish');
 
 Route::get('/login', function () {
