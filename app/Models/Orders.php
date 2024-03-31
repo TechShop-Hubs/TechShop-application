@@ -19,7 +19,8 @@ class Orders extends Model
         'quantity',
         'total_price',
         'order_date',
-        'status'
+        'status',
+        'destroy'
     ];
     protected $table = 'orders';
 
@@ -36,5 +37,27 @@ class Orders extends Model
                 'order_date' => $data['order_date'],
                 'status' => $data['status'],
             ]);
+    }
+
+    public function getDetailOrder($id){
+        $order = DB::table('orders')
+            ->select('*')
+            ->where('id', '=', $id)
+            ->where('destroy', '=', 0)
+            ->first();
+        return $order;
+    }
+
+    public function updateOrder($id, $data){
+        return DB::table('orders')
+        ->where('id', '=', $id)
+        ->update($data);
+    }
+
+    public function deleteOrder($id){
+
+        return DB::table('orders')
+                 ->where('id','=', $id)
+                 ->update(['destroy' => 1]);
     }
 }

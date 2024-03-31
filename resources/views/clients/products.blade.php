@@ -24,13 +24,17 @@
                         <p class="col bg-danger text-white rounded m-2">Giảm giá lên đến:{{$product -> discount}}%</p>
                     </div>
                     <div class="row mb-2">
-                        <button class="btn col-5 bg-secondary rounded m-1 p-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-zoom-in text-white" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0" />
-                                <path d="M10.344 11.742q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1 6.5 6.5 0 0 1-1.398 1.4z" />
-                                <path fill-rule="evenodd" d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5" />
+                        <a class="btn col-5 bg-secondary rounded m-1 p-0 justify-content-center d-flex align-items-center" href="/detail_product/{{ $product->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                fill="currentColor" class="bi bi-zoom-in text-white" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0" />
+                                <path
+                                    d="M10.344 11.742q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1 6.5 6.5 0 0 1-1.398 1.4z" />
+                                <path fill-rule="evenodd"
+                                    d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5" />
                             </svg>
-                        </button>
+                        </a>
                         <div class="col-6 bg-secondary rounded m-1 ">
                             <div class="row ">
                                 <a class="col btn m-0 pt-2 p-2 pb-2 text-white" href="/home/cart">Thêm vào<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="col  m-0 p-0 bi bi-cart3" viewBox="0 0 16 16">
@@ -68,13 +72,17 @@
                         <p class="col bg-danger text-white rounded m-2">Giảm giá lên đến:{{$product -> discount}}%</p>
                     </div>
                     <div class="row mb-2">
-                        <button class="btn col-5 bg-secondary rounded m-1 p-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-zoom-in text-white" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0" />
-                                <path d="M10.344 11.742q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1 6.5 6.5 0 0 1-1.398 1.4z" />
-                                <path fill-rule="evenodd" d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5" />
+                        <a class="btn col-5 bg-secondary rounded m-1 p-0 justify-content-center d-flex align-items-center" href="/detail_product/{{ $product->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                fill="currentColor" class="bi bi-zoom-in text-white" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0" />
+                                <path
+                                    d="M10.344 11.742q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1 6.5 6.5 0 0 1-1.398 1.4z" />
+                                <path fill-rule="evenodd"
+                                    d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5" />
                             </svg>
-                        </button>
+                        </a>
                         <div class="col-6 bg-secondary rounded m-1 ">
                             <div class="row ">
                                 <a class="col btn m-0 pt-2 p-2 pb-2 text-white" href="/home/cart">Thêm vào<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="col  m-0 p-0 bi bi-cart3" viewBox="0 0 16 16">
@@ -112,13 +120,17 @@
                         <p class="col bg-danger text-white rounded m-2">Giảm giá lên đến:{{$product -> discount}}%</p>
                     </div>
                     <div class="row mb-2">
-                        <button class="btn col-5 bg-secondary rounded m-1 p-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-zoom-in text-white" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0" />
-                                <path d="M10.344 11.742q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1 6.5 6.5 0 0 1-1.398 1.4z" />
-                                <path fill-rule="evenodd" d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5" />
+                        <a class="btn col-5 bg-secondary rounded m-1 p-0 justify-content-center d-flex align-items-center" href="/detail_product/{{ $product->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                fill="currentColor" class="bi bi-zoom-in text-white" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0" />
+                                <path
+                                    d="M10.344 11.742q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1 6.5 6.5 0 0 1-1.398 1.4z" />
+                                <path fill-rule="evenodd"
+                                    d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5" />
                             </svg>
-                        </button>
+                        </a>
                         <div class="col-6 bg-secondary rounded m-1 ">
                             <div class="row ">
                                 <a class="col btn m-0 pt-2 p-2 pb-2 text-white" href="/home/cart">Thêm vào<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="col  m-0 p-0 bi bi-cart3" viewBox="0 0 16 16">

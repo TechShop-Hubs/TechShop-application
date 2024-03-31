@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientsController;
+use App\Http\Controllers\CartController;
+
+
 use GuzzleHttp\Client;
 
 /*
@@ -36,6 +39,10 @@ Route::get('/checkout/{id}', [ClientsController::class, 'checkout'])->name('chec
 Route::post('/checkout/{id}', [ClientsController::class, 'order'])->name('order');
 
 Route::get('/cart/{id}', [ClientsController::class, 'cart'])->name('cart');
+Route::get('/cart', [ClientsController::class, 'getCart'])->name('cart');
+Route::post('/cart-reduce', [CartController::class, 'reduceQuantity'])->name('reduceQuantity');
+Route::post('/cart-increase', [CartController::class, 'increaseQuantity'])->name('increaseQuantity');
+
 Route::get('/wishlish/{id}', [ClientsController::class, 'wishlish'])->name('wishlish');
 
 Route::get('/login', function () {
@@ -77,6 +84,11 @@ Route::prefix('admin')->group(function () {
     Route::post('/user/update/{id}', [UserController::class, 'postUpdateUser']);
 
     Route::get('/order', [AdminController::class, 'getAllOrders'])->name('orders');
+    Route::get('/order/{id}', [AdminController::class, 'getDetailOrder'])->name('detailOrder');
+    Route::get('/order/update/{id}', [AdminController::class, 'getUpdateOrder'])->name('updateOrder');
+    Route::get('/order/delete/{id}', [AdminController::class, 'getDeleteOrder'])->name('deleteOrder');
+    Route::post('/order/update/{id}', [AdminController::class, 'postUpdateOrder']);
+    Route::post('/order/delete/{id}', [AdminController::class,'postDeleteOrder']);
 
     Route::get('/product', [AdminController::class, 'index'])->name('product');
     Route::get('/product/create', [AdminController::class, 'getFormCreateProduct'])->name('createProduct');
