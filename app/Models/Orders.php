@@ -36,6 +36,7 @@ class Orders extends Model
                 'total_price' => $data['total_price'],
                 'order_date' => $data['order_date'],
                 'status' => $data['status'],
+                'destroy' => $data['destroy']
             ]);
     }
 

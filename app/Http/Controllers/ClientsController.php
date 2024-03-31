@@ -201,7 +201,7 @@ class ClientsController extends Controller
             'carts.id AS cart_id', // Đổi tên trường id của carts thành cart_id
             'carts.*',
             'products.*',
-            'products.name AS product_name', 
+            'products.name AS product_name',
             'users.*'
         )
         ->where('carts.user_id', $user_id)
@@ -242,7 +242,8 @@ class ClientsController extends Controller
             'quantity' => $request->quantity,
             'total_price' => $request->total_price,
             'order_date' => date('Y-m-d'),
-            'status' => 'Đơn hàng mới'
+            'status' => 'Đơn hàng mới',
+            'destroy' => 0
         ];
 
         $this->orders->insertOrder($dataInsert);
