@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Users;
 use App\Models\Category;
 use App\Models\Orders;
+use App\Models\WishList;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -23,12 +24,14 @@ class ClientsController extends Controller
     private $users;
     private $orders;
     private $categories;
+    private $wishlist;
     public function __construct()
     {
         $this->products = new Product();
         $this->users = new Users();
         $this->categories = new Category();
         $this->orders = new Orders();
+        $this->wishlist = new WishList();
     }
 
     public function index(Request $request)
@@ -357,4 +360,22 @@ class ClientsController extends Controller
         }
 
     }
+    //wish list
+    public function postWishList($id){
+        $logged_in = session('logged_in');
+        $user_id = session('user_id');
+        
+        if(!$logged_in){
+            return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Bạn cần đăng nhập');
+        }
+        
+        $check = $this->wishlist->checkList($user_id,$id);
+        if($check){
+            return redirect()->route('detail_product', ['id' => $id])->with('msg', 'bạn đã thích sản phẩm này rồi');
+        }else{
+            $this->wishlist->postWishList($user_id,$id);
+            return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Thành công');
+        }
+    }
 }
+

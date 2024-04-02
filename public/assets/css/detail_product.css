@@ -32,3 +32,8 @@ p{
     font-weight: bold;
 }
 
+.calltoaction .btn, .calltoaction button {
+    /* width: 11rem; */
+    height: 50px;
+    font-size: 1rem; /* Thiết lập kích thước font chung */
+}
