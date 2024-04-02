@@ -19,7 +19,11 @@
                 <div class="container-fluid">
                     <a class="btn btn-danger btn-lg w-100 mt-5" href="/checkout/{{ $product->id }}">Mua ngay</a>
                     <div class="calltoaction mt-2 d-flex flex-row">
-                        <a class="btn btn-warning btn-lg me-3" href="/cart/{{ $product->id }}" style="width: 11rem;">Thêm vào giỏ hàng</a>
+                        <form action="{{route('postCart',[$product->id])}}" method="post">
+                            @csrf
+                            <button class="btn btn-warning btn-lg me-3" style="width: 11rem;">Thêm vào giỏ hàng</button>
+
+                        </form>
                         <form class=""  action="{{ route('postWishList',[$product->id]) }}" method="post">
                             @csrf
                             <button class="btn btn-lg btn-info" style="width: 11rem;">Yêu Thích</button>
