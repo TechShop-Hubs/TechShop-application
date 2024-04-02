@@ -333,17 +333,12 @@ class ClientsController extends Controller
 
     public function handleCallback(Request $request)
     {
-        // Kiểm tra xem giao dịch có thành công không
         if ($request->input('errorCode') == 0) {
-
             $this->orders->insertOrder(session('dataInsert'));
             $request->session()->forget('dataInsert');
-            // Redirect hoặc trả về thông báo thành công tùy thuộc vào logic của bạn
             return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng online thành công');
         } else {
-            // Xử lý trường hợp giao dịch không thành công (ví dụ: thông báo lỗi, redirect...)
             return redirect()->route('home')->with('msg', 'Bạn đặt hàng không thành công');
-
         }
     }
 }
