@@ -161,7 +161,7 @@ class ClientsController extends Controller
             return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện đặt hàng');
         }
     }
-    
+
 
 
 
@@ -246,6 +246,7 @@ class ClientsController extends Controller
             'status' => 'Đơn hàng mới',
             'destroy' => 0
         ];
+        $request->session()->put('dataInsert', $dataInsert);
         if($request->payment_method == 'COD') {
             $this->orders->insertOrder($dataInsert);
             return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng thành công');
@@ -253,7 +254,7 @@ class ClientsController extends Controller
 
 
         if ($request->payment_method == 'momo') {
-            
+
             function execPostRequest($url, $data)
             {
                 $ch = curl_init($url);
@@ -288,8 +289,8 @@ class ClientsController extends Controller
             $orderInfo = "Thanh toán qua MoMo";
             $amount = $request->total_price;
             $orderId = time() . "";
-            $redirectUrl = "http://127.0.0.1:8000/cart";
-            // $ipnUrl = "http://127.0.0.1:8000/cart";
+            $redirectUrl = "http://127.0.0.1:8000/momo/callback";
+            $ipnUrl = "http://127.0.0.1:8000/cart";
             $extraData = "";
             $partnerCode = $partnerCode;
             $accessKey = $accessKey;
@@ -326,7 +327,23 @@ class ClientsController extends Controller
             } else {
                 echo "Error: Missing payUrl in the response.";
             }
-        
+
+        }
+    }
+
+    public function handleCallback(Request $request)
+    {
+        // Kiểm tra xem giao dịch có thành công không
+        if ($request->input('errorCode') == 0) {
+
+            $this->orders->insertOrder(session('dataInsert'));
+            $request->session()->forget('dataInsert');
+            // Redirect hoặc trả về thông báo thành công tùy thuộc vào logic của bạn
+            return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng online thành công');
+        } else {
+            // Xử lý trường hợp giao dịch không thành công (ví dụ: thông báo lỗi, redirect...)
+            return redirect()->route('home')->with('msg', 'Bạn đặt hàng không thành công');
+
         }
     }
 }

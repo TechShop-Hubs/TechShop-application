@@ -45,6 +45,7 @@ Route::post('/cart-increase', [CartController::class, 'increaseQuantity'])->name
 Route::post('/update-cart', [CartController::class, 'updateCart'])->name('updateCart');
 
 Route::post('/momo', [PaymentController::class, 'momoPayment'])->name('momoPayment');
+Route::get('/momo/callback', [ClientsController::class, 'handleCallback']);
 
 Route::get('/wishlish/{id}', [ClientsController::class, 'wishlish'])->name('wishlish');
 
