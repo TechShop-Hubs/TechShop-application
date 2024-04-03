@@ -43,8 +43,8 @@ Route::get('/cart', [ClientsController::class, 'getCart'])->name('cart');
 Route::post('/cart-reduce', [CartController::class, 'reduceQuantity'])->name('reduceQuantity');
 Route::post('/cart-increase', [CartController::class, 'increaseQuantity'])->name('increaseQuantity');
 
-Route::get('/wishlish/{id}', [ClientsController::class, 'wishlish'])->name('wishlish');
-
+// Route::get('/wishlish/{id}', [ClientsController::class, 'wishlish'])->name('wishlish');
+Route::post('/wishlish/{id}', [ClientsController::class, 'postWishList'])->name('postWishList');
 Route::get('/login', function () {
     return view('login');
 })->name('login');
