@@ -368,7 +368,7 @@ class ClientsController extends Controller
         if(!$logged_in){
             return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Bạn cần đăng nhập');
         }
-        
+
         $check = $this->wishlist->checkList($user_id,$id);
         if($check){
             return redirect()->route('detail_product', ['id' => $id])->with('msg', 'bạn đã thích sản phẩm này rồi');
@@ -377,5 +377,6 @@ class ClientsController extends Controller
             return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Thành công');
         }
     }
+
 }
 
