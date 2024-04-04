@@ -37,7 +37,11 @@ Route::get('/detail_product/{id}', [ClientsController::class, 'getProduct'])->na
 Route::get('/checkout/{id}', [ClientsController::class, 'checkout'])->name('checkout');
 Route::post('/checkout/{id}', [ClientsController::class, 'order'])->name('order');
 
+
 // Route::get('/cart/{id}', [ClientsController::class, 'cart'])->name('cart');
+
+Route::post('/cart/{id}', [CartController::class, 'postCart'])->name('postCart');
+
 Route::get('/cart', [ClientsController::class, 'getCart'])->name('cart');
 
 Route::post('/cart-reduce', [CartController::class, 'reduceQuantity'])->name('reduceQuantity');
@@ -46,8 +50,8 @@ Route::post('/update-cart', [CartController::class, 'updateCart'])->name('update
 
 Route::post('/momo', [PaymentController::class, 'momoPayment'])->name('momoPayment');
 
-Route::get('/wishlish/{id}', [ClientsController::class, 'wishlish'])->name('wishlish');
-
+// Route::get('/wishlish/{id}', [ClientsController::class, 'wishlish'])->name('wishlish');
+Route::post('/wishlish/{id}', [ClientsController::class, 'postWishList'])->name('postWishList');
 Route::get('/login', function () {
     return view('login');
 })->name('login');

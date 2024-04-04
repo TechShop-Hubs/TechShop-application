@@ -9,10 +9,12 @@ use App\Models\Product;
 use App\Models\Users;
 use App\Models\Category;
 use App\Models\Orders;
+use App\Models\WishList;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PaymentController;
+
 class ClientsController extends Controller
 {
     public $data = [];
@@ -20,11 +22,14 @@ class ClientsController extends Controller
     private $users;
     private $orders;
     private $categories;
-    public function __construct(){
+    private $wishlist;
+    public function __construct()
+    {
         $this->products = new Product();
         $this->users = new Users();
         $this->categories = new Category();
         $this->orders = new Orders();
+        $this->wishlist = new WishList();
     }
 
     public function index(Request $request)
@@ -129,7 +134,8 @@ class ClientsController extends Controller
     }
 
     //PRODUCT
-    public function getProduct($id){
+    public function getProduct($id)
+    {
         $data['title'] = 'Chi tiết sản phẩm';
 
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
@@ -139,14 +145,18 @@ class ClientsController extends Controller
     }
 
     //CHECKOUT
+
     public function checkout($id, Request $request){
+
         if (session('logged_in')) {
             // option 1 với nút mua ngay ở trang chi tiết sản phẩm
             $data['title'] = 'Xác nhận thông tin';
             $user = $this->users->getUser(session('user_id'));
+
             if($request->product_id){
                 $id = $request->product_id;
             }
+
             $product = $this->products->getDetail($id);
             $category = DB::table('category')->where('id', $product->category_id)->first();
             $fee = 15000;
@@ -165,7 +175,9 @@ class ClientsController extends Controller
 
 
 
-    public function wishlish($id){
+
+    public function wishlish($id)
+    {
         $data['title'] = 'Giỏ hàng';
         if (session('logged_in')) {
             $user = $this->users->getUser(session('user_id'));
@@ -174,12 +186,13 @@ class ClientsController extends Controller
             return view('clients.detail_product');
         }
     }
-    public function getContact(){
+    public function getContact()
+    {
         $logged_in = session('logged_in');
         //laays id user
         $user_id = session('user_id');
 
-        if($logged_in) {
+        if ($logged_in) {
             $user = DB::table('users')->where('id', $user_id)->first();
             $data['title'] = "Liên hệ";
             return view('clients.contact', compact('data', 'user'));
@@ -189,7 +202,8 @@ class ClientsController extends Controller
         }
     }
     // cart
-    public function getCart(){
+    public function getCart()
+    {
         $logged_in = session('logged_in');
         $total_price = 0;
         //laays id user
@@ -207,23 +221,25 @@ class ClientsController extends Controller
         )
         ->where('carts.user_id', $user_id)
         ->get();
+
         // dd($carts);
         // dd($cart);
-        if($logged_in){
+        if ($logged_in) {
             $data['title'] = 'Giỏ hàng';
-            return view('clients.cart',compact('data','carts','total_price'));
-        }
-        else {
+            return view('clients.cart', compact('data', 'carts', 'total_price'));
+        } else {
             return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
         }
     }
     //Logout
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         $request->session()->flush();
         return redirect()->route('login');
     }
 
-    public function order(Request $request, $id){
+    public function order(Request $request, $id)
+    {
         $request->validate([
             'name' => 'required',
             'phone_number' => 'required',
@@ -246,14 +262,25 @@ class ClientsController extends Controller
             'status' => 'Đơn hàng mới',
             'destroy' => 0
         ];
-        if($request->payment_method == 'COD') {
+
+
+
+        // $this->orders->insertOrder($dataInsert);
+
+        // if ( $request->payment_method == 'Online') {
+        //     return redirect()->route('home')->with('msg', 'Bạn chọn thanh toán online');
+        // }
+
+        // return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng thành công');
+
+        if ($request->payment_method == 'COD') {
             $this->orders->insertOrder($dataInsert);
             return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng thành công');
         }
 
 
         if ($request->payment_method == 'momo') {
-            
+
             function execPostRequest($url, $data)
             {
                 $ch = curl_init($url);
@@ -289,7 +316,7 @@ class ClientsController extends Controller
             $amount = $request->total_price;
             $orderId = time() . "";
             $redirectUrl = "http://127.0.0.1:8000/cart";
-            // $ipnUrl = "http://127.0.0.1:8000/cart";
+            $ipnUrl = "http://127.0.0.1:8000/cart";
             $extraData = "";
             $partnerCode = $partnerCode;
             $accessKey = $accessKey;
@@ -326,7 +353,27 @@ class ClientsController extends Controller
             } else {
                 echo "Error: Missing payUrl in the response.";
             }
+
+        }
+
+    }
+    //wish list
+    public function postWishList($id){
+        $logged_in = session('logged_in');
+        $user_id = session('user_id');
         
+        if(!$logged_in){
+            return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Bạn cần đăng nhập');
+        }
+
+        $check = $this->wishlist->checkList($user_id,$id);
+        if($check){
+            return redirect()->route('detail_product', ['id' => $id])->with('msg', 'bạn đã thích sản phẩm này rồi');
+        }else{
+            $this->wishlist->postWishList($user_id,$id);
+            return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Thành công');
         }
     }
+
 }
+
