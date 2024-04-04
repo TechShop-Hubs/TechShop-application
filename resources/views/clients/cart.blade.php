@@ -50,8 +50,9 @@
                                         style="width:30px;height:30px;">+</button>
                                 </form>
                             </td>
-                            <td>{{ $cart->sell_price * ($cart->discount / 100) }}</td>
-                            <td>{{ $cart->product_quantity * $cart->sell_price * ($cart->discount / 100) }}</td>
+                            <td>{{ $cart->sell_price * (1-($cart->discount / 100)) }}</td>
+                    
+                            <td>{{ $cart->product_quantity *($cart->sell_price * (1-($cart->discount / 100))) }}</td>
                             <td>
                                 <form action="{{ route('checkout', ['id' => $cart->cart_id]) }}" method="get">
                                     {{-- @csrf --}}
