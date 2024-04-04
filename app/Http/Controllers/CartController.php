@@ -58,5 +58,6 @@ class CartController extends Controller
             return redirect()->route('detail_product',['id' => $id])->with('msg', 'Success add to cart');
         }
     }
+
     
 }

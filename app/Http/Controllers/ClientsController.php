@@ -13,9 +13,7 @@ use App\Models\WishList;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
-
 use App\Http\Controllers\PaymentController;
-
 
 class ClientsController extends Controller
 {
@@ -147,12 +145,15 @@ class ClientsController extends Controller
     }
 
     //CHECKOUT
-    public function checkout($id, Request $request)
-    {
+
+    public function checkout($id, Request $request){
+
         if (session('logged_in')) {
+            // option 1 với nút mua ngay ở trang chi tiết sản phẩm
             $data['title'] = 'Xác nhận thông tin';
             $user = $this->users->getUser(session('user_id'));
-            if ($request->product_id) {
+
+            if($request->product_id){
                 $id = $request->product_id;
             }
 
@@ -162,21 +163,17 @@ class ClientsController extends Controller
             if ($product->discount > 5) {
                 $fee = 20000;
             }
-            return view('clients.checkout', compact('data', 'product', 'user', 'category', 'fee'));
+            // Lấy giá trị số lượng từ yêu cầu
+            $quantity = $request->quantity;
+            return view('clients.checkout', compact('data', 'product', 'user', 'category', 'fee', 'quantity'));
+            // option 2 với nút từ trang cart
         } else {
             return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện đặt hàng');
         }
     }
+    
 
-    // public function cart($id){
-    //     $data['title'] = 'Giỏ hàng';
-    //     if (session('logged_in')) {
-    //         $user = $this->users->getUser(session('user_id'));
-    //         return view('clients.home');
-    //     } else {
-    //         return view('clients.detail_product');
-    //     }
-    // }
+
 
 
     public function wishlish($id)
@@ -212,19 +209,18 @@ class ClientsController extends Controller
         //laays id user
         $user_id = session('user_id');
         $carts = DB::table('carts')
-
-            ->leftJoin('products', 'carts.product_id', '=', 'products.id')
-            ->leftJoin('users', 'carts.user_id', '=', 'users.id')
-            ->select(
-                'carts.id AS cart_id', // Đổi tên trường id của carts thành cart_id
-                'carts.*',
-                'carts.status AS cart_status',
-                'products.*',
-                'products.name AS product_name',
-                'users.*'
-            )
-            ->where('carts.user_id', $user_id)
-            ->get();
+        ->leftJoin('products', 'carts.product_id', '=', 'products.id')
+        ->leftJoin('users', 'carts.user_id', '=', 'users.id')
+        ->select(
+            'carts.id AS cart_id', // Đổi tên trường id của carts thành cart_id
+            'carts.*',
+            'carts.status AS cart_status',
+            'products.*',
+            'products.name AS product_name',
+            'users.*'
+        )
+        ->where('carts.user_id', $user_id)
+        ->get();
 
         // dd($carts);
         // dd($cart);
@@ -266,6 +262,7 @@ class ClientsController extends Controller
             'status' => 'Đơn hàng mới',
             'destroy' => 0
         ];
+
 
 
         // $this->orders->insertOrder($dataInsert);
