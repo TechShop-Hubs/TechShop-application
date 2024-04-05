@@ -13,6 +13,7 @@
                 <img src="{{ asset('assets/images/iphone_expl.jpg') }}" alt="">
             </div>
             <div class="col-4">
+                <p class="quantity_product"><b>Số lượng còn lại:</b> {{ $product->quantity_product }} sản phẩm</p>
                 <p class="sell_price">{{ $product->sell_price }}đ</p>
                 <h3 style="color: red">{{ $product->sell_price * (1 - $product->discount / 100) }}đ</h3>
                 <p>Tiết kiệm đến {{ $product->discount }}% cho khách hàng</p>
@@ -30,8 +31,8 @@
                         </form>
                     </div>
                 </div>
-                
-                
+
+
             </div>
             <div class="col-4 specification">
                 <h3 class="text-center mb-4">Thông số kỹ thuật</h3>

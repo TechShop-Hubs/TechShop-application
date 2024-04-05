@@ -29,13 +29,22 @@
                 </div>
             </div>
             <div class="col-5 login_background">
+                @if (session('msg'))
+                    <div class="alert alert-danger">{{ session('msg') }}</div>
+                @endif
                 <div class="login_background_1">
                     <form method="POST" class="login_form">
                         @csrf
                         <input class="login_email" type="email" name="email" placeholder="Email - Tài khoản" value="{{old('email')}}"
                             required>
+                        @error('email')
+                            <p style="color: red">{{$message}}</p>
+                        @enderror
                         <input class="login_pass" type="password" name="password" placeholder="Mật khẩu" required
                             minlength="8">
+                        @error('password')
+                            <p style="color: red">{{$message}}</p>
+                        @enderror
                         <button class="login_button" type="submit">Đăng nhập</button>
                     </form>
                     <a class="login_question" href="{{ route('home') }}">Bạn quên mật khẩu ?</a>

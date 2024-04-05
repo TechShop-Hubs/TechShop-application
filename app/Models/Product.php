@@ -87,4 +87,13 @@ class Product extends Model
                  ->where('id', $id)
                  ->update(['status' => 0]);
     }
+
+    //update quantity
+    public function updateQuantity($id, $quantity){
+        return DB::table($this->table)
+            ->where('id', $id)
+            ->update([
+                'quantity_product' => $quantity
+            ]);
+    }
 }

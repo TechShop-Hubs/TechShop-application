@@ -29,7 +29,13 @@ class Cart extends Model
             ->where(['user_id' => $user_id, 'product_id' => $product_id])
             ->value('id');
     }
-    
-    
+
+    public function deleteCart($id){
+        return DB::table($this->table)
+            ->where('id', $id)
+            ->update([
+                'status' => 0
+            ]);
+    }
 
 }

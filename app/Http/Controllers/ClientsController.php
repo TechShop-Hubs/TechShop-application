@@ -21,6 +21,7 @@ class ClientsController extends Controller
     private $products;
     private $users;
     private $orders;
+    private $carts;
     private $categories;
     private $wishlist;
     public function __construct()
@@ -30,6 +31,7 @@ class ClientsController extends Controller
         $this->categories = new Category();
         $this->orders = new Orders();
         $this->wishlist = new WishList();
+        $this->carts = new Cart();
     }
 
     public function index(Request $request)
@@ -46,7 +48,9 @@ class ClientsController extends Controller
     {
         $data['title'] = 'Products Page';
         $banners = DB::table('banner')->get();
-        $products = DB::table('products')->get();
+        $products = DB::table('products')
+        ->where('quantity_product', '>', 0)
+        ->get();
         return view('clients.products', compact('data', 'products'));
     }
 
@@ -57,16 +61,8 @@ class ClientsController extends Controller
 
         $products = DB::table('products')
             ->where('category_id', 1)
+            ->where('quantity_product', '>', 0)
             ->get();
-        // $quantity = $products->quantity_product;
-        // $describe_product = $products->describe_product;
-
-        // if ($products) {
-        //     $quantity = $products->quantity_product;
-        // } else {
-        //     $quantity = 0;
-        // }
-        // return view('clients.iphone', compact('data', 'products', 'quantity', 'describe_product'));
         return view('clients.iphone', compact('data', 'products', 'banners'));
     }
 
@@ -76,6 +72,7 @@ class ClientsController extends Controller
         $banners = DB::table('banner')->get();
         $products = DB::table('products')
             ->where('category_id', 7)
+            ->where('quantity_product', '>', 0)
             ->get();
         return view('clients.laptop', compact('data', 'products', 'banners'));
     }
@@ -129,6 +126,7 @@ class ClientsController extends Controller
 
         $products = DB::table('products')
             ->where('category_id', 2)
+            ->where('quantity_product', '>', 0)
             ->get();
         return view('clients.samsung', compact('data', 'products', 'banners'));
     }
@@ -171,10 +169,6 @@ class ClientsController extends Controller
             return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện đặt hàng');
         }
     }
-    
-
-
-
 
     public function wishlish($id)
     {
@@ -228,7 +222,7 @@ class ClientsController extends Controller
             $data['title'] = 'Giỏ hàng';
             return view('clients.cart', compact('data', 'carts', 'total_price'));
         } else {
-            return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
+            return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để xem giỏ hàng');
         }
     }
     //Logout
@@ -252,6 +246,7 @@ class ClientsController extends Controller
 
         $dataInsert = [
             'user_id' => session('user_id'),
+            'cart_id' => $request->cart_id,
             'name' => $request->name,
             'phone_number' => $request->phone_number,
             'address' => $request->address,
@@ -262,19 +257,15 @@ class ClientsController extends Controller
             'status' => 'Đơn hàng mới',
             'destroy' => 0
         ];
-
-
-
-        // $this->orders->insertOrder($dataInsert);
-
-        // if ( $request->payment_method == 'Online') {
-        //     return redirect()->route('home')->with('msg', 'Bạn chọn thanh toán online');
-        // }
-
-        // return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng thành công');
-
-        if ($request->payment_method == 'COD') {
+        //số lượng sản phẩm còn lại
+        $quantity = $request->original_product_quantity - $request->quantity;
+        if($request->payment_method == 'COD') {
             $this->orders->insertOrder($dataInsert);
+            if ($request->cart_id != null) {
+                $this->carts->deleteCart($request->cart_id);
+            }
+            $this->products->updateQuantity($request->product_id, $quantity);
+
             return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng thành công');
         }
 
@@ -315,7 +306,7 @@ class ClientsController extends Controller
             $orderInfo = "Thanh toán qua MoMo";
             $amount = $request->total_price;
             $orderId = time() . "";
-            $redirectUrl = "http://127.0.0.1:8000/cart";
+            $redirectUrl = "http://127.0.0.1:8000/momo/callback";
             $ipnUrl = "http://127.0.0.1:8000/cart";
             $extraData = "";
             $partnerCode = $partnerCode;
@@ -349,19 +340,45 @@ class ClientsController extends Controller
             $result = execPostRequest($endpoint, json_encode($data));
             $jsonResult = json_decode($result, true);
             if (isset($jsonResult['payUrl'])) {
+                $request->session()->put('dataInsert', $dataInsert);
+                if ($request->cart_id != null) {
+                    $request->session()->put('cart_id', $request->cart_id);
+                }
+                $request->session()->put('quantity_product', $quantity);
+                $request->session()->put('product_id', $request->product_id);
+
                 return redirect($jsonResult['payUrl']);
             } else {
                 echo "Error: Missing payUrl in the response.";
             }
 
         }
+    }
 
+    public function handleCallback(Request $request)
+    {
+        if ($request->input('errorCode') == 0) {
+            $this->orders->insertOrder(session('dataInsert'));
+            if (session('cart_id') != null) {
+                $this->carts->deleteCart(session('cart_id'));
+                $request->session()->forget('cart_id');
+            }
+            $this->products->updateQuantity(session('product_id'), session('quantity_product'));
+
+            $request->session()->forget('dataInsert');
+            $request->session()->forget('product_id');
+            $request->session()->forget('quantity_product');
+
+            return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng online thành công');
+        } else {
+            return redirect()->route('home')->with('msg', 'Bạn đặt hàng không thành công');
+        }
     }
     //wish list
     public function postWishList($id){
         $logged_in = session('logged_in');
         $user_id = session('user_id');
-        
+
         if(!$logged_in){
             return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Bạn cần đăng nhập');
         }

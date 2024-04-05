@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use SebastianBergmann\Type\VoidType;
 use App\Models\User; // Assuming your User model is named User
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -124,6 +125,13 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required',
+        ], [
+            'email.required' => 'Cần nhập email.',
+            'password.required' => 'Cần nhập mật khẩu.'
+        ]);
         $user = $this->users->getDetail($request->email, $request->password);
         if (!empty($user)) {
             $request->session()->put('user_id', $user->id);
@@ -134,7 +142,7 @@ class UserController extends Controller
             }
             return redirect()->route('home');
         }else {
-            return back()->withInput($request->only('email'));
+            return back()->withInput($request->only('email'))->with('msg', 'Đăng nhập không thành công');
         }
     }
 
@@ -159,7 +167,7 @@ class UserController extends Controller
 
         return redirect()->route('login');
     }
-    
+
     public function destroy(User $user)
     {
         $user->delete();

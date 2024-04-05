@@ -17,7 +17,7 @@ class CartController extends Controller
         $cart = Cart::find($id);
 
         $product_quantity = $cart->product_quantity - 1;
-    
+
         if ($product_quantity <= 0) {
             $cart->delete();
             return redirect()->route('cart')->with('msg', 'Cart item deleted');
@@ -59,5 +59,4 @@ class CartController extends Controller
         }
     }
 
-    
 }
