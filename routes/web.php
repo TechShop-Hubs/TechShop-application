@@ -50,8 +50,10 @@ Route::post('/update-cart', [CartController::class, 'updateCart'])->name('update
 
 Route::post('/momo', [PaymentController::class, 'momoPayment'])->name('momoPayment');
 
-// Route::get('/wishlish/{id}', [ClientsController::class, 'wishlish'])->name('wishlish');
+Route::get('/wishlist', [ClientsController::class, 'showWishlist'])->name('showWishlist');;
 Route::post('/wishlish/{id}', [ClientsController::class, 'postWishList'])->name('postWishList');
+Route::post('/{id}', [ClientsController::class, 'postWishList']);
+
 Route::get('/login', function () {
     return view('login');
 })->name('login');

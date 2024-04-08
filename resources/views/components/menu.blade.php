@@ -14,4 +14,7 @@
     <div class="mt-2">
         <h5><a href="/clients/samsung" class="text-black" style="text-decoration: none">Samsung</a></h5>
     </div>
+    <div class="btn btn-danger">
+        <h5><a href="/wishlist" class="text-white" style="text-decoration: none">WishList</a></h5>
+    </div>
 </div>

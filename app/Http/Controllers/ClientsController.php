@@ -358,7 +358,7 @@ class ClientsController extends Controller
 
     }
     //wish list
-    public function postWishList($id){
+    public function postWishList($id, Request $request){
         $logged_in = session('logged_in');
         $user_id = session('user_id');
         
@@ -367,13 +367,34 @@ class ClientsController extends Controller
         }
 
         $check = $this->wishlist->checkList($user_id,$id);
-        if($check){
-            return redirect()->route('detail_product', ['id' => $id])->with('msg', 'bạn đã thích sản phẩm này rồi');
+        $checkPath = Request() -> path();
+        if($checkPath != 'detail_product'){
+            if($check){
+                return redirect()->route('home', ['id' => $id])->with('msg', 'bạn đã thích sản phẩm này rồi');
+            }else{
+                $this->wishlist->postWishList($user_id,$id);
+                return redirect()->route('home', ['id' => $id])->with('msg', 'Thành công');
+            }
         }else{
-            $this->wishlist->postWishList($user_id,$id);
-            return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Thành công');
+            if ($check) {
+                return redirect()->route('detail_product', ['id' => $id])->with('msg', 'bạn đã thích sản phẩm này rồi');
+            } else {
+                $this->wishlist->postWishList($user_id, $id);
+                return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Thành công');
+            }
         }
     }
+
+    public function showWishlist($user_id){
+        $logged_in = session('logged_in');
+        $user_id = session('user_id');
+        if(!$logged_in){
+            return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập');
+        }
+        $data['title'] = 'Wishlist';
+        $data['wishlist'] = $this->wishlist->showWishlist($user_id);
+        return view('clients.wishlist', $data);
+      }
 
 }
 
