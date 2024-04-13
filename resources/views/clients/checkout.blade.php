@@ -47,7 +47,7 @@
                 <div class="col-6">
                     <h3 class="">Thông tin sản phẩm</h3>
                     <div class="row g-3">
-                        <div class="col-6">
+                        {{-- <div class="col-6">
                             <label for="" class="form-label"><b>Tên sản phẩm</b></label>
                             <input type="text" class="form-control" value="{{ $product->name }}" readonly>
                             <input type="hidden" value="{{ $product->id }}">
@@ -65,13 +65,45 @@
                         </div>
                         <div class="col-6">
                             <label for="" class="form-label"><b>Số lượng</b></label>
-                            <div class="number">
-                                <span class="minus sp">-</span>
-                                <input type="number" class="form-control" value="{{ isset($quantity) ? $quantity : '1' }}" id="count" name="quantity" readonly />
-                                <span class="plus sp">+</span>
-                            </div>
-                            
                         </div>
+                        <div class="col-6">
+                            <label for="" class="form-label"><b>Giảm giá</b></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" readonly value="">
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+                         --}}
+                        <table class="table table-bordered border-primary">
+                            <thead>
+                                <tr class="text-center">
+                                    <th scope="col">#</th>
+                                    <th scope="col">Tên sản phẩm</th>
+                                    <th scope="col">Giá gốc</th>
+                                    <th scope="col">Khuyến mãi</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Giá</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{-- @foreach ($listProduct as $product) --}}
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>{{ $product->name }}</td>
+                                        <td>{{ $product->sell_price }}</td>
+                                        <td class="w-2">{{ $product->discount }}%</td>
+                                        <td>
+                                            <div class="number d-flex gap-1">
+                                                <span class="minus sp pt-1">-</span>
+                                                <input type="number" class="form-control" value="{{ isset($quantity) ? $quantity : '1' }}" id="count" name="quantity" readonly />
+                                                <span class="plus sp pt-1">+</span>
+                                            </div>
+                                        </td>
+                                        <td>{{ $product->sell_price * (1 - $product->discount / 100) + $fee }}</td>
+                                    </tr>
+                                {{-- @endforeach --}}
+                            </tbody>
+                        </table>
                         <div class="col-6">
                             <label for="" class="form-label"><b>Phí vận chuyển</b></label>
                             <div class="input-group">
@@ -80,17 +112,10 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <label for="" class="form-label"><b>Giảm giá</b></label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" readonly value="{{ $product->discount }}">
-                                <span class="input-group-text">%</span>
-                            </div>
-                        </div>
-                        <div class="col-12">
                             <label for="" class="form-label"><b>Tổng tiền</b></label>
                             <div class="input-group">
                                 <input type="number" class="form-control" readonly
-                                    value="{{ $product->sell_price * (1 - $product->discount / 100) + $fee }}"
+                                    {{-- value="{{ $product->sell_price * (1 - $product->discount / 100) + $fee }}" --}}
                                     id="total_price" name="total_price">
                                 <span class="input-group-text">VND</span>
                             </div>
