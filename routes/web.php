@@ -37,8 +37,8 @@ Route::get('/detail_product/{id}', [ClientsController::class, 'getProduct'])->na
 Route::get('/checkout/{id}', [ClientsController::class, 'checkout'])->name('checkout');
 Route::post('/checkout/{id}', [ClientsController::class, 'order'])->name('order');
 
-
-// Route::get('/cart/{id}', [ClientsController::class, 'cart'])->name('cart');
+//checkout with many products
+Route::post('/checkout', [ClientsController::class, 'checkouts'])->name('checkouts');
 
 Route::post('/cart/{id}', [CartController::class, 'postCart'])->name('postCart');
 
@@ -47,7 +47,7 @@ Route::get('/cart', [ClientsController::class, 'getCart'])->name('cart');
 Route::post('/cart-reduce', [CartController::class, 'reduceQuantity'])->name('reduceQuantity');
 Route::post('/cart-increase', [CartController::class, 'increaseQuantity'])->name('increaseQuantity');
 Route::post('/update-cart', [CartController::class, 'updateCart'])->name('updateCart');
-
+Route::post('/delete-cart/{id}', [CartController::class, 'deleteCart'])->name('deleteCart');
 Route::post('/momo', [PaymentController::class, 'momoPayment'])->name('momoPayment');
 
 // Route::get('/wishlish/{id}', [ClientsController::class, 'wishlish'])->name('wishlish');
