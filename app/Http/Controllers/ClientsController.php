@@ -171,10 +171,6 @@ class ClientsController extends Controller
             return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện đặt hàng');
         }
     }
-    
-
-
-
 
     public function wishlish($id)
     {
@@ -263,21 +259,10 @@ class ClientsController extends Controller
             'destroy' => 0
         ];
 
-
-
-        // $this->orders->insertOrder($dataInsert);
-
-        // if ( $request->payment_method == 'Online') {
-        //     return redirect()->route('home')->with('msg', 'Bạn chọn thanh toán online');
-        // }
-
-        // return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng thành công');
-
         if ($request->payment_method == 'COD') {
             $this->orders->insertOrder($dataInsert);
             return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng thành công');
         }
-
 
         if ($request->payment_method == 'momo') {
 
@@ -361,7 +346,7 @@ class ClientsController extends Controller
     public function postWishList($id){
         $logged_in = session('logged_in');
         $user_id = session('user_id');
-        
+
         if(!$logged_in){
             return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Bạn cần đăng nhập');
         }
