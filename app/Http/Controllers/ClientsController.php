@@ -45,11 +45,52 @@ class ClientsController extends Controller
     public function products(Request $request)
     {
         $data['title'] = 'Products Page';
-        $banners = DB::table('banner')->get();
+        // $banners = DB::table('banner')->get();
         $products = DB::table('products')->get();
-        return view('clients.products', compact('data', 'products'));
+        $kinds = $this->categories->getDistinctNameCategory();
+        
+        // Tạo một mảng để lưu trữ thông tin thương hiệu cho mỗi loại sản phẩm
+        $brandsByKind = [];
+    
+        // Lặp qua các loại sản phẩm để lấy các thương hiệu tương ứng
+        foreach ($kinds as $key => $kind) {
+            // Kiểm tra xem đã có thông tin về thương hiệu cho loại sản phẩm này chưa
+            if (!isset($brandsByKind[$kind->kind])) {
+                // Nếu chưa có, lấy thông tin thương hiệu cho loại sản phẩm này
+                $brandsByKind[$kind->kind] = $this->categories->getBrand($kind->kind);
+            }
+        }
+        // dd($brandsByKind);
+        // Truyền thông tin thương hiệu cho mỗi loại sản phẩm vào view
+        return view('clients.products', compact('data', 'products', 'kinds', 'brandsByKind'));
     }
+    // thông tin cho view sản phẩm theo brand and kind ở view clients/product.blade
+    public function product(Request $request){
+        $kindquery = $request->query('kind');
+        $brandquery = $request->query('brand');
+        
+        $data['title'] = 'Product';
+        // Khai báo $products trước khi truyền vào view
+        $products = []; // Cần phải gán giá trị cho $products
+        
+        $kinds = $this->categories->getDistinctNameCategory();
+        $brandsByKind = [];
+        foreach ($kinds as $key => $kind) {
+            if (!isset($brandsByKind[$kind->kind])) {
+                $brandsByKind[$kind->kind] = $this->categories->getBrand($kind->kind);
+            }
+        }
+       // Xử lý loại sản phẩm nào đổ ra sản phẩm đó
+        $categoryId = $this->categories->getCategoryID($kindquery, $brandquery);
+        // dd($categoryId);
+        if ($categoryId) {
+            $products = DB::table('products')->where('category_id', $categoryId[0]->id)->get();
+        } else {
+            echo "Category ID not found"; // Hoặc thông báo lỗi khác tùy vào trường hợp của bạn
+        }
 
+        return view('clients.product', compact('data', 'products', 'kinds', 'brandsByKind'));
+    }
     public function iphone(Request $request)
     {
         $data['title'] = 'Iphone';
