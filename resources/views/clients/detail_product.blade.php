@@ -3,7 +3,7 @@
 @include('components.menu')
 <link rel="stylesheet" href="{{ asset('assets/css/detail_product.css') }}">
 @if (session('msg'))
-    <div class="alert alert-danger">{{ session('msg') }}</div>
+    <div class="alert alert-success">{{ session('msg') }}</div>
 @endif
 <div class="container p-0 m-0">
     <div class="frame">

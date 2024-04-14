@@ -5,12 +5,14 @@
     @if (session('msg'))
         <div class="alert alert-success">{{ session('msg') }}</div>
     @endif
+    @if (session('err'))
+        <div class="alert alert-danger">{{ session('err') }}</div>
+    @endif
 </div>
 <div class="container-fluid">
     <div class="container">
         <h2 class="text-center">Chi tiết giỏ hàng</h2>
     </div>
-
     <div class="container">
         <div class="form">
             @csrf
@@ -23,6 +25,7 @@
                         <th scope="col">Số lượng</th>
                         <th scope="col">Giá</th>
                         <th scope="col">Tổng giá</th>
+                        <th></th>
                         <th scope="col">Chọn</th>
                     </tr>
                 </thead>
@@ -50,17 +53,18 @@
                                         style="width:30px;height:30px;">+</button>
                                 </form>
                             </td>
-                            <td>{{ $cart->sell_price * (1-($cart->discount / 100)) }}</td>
-                    
-                            <td>{{ $cart->product_quantity *($cart->sell_price * (1-($cart->discount / 100))) }}</td>
+                            <td>{{ $cart->sell_price * (1 - $cart->discount / 100) }}</td>
+
+                            <td>{{ $cart->product_quantity * ($cart->sell_price * (1 - $cart->discount / 100)) }}</td>
                             <td>
-                                <form action="{{ route('checkout', ['id' => $cart->cart_id]) }}" method="get">
-                                    {{-- @csrf --}}
-                                    <input type="hidden" name="quantity" value="{{ $cart->product_quantity }}">
-                                    <input type="hidden" name="product_id" value="{{ $cart->product_id }}">
-                                    <button type="submit" class="btn btn-primary">Thanh toán</button>
+                                <input type="checkbox" name="cartItem" value="{{$cart->cart_id}}">
+                            </td>
+                            <td class="d-flex flex-row gap-2">
+                                <form action="{{ route('deleteCart', ['id' => $cart->cart_id]) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="cart_id" value="{{ $cart->cart_id }}">
+                                    <button type="submit" class="btn btn-danger">Xóa</button>
                                 </form>
-                                
                             </td>
                             @php
                                 $total_price += $cart->product_quantity * $cart->sell_price * ($cart->discount / 100);
@@ -71,29 +75,51 @@
                         <td colspan="5"></td>
                         <td><strong>{{ $total_price }}</strong></td>
                         <td>
-                            {{-- Các nút hoặc liên kết khác nếu cần --}}
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div class="redirect d-flex flex-row justify-content-between">
                 <a href="/" class="btn btn-warning">Về trang chủ</a>
-                {{-- <button type="submit" class="btn btn-success">Tiến hành thanh toán</button> --}}
+                <button type="submit" class="btn btn-success" id="checkout" >Tiến hành thanh toán</button>
             </div>
         </div>
     </div>
-    <div class="test">
-        <h2>test momo</h2>
-        <form action="{{ route('momoPayment') }}" method="POST" class="border border-1">
-            @csrf
-            <input type="hidden" name="paymentMethod" value="momo">
-            <input type="hidden" name="total_price" value="200000">
-            <button type="submit" class="btn btn-primary ">pay</button>
-        </form>
-    </div>
-
 </div>
-{{-- @include('layouts.footer') --}}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<!-- Dưới phần script -->
+<script>
+    let check = document.getElementById('checkout');
+    check.addEventListener('click', ()=>{
+        // Lấy danh sách các cart_id đã chọn
+        let checkedItems = document.querySelectorAll('input[name="cartItem"]:checked');
+        let checkedIds = [];
+        // Lặp qua các ô đánh dấu đã chọn và lấy giá trị value của chúng
+        checkedItems.forEach(item => {
+            checkedIds.push(item.value); // Lấy giá trị của ô checkbox
+        });
+        // Chạy hàm xử lý thanh toán và truyền danh sách các cart_id đã chọn
+        if (checkedIds.length==0){
+            alert('Please select least one item');
+        }else{
+            proceedToCheckout(checkedIds);
+        }
+    });
+    function proceedToCheckout(selectedIds) {
+        let form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/checkout'; // Đặt URL của phương thức POST
+        let csrfToken = document.createElement('input');
+        csrfToken.type = 'hidden';
+        csrfToken.name = '_token'; // Tên của trường CSRF token trong Laravel
+        csrfToken.value = '{{ csrf_token() }}'; // Lấy giá trị CSRF token từ Laravel và gán vào input
+        form.appendChild(csrfToken);
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'cartIds'; // Đặt tên cho input, đây sẽ là tên khi bạn lấy dữ liệu trong phía server
+        input.value = JSON.stringify(selectedIds); // Chuyển đổi mảng thành chuỗi JSON và đặt giá trị của input là chuỗi này
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+    
+</script>

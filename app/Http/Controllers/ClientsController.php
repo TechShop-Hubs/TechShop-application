@@ -166,11 +166,52 @@ class ClientsController extends Controller
             // Lấy giá trị số lượng từ yêu cầu
             $quantity = $request->quantity;
             return view('clients.checkout', compact('data', 'product', 'user', 'category', 'fee', 'quantity'));
-            // option 2 với nút từ trang cart
+
         } else {
             return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện đặt hàng');
         }
     }
+
+    //checkout with many products
+    public function checkouts(Request $request){
+        $data['title'] = 'Xác nhận thông tin';
+        $arrId = json_decode($request->cartIds);
+        $fee = 0;
+        $totalPrice = 0;
+        
+        if(count($arrId) > 1){
+
+            $fee = 0;
+        }else{  
+            $fee = 20000;  
+        }
+        $user = $this->users->getUser(session('user_id'));
+        $products = [];
+        foreach ($arrId as $product_id) {
+            // Sử dụng where() thay vì wheres() và chỉ định cột để so sánh
+            $product = DB::table('carts')
+            ->select(
+                'carts.id as cart_id',
+                'carts.product_quantity',
+                'products.name as name',
+                'products.*' // Chọn tất cả các trường từ bảng products
+            )
+            ->leftJoin('products', 'carts.product_id', '=', 'products.id')
+            ->where('carts.id', '=', $product_id) // Sử dụng 'carts.cart_id' thay vì 'carts.id'
+            ->first();
+            
+            // Kiểm tra nếu sản phẩm tồn tại trước khi thêm vào mảng
+            if ($product) {
+                $products[] = $product; // Sử dụng []= để thêm phần tử vào mảng
+            }
+            $totalPrice += $product->sell_price * (1 - $product->discount / 100) + $fee;
+            
+        }
+        // dd($products);
+        return view('clients.checkouts',compact('data','user','products','fee','totalPrice'));    
+    }
+    
+    
 
     public function wishlish($id)
     {
