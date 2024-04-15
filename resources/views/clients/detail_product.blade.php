@@ -20,7 +20,6 @@
                 <h3 style="color: red">{{ $product->sell_price * (1 - $product->discount / 100) }}đ</h3>
                 <p>Tiết kiệm đến {{ $product->discount }}% cho khách hàng</p>
                 <div class="container-fluid">
-                    <a class="btn btn-danger btn-lg w-100 mt-5" href="/checkout/{{ $product->id }}">Mua ngay</a>
                     <div class="calltoaction mt-2 d-flex flex-row">
                         <form action="{{route('postCart',[$product->id])}}" method="post">
                             @csrf
@@ -33,8 +32,8 @@
                         </form>
                     </div>
                 </div>
-                
-                
+
+
             </div>
             <div class="col-4 specification">
                 <h3 class="text-center mb-4">Thông số kỹ thuật</h3>

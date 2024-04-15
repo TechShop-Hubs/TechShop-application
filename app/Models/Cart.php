@@ -29,6 +29,6 @@ class Cart extends Model
             ->where(['user_id' => $user_id, 'product_id' => $product_id])
             ->value('id');
     }
-    
 
+    
 }

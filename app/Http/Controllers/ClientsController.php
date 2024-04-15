@@ -14,6 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PaymentController;
+use App\Models\orderItem;
 
 class ClientsController extends Controller
 {
@@ -21,6 +22,7 @@ class ClientsController extends Controller
     private $products;
     private $users;
     private $orders;
+    private $orderItems;
     private $categories;
     private $wishlist;
     public function __construct()
@@ -29,6 +31,7 @@ class ClientsController extends Controller
         $this->users = new Users();
         $this->categories = new Category();
         $this->orders = new Orders();
+        $this->orderItems = new orderItem();
         $this->wishlist = new WishList();
     }
 
@@ -58,10 +61,10 @@ class ClientsController extends Controller
 
         // dd($products);
         $kinds = $this->categories->getDistinctNameCategory();
-        
+
         // Tạo một mảng để lưu trữ thông tin thương hiệu cho mỗi loại sản phẩm
         $brandsByKind = [];
-    
+
         // Lặp qua các loại sản phẩm để lấy các thương hiệu tương ứng
         foreach ($kinds as $key => $kind) {
             // Kiểm tra xem đã có thông tin về thương hiệu cho loại sản phẩm này chưa
@@ -171,45 +174,19 @@ class ClientsController extends Controller
     }
 
     //CHECKOUT
-
-    public function checkout($id, Request $request){
-
-        if (session('logged_in')) {
-            // option 1 với nút mua ngay ở trang chi tiết sản phẩm
-            $data['title'] = 'Xác nhận thông tin';
-            $user = $this->users->getUser(session('user_id'));
-
-            if($request->product_id){
-                $id = $request->product_id;
-            }
-
-            $product = $this->products->getDetail($id);
-            $category = DB::table('category')->where('id', $product->category_id)->first();
-            $fee = 15000;
-            if ($product->discount > 5) {
-                $fee = 20000;
-            }
-            // Lấy giá trị số lượng từ yêu cầu
-            $quantity = $request->quantity;
-            return view('clients.checkout', compact('data', 'product', 'user', 'category', 'fee', 'quantity'));
-
-        } else {
-            return redirect()->route('home')->with('err', 'Bạn cần đăng nhập để thực hiện đặt hàng');
-        }
-    }
-
     //checkout with many products
     public function checkouts(Request $request){
         $data['title'] = 'Xác nhận thông tin';
         $arrId = json_decode($request->cartIds);
+        $request->session()->put('arrayIDCart', $arrId);
         $fee = 0;
         $totalPrice = 0;
-        
+
         if(count($arrId) > 1){
 
             $fee = 0;
-        }else{  
-            $fee = 20000;  
+        }else{
+            $fee = 20000;
         }
         $user = $this->users->getUser(session('user_id'));
         $products = [];
@@ -225,19 +202,19 @@ class ClientsController extends Controller
             ->leftJoin('products', 'carts.product_id', '=', 'products.id')
             ->where('carts.id', '=', $product_id) // Sử dụng 'carts.cart_id' thay vì 'carts.id'
             ->first();
-            
+
             // Kiểm tra nếu sản phẩm tồn tại trước khi thêm vào mảng
             if ($product) {
                 $products[] = $product; // Sử dụng []= để thêm phần tử vào mảng
             }
-            $totalPrice += $product->sell_price * (1 - $product->discount / 100) + $fee;
-            
+            $totalPrice += ($product->sell_price * (1 - $product->discount / 100)) * $product->product_quantity + $fee;
+
         }
         // dd($products);
-        return view('clients.checkouts',compact('data','user','products','fee','totalPrice'));    
+        return view('clients.checkouts',compact('data','user','products','fee','totalPrice', 'arrId'));
     }
-    
-    
+
+
 
     public function wishlish($id)
     {
@@ -285,8 +262,6 @@ class ClientsController extends Controller
         ->where('carts.user_id', $user_id)
         ->get();
 
-        // dd($carts);
-        // dd($cart);
         if ($logged_in) {
             $data['title'] = 'Giỏ hàng';
             return view('clients.cart', compact('data', 'carts', 'total_price'));
@@ -301,7 +276,7 @@ class ClientsController extends Controller
         return redirect()->route('login');
     }
 
-    public function order(Request $request, $id)
+    public function order(Request $request)
     {
         $request->validate([
             'name' => 'required',
@@ -319,7 +294,6 @@ class ClientsController extends Controller
             'phone_number' => $request->phone_number,
             'address' => $request->address,
             'payment_method' => $request->payment_method,
-            'quantity' => $request->quantity,
             'total_price' => $request->total_price,
             'order_date' => date('Y-m-d'),
             'status' => 'Đơn hàng mới',
@@ -328,10 +302,30 @@ class ClientsController extends Controller
 
         if ($request->payment_method == 'COD') {
             $this->orders->insertOrder($dataInsert);
+            $order = DB::table('orders')
+            ->select('id')
+            ->orderByDesc('id')
+            ->limit(1)
+            ->first();
+            foreach (session('arrayIDCart') as $cart_id) {
+                $cart = DB::table('carts')->where('id', $cart_id)->first();
+                $product = DB::table('products')->where('id', $cart->product_id)->first();
+                $total_price = ($product->sell_price * $cart->product_quantity) + $request->fee;
+                $data = [
+                    'order_id' => $order->id,
+                    'product_id' => $cart->product_id,
+                    'price' => $product->sell_price,
+                    'quantity' => $cart->product_quantity,
+                    'total_price' => $total_price,
+                ];
+                $this->orderItems->insertOrderItem($data);
+                DB::table('carts')->where('id', $cart_id)->delete();
+            }
+
             return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng thành công');
         }
 
-        if ($request->payment_method == 'momo') {
+        if ($request->payment_method == 'Momo') {
 
             function execPostRequest($url, $data)
             {
@@ -367,7 +361,7 @@ class ClientsController extends Controller
             $orderInfo = "Thanh toán qua MoMo";
             $amount = $request->total_price;
             $orderId = time() . "";
-            $redirectUrl = "http://127.0.0.1:8000/cart";
+            $redirectUrl = "http://127.0.0.1:8000/momo/callback";
             $ipnUrl = "http://127.0.0.1:8000/cart";
             $extraData = "";
             $partnerCode = $partnerCode;
@@ -401,6 +395,7 @@ class ClientsController extends Controller
             $result = execPostRequest($endpoint, json_encode($data));
             $jsonResult = json_decode($result, true);
             if (isset($jsonResult['payUrl'])) {
+                $request->session()->put('dataInsert', $dataInsert);
                 return redirect($jsonResult['payUrl']);
             } else {
                 echo "Error: Missing payUrl in the response.";
@@ -409,6 +404,39 @@ class ClientsController extends Controller
         }
 
     }
+
+    public function handleCallback(Request $request)
+    {
+        if ($request->input('errorCode') == 0) {
+            $this->orders->insertOrder(session('dataInsert'));
+            $order = DB::table('orders')
+            ->select('id')
+            ->orderByDesc('id')
+            ->limit(1)
+            ->first();
+            foreach (session('arrayIDCart') as $cart_id) {
+                $cart = DB::table('carts')->where('id', $cart_id)->first();
+                $product = DB::table('products')->where('id', $cart->product_id)->first();
+                $total_price = ($product->sell_price * $cart->product_quantity) + $request->fee;
+                $data = [
+                    'order_id' => $order->id,
+                    'product_id' => $cart->product_id,
+                    'price' => $product->sell_price,
+                    'quantity' => $cart->product_quantity,
+                    'total_price' => $total_price,
+                ];
+                $this->orderItems->insertOrderItem($data);
+                DB::table('carts')->where('id', $cart_id)->delete();
+            }
+
+            $request->session()->forget('dataInsert');
+
+            return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng online thành công');
+        } else {
+            return redirect()->route('home')->with('msg', 'Bạn đặt hàng không thành công');
+        }
+    }
+
     //wish list
     public function postWishList($id){
         $logged_in = session('logged_in');
