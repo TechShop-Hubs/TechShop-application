@@ -45,7 +45,11 @@ class ClientsController extends Controller
     public function products(Request $request)
     {
         $data['title'] = 'Products Page';
-        // $banners = DB::table('banner')->get();
+        $kindquery = "";
+        $brandquery = "";
+        $kindquery = $request->query('kind');
+        $brandquery = $request->query('brand');
+        $products = [];
         $products = DB::table('products')->get();
         $kinds = $this->categories->getDistinctNameCategory();
         
@@ -60,36 +64,17 @@ class ClientsController extends Controller
                 $brandsByKind[$kind->kind] = $this->categories->getBrand($kind->kind);
             }
         }
-        // dd($brandsByKind);
-        // Truyền thông tin thương hiệu cho mỗi loại sản phẩm vào view
-        return view('clients.products', compact('data', 'products', 'kinds', 'brandsByKind'));
-    }
-    // thông tin cho view sản phẩm theo brand and kind ở view clients/product.blade
-    public function product(Request $request){
-        $kindquery = $request->query('kind');
-        $brandquery = $request->query('brand');
-        
-        $data['title'] = 'Product';
-        // Khai báo $products trước khi truyền vào view
-        $products = []; // Cần phải gán giá trị cho $products
-        
-        $kinds = $this->categories->getDistinctNameCategory();
-        $brandsByKind = [];
-        foreach ($kinds as $key => $kind) {
-            if (!isset($brandsByKind[$kind->kind])) {
-                $brandsByKind[$kind->kind] = $this->categories->getBrand($kind->kind);
+        if($kindquery != '' && $brandquery !=''){
+                   // Xử lý loại sản phẩm nào đổ ra sản phẩm đó
+            $categoryId = $this->categories->getCategoryID($kindquery, $brandquery);
+            // dd($categoryId);
+            if ($categoryId) {
+                $products = DB::table('products')->where('category_id', $categoryId[0]->id)->get();
+            } else {
+                echo "Category ID not found"; // Hoặc thông báo lỗi khác tùy vào trường hợp của bạn
             }
         }
-       // Xử lý loại sản phẩm nào đổ ra sản phẩm đó
-        $categoryId = $this->categories->getCategoryID($kindquery, $brandquery);
-        // dd($categoryId);
-        if ($categoryId) {
-            $products = DB::table('products')->where('category_id', $categoryId[0]->id)->get();
-        } else {
-            echo "Category ID not found"; // Hoặc thông báo lỗi khác tùy vào trường hợp của bạn
-        }
-
-        return view('clients.product', compact('data', 'products', 'kinds', 'brandsByKind'));
+        return view('clients.products', compact('data', 'products', 'kinds', 'brandsByKind'));
     }
     public function iphone(Request $request)
     {
@@ -99,15 +84,6 @@ class ClientsController extends Controller
         $products = DB::table('products')
             ->where('category_id', 1)
             ->get();
-        // $quantity = $products->quantity_product;
-        // $describe_product = $products->describe_product;
-
-        // if ($products) {
-        //     $quantity = $products->quantity_product;
-        // } else {
-        //     $quantity = 0;
-        // }
-        // return view('clients.iphone', compact('data', 'products', 'quantity', 'describe_product'));
         return view('clients.iphone', compact('data', 'products', 'banners'));
     }
 
@@ -209,7 +185,7 @@ class ClientsController extends Controller
             return view('clients.checkout', compact('data', 'product', 'user', 'category', 'fee', 'quantity'));
 
         } else {
-            return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện đặt hàng');
+            return redirect()->route('home')->with('err', 'Bạn cần đăng nhập để thực hiện đặt hàng');
         }
     }
 
