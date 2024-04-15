@@ -38,6 +38,7 @@ class ClientsController extends Controller
         $banners = DB::table('banner')->get();
         $products = DB::table('products')
             ->where('discount', '>', 0)
+            ->join('images', 'products.id', '=', 'images.product_id')
             ->paginate(5);
         return view('clients.home', compact('data', 'products', 'banners'));
     }
@@ -51,6 +52,11 @@ class ClientsController extends Controller
         $brandquery = $request->query('brand');
         $products = [];
         $products = DB::table('products')->get();
+        $products = DB::table('products')
+            ->join('images', 'products.id', '=', 'images.product_id')
+            ->get();
+
+        // dd($products);
         $kinds = $this->categories->getDistinctNameCategory();
         
         // Tạo một mảng để lưu trữ thông tin thương hiệu cho mỗi loại sản phẩm
@@ -69,7 +75,7 @@ class ClientsController extends Controller
             $categoryId = $this->categories->getCategoryID($kindquery, $brandquery);
             // dd($categoryId);
             if ($categoryId) {
-                $products = DB::table('products')->where('category_id', $categoryId[0]->id)->get();
+                $products = DB::table('products')->join('images', 'products.id', '=', 'images.product_id')->where('category_id', $categoryId[0]->id)->get();
             } else {
                 echo "Category ID not found"; // Hoặc thông báo lỗi khác tùy vào trường hợp của bạn
             }
@@ -83,6 +89,7 @@ class ClientsController extends Controller
 
         $products = DB::table('products')
             ->where('category_id', 1)
+            ->join('images', 'products.id', '=', 'images.product_id')
             ->get();
         return view('clients.iphone', compact('data', 'products', 'banners'));
     }
@@ -93,6 +100,7 @@ class ClientsController extends Controller
         $banners = DB::table('banner')->get();
         $products = DB::table('products')
             ->where('category_id', 7)
+            ->join('images', 'products.id', '=', 'images.product_id')
             ->get();
         return view('clients.laptop', compact('data', 'products', 'banners'));
     }
@@ -146,6 +154,7 @@ class ClientsController extends Controller
 
         $products = DB::table('products')
             ->where('category_id', 2)
+            ->join('images', 'products.id', '=', 'images.product_id')
             ->get();
         return view('clients.samsung', compact('data', 'products', 'banners'));
     }
