@@ -54,7 +54,7 @@
                 <div class="col-12 d-flex justify-content-center border border-black rounded bg-warning bg-opacity-10 ">
                     <div class="row d-flex justify-content-center ">
                         <div class="col-12 text-center ">
-                            <img class="col mt-3 image" style="height:250px;" src="https://photo.znews.vn/w660/Uploaded/qhj_yvobvhfwbv/2018_07_18/Nguyen_Huy_Binh1.jpg" alt="">
+                            <img class="col mt-3 image" style="height:250px;" src="{{$product->image}}" alt="">
                             <b class="col">
                                 <p class="name">{{$product -> name}}</p>
                             </b>

@@ -13,7 +13,7 @@
         <div class="row mt-5 larger">
             <div class="col-4 text-center">
                 <h2>{{ $product->name }}</h2>
-                <img src="{{ asset('assets/images/iphone_expl.jpg') }}" alt="">
+                <img style="height: 358px;" src="{{ $product->image }}" alt="">
             </div>
             <div class="col-4">
                 <p class="sell_price">{{ $product->sell_price }}đ</p>
