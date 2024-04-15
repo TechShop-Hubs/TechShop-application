@@ -51,7 +51,7 @@
                     <div class="row d-flex justify-content-center">
                         <div class="col-12 text-center">
                             <img class="col mt-3 image" style="height:120px;"
-                                src="https://photo.znews.vn/w660/Uploaded/qhj_yvobvhfwbv/2018_07_18/Nguyen_Huy_Binh1.jpg"
+                                src="{{$product->image}}"
                                 alt="">
                             <b class="">
                                 <p class="name">{{ $product->name }}</p>
@@ -106,7 +106,7 @@
                     <div class="row d-flex justify-content-center">
                         <div class="col-12 text-center">
                             <img class="col mt-3 image" style="height:120px;"
-                                src="https://photo.znews.vn/w660/Uploaded/qhj_yvobvhfwbv/2018_07_18/Nguyen_Huy_Binh1.jpg"
+                                src="{{$product->image}}"
                                 alt="">
                             <b class="">
                                 <p class="name">{{ $product->name }}</p>
