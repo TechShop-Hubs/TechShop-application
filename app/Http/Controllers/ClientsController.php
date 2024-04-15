@@ -238,7 +238,7 @@ class ClientsController extends Controller
             return view('clients.contact', compact('data', 'user'));
 
         } else {
-            return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
+            return redirect()->route('home')->with('err', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
         }
     }
     // cart
@@ -266,7 +266,7 @@ class ClientsController extends Controller
             $data['title'] = 'Giỏ hàng';
             return view('clients.cart', compact('data', 'carts', 'total_price'));
         } else {
-            return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
+            return redirect()->route('home')->with('err', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
         }
     }
     //Logout
@@ -443,12 +443,12 @@ class ClientsController extends Controller
         $user_id = session('user_id');
 
         if(!$logged_in){
-            return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Bạn cần đăng nhập');
+            return redirect()->route('detail_product', ['id' => $id])->with('err', 'Bạn cần đăng nhập');
         }
 
         $check = $this->wishlist->checkList($user_id,$id);
         if($check){
-            return redirect()->route('detail_product', ['id' => $id])->with('msg', 'bạn đã thích sản phẩm này rồi');
+            return redirect()->route('detail_product', ['id' => $id])->with('err', 'bạn đã thích sản phẩm này rồi');
         }else{
             $this->wishlist->postWishList($user_id,$id);
             return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Thành công');
