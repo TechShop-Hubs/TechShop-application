@@ -73,8 +73,8 @@ class ClientsController extends Controller
                 $brandsByKind[$kind->kind] = $this->categories->getBrand($kind->kind);
             }
         }
-        if($kindquery != '' && $brandquery !=''){
-                   // Xử lý loại sản phẩm nào đổ ra sản phẩm đó
+        if ($kindquery != '' && $brandquery != '') {
+            // Xử lý loại sản phẩm nào đổ ra sản phẩm đó
             $categoryId = $this->categories->getCategoryID($kindquery, $brandquery);
             // dd($categoryId);
             if ($categoryId) {
@@ -175,17 +175,18 @@ class ClientsController extends Controller
 
     //CHECKOUT
     //checkout with many products
-    public function checkouts(Request $request){
+    public function checkouts(Request $request)
+    {
         $data['title'] = 'Xác nhận thông tin';
         $arrId = json_decode($request->cartIds);
         $request->session()->put('arrayIDCart', $arrId);
         $fee = 0;
         $totalPrice = 0;
 
-        if(count($arrId) > 1){
+        if (count($arrId) > 1) {
 
             $fee = 0;
-        }else{
+        } else {
             $fee = 20000;
         }
         $user = $this->users->getUser(session('user_id'));
@@ -193,25 +194,24 @@ class ClientsController extends Controller
         foreach ($arrId as $product_id) {
             // Sử dụng where() thay vì wheres() và chỉ định cột để so sánh
             $product = DB::table('carts')
-            ->select(
-                'carts.id as cart_id',
-                'carts.product_quantity',
-                'products.name as name',
-                'products.*' // Chọn tất cả các trường từ bảng products
-            )
-            ->leftJoin('products', 'carts.product_id', '=', 'products.id')
-            ->where('carts.id', '=', $product_id) // Sử dụng 'carts.cart_id' thay vì 'carts.id'
-            ->first();
+                ->select(
+                    'carts.id as cart_id',
+                    'carts.product_quantity',
+                    'products.name as name',
+                    'products.*' // Chọn tất cả các trường từ bảng products
+                )
+                ->leftJoin('products', 'carts.product_id', '=', 'products.id')
+                ->where('carts.id', '=', $product_id) // Sử dụng 'carts.cart_id' thay vì 'carts.id'
+                ->first();
 
             // Kiểm tra nếu sản phẩm tồn tại trước khi thêm vào mảng
             if ($product) {
                 $products[] = $product; // Sử dụng []= để thêm phần tử vào mảng
             }
             $totalPrice += ($product->sell_price * (1 - $product->discount / 100)) * $product->product_quantity + $fee;
-
         }
         // dd($products);
-        return view('clients.checkouts',compact('data','user','products','fee','totalPrice', 'arrId'));
+        return view('clients.checkouts', compact('data', 'user', 'products', 'fee', 'totalPrice', 'arrId'));
     }
 
 
@@ -236,7 +236,6 @@ class ClientsController extends Controller
             $user = DB::table('users')->where('id', $user_id)->first();
             $data['title'] = "Liên hệ";
             return view('clients.contact', compact('data', 'user'));
-
         } else {
             return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
         }
@@ -249,18 +248,18 @@ class ClientsController extends Controller
         //laays id user
         $user_id = session('user_id');
         $carts = DB::table('carts')
-        ->leftJoin('products', 'carts.product_id', '=', 'products.id')
-        ->leftJoin('users', 'carts.user_id', '=', 'users.id')
-        ->select(
-            'carts.id AS cart_id', // Đổi tên trường id của carts thành cart_id
-            'carts.*',
-            'carts.status AS cart_status',
-            'products.*',
-            'products.name AS product_name',
-            'users.*'
-        )
-        ->where('carts.user_id', $user_id)
-        ->get();
+            ->leftJoin('products', 'carts.product_id', '=', 'products.id')
+            ->leftJoin('users', 'carts.user_id', '=', 'users.id')
+            ->select(
+                'carts.id AS cart_id', // Đổi tên trường id của carts thành cart_id
+                'carts.*',
+                'carts.status AS cart_status',
+                'products.*',
+                'products.name AS product_name',
+                'users.*'
+            )
+            ->where('carts.user_id', $user_id)
+            ->get();
 
         if ($logged_in) {
             $data['title'] = 'Giỏ hàng';
@@ -303,10 +302,10 @@ class ClientsController extends Controller
         if ($request->payment_method == 'COD') {
             $this->orders->insertOrder($dataInsert);
             $order = DB::table('orders')
-            ->select('id')
-            ->orderByDesc('id')
-            ->limit(1)
-            ->first();
+                ->select('id')
+                ->orderByDesc('id')
+                ->limit(1)
+                ->first();
             foreach (session('arrayIDCart') as $cart_id) {
                 $cart = DB::table('carts')->where('id', $cart_id)->first();
                 $product = DB::table('products')->where('id', $cart->product_id)->first();
@@ -400,9 +399,7 @@ class ClientsController extends Controller
             } else {
                 echo "Error: Missing payUrl in the response.";
             }
-
         }
-
     }
 
     public function handleCallback(Request $request)
@@ -410,10 +407,10 @@ class ClientsController extends Controller
         if ($request->input('errorCode') == 0) {
             $this->orders->insertOrder(session('dataInsert'));
             $order = DB::table('orders')
-            ->select('id')
-            ->orderByDesc('id')
-            ->limit(1)
-            ->first();
+                ->select('id')
+                ->orderByDesc('id')
+                ->limit(1)
+                ->first();
             foreach (session('arrayIDCart') as $cart_id) {
                 $cart = DB::table('carts')->where('id', $cart_id)->first();
                 $product = DB::table('products')->where('id', $cart->product_id)->first();
@@ -438,22 +435,100 @@ class ClientsController extends Controller
     }
 
     //wish list
-    public function postWishList($id){
+    public function postWishList($id)
+    {
         $logged_in = session('logged_in');
         $user_id = session('user_id');
 
-        if(!$logged_in){
+        if (!$logged_in) {
             return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Bạn cần đăng nhập');
         }
 
-        $check = $this->wishlist->checkList($user_id,$id);
-        if($check){
+        $check = $this->wishlist->checkList($user_id, $id);
+        if ($check) {
             return redirect()->route('detail_product', ['id' => $id])->with('msg', 'bạn đã thích sản phẩm này rồi');
-        }else{
-            $this->wishlist->postWishList($user_id,$id);
+        } else {
+            $this->wishlist->postWishList($user_id, $id);
             return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Thành công');
         }
     }
 
-}
+    public function historyOrder()
+    {
+        $logged_in = session('logged_in');
+        $user_id = session('user_id');
 
+        if ($logged_in) {
+            $user = DB::table('users')->where('id', $user_id)->first();
+            $listOrders = DB::table('orders')->where('id', $user_id)->get();
+            $data['title'] = "Lịch sử đơn hàng";
+            return view('clients.history_order', compact('data', 'user', 'listOrders'));
+        } else {
+            return redirect()->route('home')->with('msg', 'Bạn cần đăng nhập để thực hiện chức năng liên hệ này');
+        }
+    }
+
+    public function changePassword()
+    {
+        $data['title'] = "Thay đổi mật khẩu";
+        $user = DB::table('users')->where('id', session('user_id'))->first();
+        $password = $user->password;
+        return view('clients.change_password', compact('password', 'data'));
+    }
+
+    public function postChangePassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|min:8',
+        ], [
+            'password.required' => 'Mật khẩu bắt buộc phải nhập',
+            'password.min' => 'Mật khẩu phải từ :min kí tự trở lên',
+        ]);
+
+        $success = DB::table('users')->where('id', session('user_id'))->update(['password' => $request->password]);
+
+        if ($success) {
+            return redirect()->route('historyOrder')->with('msg', 'Thay đổi mật khẩu thành công');
+        } else {
+            return back()->withInput($request->all());
+        }
+    }
+
+    public function updateInformation()
+    {
+        $data['title'] = "Thay đổi thông tin";
+        $user = $this->users->getUser(session('user_id'));
+        return view('clients.update_information', compact('user', 'data'));
+    }
+
+    public function postUpdateInfo(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|unique:users',
+            'name' => 'required|min:3',
+            'phone_number' => 'required|min:10',
+        ], [
+            'email.required' => 'Email bắt buộc phải nhập',
+            'email.unique' => 'Email đã tồn tại trên hệ thống.',
+            'email.email' => 'Email phải đúng định dạng.',
+            'phone_number.required' => 'Số điện thoại bắt buộc phải nhập',
+            'phone_number.min' => 'Số điện thoại phải từ :min kí tự trở lên',
+            'name.required' => 'Tên bắt buộc phải nhập',
+            'name.min' => 'Tên phải từ :min kí tự trở lên',
+        ]);
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+        ];
+
+        $success = DB::table('users')->where('id', session('user_id'))->update($data);
+
+        if ($success) {
+            return redirect()->route('historyOrder')->with('msg', 'Thay đổi thông tin thành công');
+        } else {
+            return back()->withInput($request->all());
+        }
+    }
+}
