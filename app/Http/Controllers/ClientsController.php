@@ -316,7 +316,7 @@ class ClientsController extends Controller
             return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng thành công');
         }
 
-        if ($request->payment_method == 'momo') {
+        if ($request->payment_method == 'Momo') {
 
             function execPostRequest($url, $data)
             {
@@ -352,7 +352,7 @@ class ClientsController extends Controller
             $orderInfo = "Thanh toán qua MoMo";
             $amount = $request->total_price;
             $orderId = time() . "";
-            $redirectUrl = "http://127.0.0.1:8000/cart";
+            $redirectUrl = "http://127.0.0.1:8000/momo/callback";
             $ipnUrl = "http://127.0.0.1:8000/cart";
             $extraData = "";
             $partnerCode = $partnerCode;
@@ -386,6 +386,7 @@ class ClientsController extends Controller
             $result = execPostRequest($endpoint, json_encode($data));
             $jsonResult = json_decode($result, true);
             if (isset($jsonResult['payUrl'])) {
+                $request->session()->put('dataInsert', $dataInsert);
                 return redirect($jsonResult['payUrl']);
             } else {
                 echo "Error: Missing payUrl in the response.";
@@ -394,6 +395,39 @@ class ClientsController extends Controller
         }
 
     }
+
+    public function handleCallback(Request $request)
+    {
+        if ($request->input('errorCode') == 0) {
+            $this->orders->insertOrder(session('dataInsert'));
+            $order = DB::table('orders')
+            ->select('id')
+            ->orderByDesc('id')
+            ->limit(1)
+            ->first();
+            foreach (session('arrayIDCart') as $cart_id) {
+                $cart = DB::table('carts')->where('id', $cart_id)->first();
+                $product = DB::table('products')->where('id', $cart->product_id)->first();
+                $total_price = ($product->sell_price * $cart->product_quantity) + $request->fee;
+                $data = [
+                    'order_id' => $order->id,
+                    'product_id' => $cart->product_id,
+                    'price' => $product->sell_price,
+                    'quantity' => $cart->product_quantity,
+                    'total_price' => $total_price,
+                ];
+                $this->orderItems->insertOrderItem($data);
+                DB::table('carts')->where('id', $cart_id)->delete();
+            }
+
+            $request->session()->forget('dataInsert');
+
+            return redirect()->route('home')->with('msg', 'Bạn đã đặt hàng online thành công');
+        } else {
+            return redirect()->route('home')->with('msg', 'Bạn đặt hàng không thành công');
+        }
+    }
+
     //wish list
     public function postWishList($id){
         $logged_in = session('logged_in');

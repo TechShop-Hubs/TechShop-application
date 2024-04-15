@@ -19,10 +19,10 @@ use GuzzleHttp\Client;
 |
 */
 
-//HOME PAGE
+//HOME PAGE-------------------------------------------------------------------------------------------
 Route::get('/', [ClientsController::class, 'index'])->name('home');
 
-//CLIENT PAGE
+//CLIENT PAGE-------------------------------------------------------------------------------------------
 Route::get('/clients/products', [ClientsController::class, 'products']);
 Route::get('/clients/iphone', [ClientsController::class, 'iphone']);
 Route::get('/clients/laptop', [ClientsController::class, 'laptop']);
@@ -30,48 +30,49 @@ Route::post('/clupdateCartients/laptop', [ClientsController::class, 'filters']);
 Route::get('/clients/samsung', [ClientsController::class, 'samsung']);
 Route::get('/detail_product/{id}', [ClientsController::class, 'getProduct'])->name('detail_product');
 
-//LOGIN
+//LOGIN-------------------------------------------------------------------------------------------
 Route::get('/login', function () {
     return view('login');
 })->name('login');
 Route::post('/login', [UserController::class, 'login']);
 
-//REGISTER
+//REGISTER-------------------------------------------------------------------------------------------
 Route::get('/register', function () {
     return view('register');
 })->name('register');
 Route::post('/register', [UserController::class, 'register']);
 
-//LOGOUT
+//LOGOUT-------------------------------------------------------------------------------------------
 Route::get('/logout', [ClientsController::class, 'logout']);
 
-//CONTACT
+//CONTACT-------------------------------------------------------------------------------------------
 Route::get('/contact',[ClientsController::class,'getContact'] )->name('client.contact');
 Route::post('/contact', [AdminController::class,'createContact']);
 
-//CHECKOUT
+//CHECKOUT-------------------------------------------------------------------------------------------
 //checkout from cart
 Route::post('/checkout', [ClientsController::class, 'checkouts'])->name('checkouts');
 Route::post('/checkout_order', [ClientsController::class, 'order'])->name('order');
+Route::post('/momo', [PaymentController::class, 'momoPayment'])->name('momoPayment');
+Route::get('/momo/callback', [ClientsController::class, 'handleCallback']);
 
-//CART
+//CART-------------------------------------------------------------------------------------------
 Route::post('/cart/{id}', [CartController::class, 'postCart'])->name('postCart');
 Route::get('/cart', [ClientsController::class, 'getCart'])->name('cart');
 Route::post('/cart-reduce', [CartController::class, 'reduceQuantity'])->name('reduceQuantity');
 Route::post('/cart-increase', [CartController::class, 'increaseQuantity'])->name('increaseQuantity');
 Route::post('/update-cart', [CartController::class, 'updateCart'])->name('updateCart');
 Route::post('/delete-cart/{id}', [CartController::class, 'deleteCart'])->name('deleteCart');
-Route::post('/momo', [PaymentController::class, 'momoPayment'])->name('momoPayment');
 
-//WISHLIST
+//WISHLIST-------------------------------------------------------------------------------------------
 Route::post('/wishlish/{id}', [ClientsController::class, 'postWishList'])->name('postWishList');
 
-//ADMIN
+//ADMIN-------------------------------------------------------------------------------------------
 Route::prefix('admin')->group(function () {
-    //DEFAULT PAGE
+    //DEFAULT PAGE-------------------------------------------------------------------------------------------
     Route::get('/', [AdminController::class, 'index']);
 
-    //CATEGORY
+    //CATEGORY-------------------------------------------------------------------------------------------
     Route::get('/category', [AdminController::class, 'getCategories'])->name('categories');
     Route::get('/category/create', [AdminController::class, 'getFormCreateCategory'])->name('createCategory');
     Route::post('/category/create', [AdminController::class, 'postCreateCategory'])->name('postCreateCategory');
@@ -80,7 +81,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/category/delete/{id}', [AdminController::class, 'getDeleteCategory'])->name('deleteCategory');
     Route::post('/category/delete/{id}', [AdminController::class, 'postDeleteCategory']);
 
-    //USER
+    //USER-------------------------------------------------------------------------------------------
     Route::get('/user', [UserController::class, 'getAllUsers'])->name('users');
     Route::get('/user/create', [UserController::class, 'getFormCreateUser'])->name('createUser');
     Route::post('/user/create', [UserController::class, 'createUser']);
@@ -90,7 +91,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/user/update/{id}', [UserController::class, 'getUpdateUser'])->name('updateUser');
     Route::post('/user/update/{id}', [UserController::class, 'postUpdateUser']);
 
-    //ORDER
+    //ORDER-------------------------------------------------------------------------------------------
     Route::get('/order', [AdminController::class, 'getAllOrders'])->name('orders');
     Route::get('/order/{id}', [AdminController::class, 'getDetailOrder'])->name('detailOrder');
     Route::get('/order/update/{id}', [AdminController::class, 'getUpdateOrder'])->name('updateOrder');
@@ -98,7 +99,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/order/update/{id}', [AdminController::class, 'postUpdateOrder']);
     Route::post('/order/delete/{id}', [AdminController::class,'postDeleteOrder']);
 
-    //PRODUCT
+    //PRODUCT-------------------------------------------------------------------------------------------
     Route::get('/product', [AdminController::class, 'index'])->name('product');
     Route::get('/product/create', [AdminController::class, 'getFormCreateProduct'])->name('createProduct');
     Route::get('/product/{id}', [AdminController::class, 'getDetailProduct'])->name('detailProduct');
@@ -108,7 +109,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/product/delete/{id}', [AdminController::class,'postDeleteProduct']);
     Route::post('/product/create', [AdminController::class, 'createProduct']);
 
-    //CONTACT
+    //CONTACT-------------------------------------------------------------------------------------------
     Route::get('/contact', [AdminController::class, 'getContact'])->name('contact');
     Route::get('/contact/update/{id}', [AdminController::class, 'getUpdateContact'])->name('updateContact');
     Route::post('/contact/update/{id}', [AdminController::class, 'updateContact']);

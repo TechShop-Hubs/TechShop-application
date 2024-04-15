@@ -39,7 +39,7 @@
                             <label for="payment_method" class="form-label"><b>Chọn phương thức thanh toán</b></label>
                             <select class="form-select" name="payment_method">
                                 <option value="COD" selected>COD</option>
-                                <option value="momo">Trực tuyến</option>
+                                <option value="Momo">Momo</option>
                             </select>
                         </div>
                     </div>
