@@ -5,6 +5,9 @@
 @if (session('msg'))
     <div class="alert alert-success">{{ session('msg') }}</div>
 @endif
+@if (session('err'))
+    <div class="alert alert-danger">{{ session('err') }}</div>
+@endif
 <div class="container p-0 m-0">
     <div class="frame">
         <div class="row mt-5 larger">

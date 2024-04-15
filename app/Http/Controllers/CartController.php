@@ -50,7 +50,7 @@ class CartController extends Controller
         $logged_in = session('logged_in');
         $user_id = session('user_id');
         if(!$logged_in){
-            return redirect()->route('detail_product', ['id' => $id])->with('msg', 'Bạn cần đăng nhập');
+            return redirect()->route('detail_product', ['id' => $id])->with('err', 'Bạn cần đăng nhập');
         }
         $check = $this->carts->checkCart($user_id,$id);
         if($check){

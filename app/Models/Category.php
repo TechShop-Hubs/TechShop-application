@@ -67,4 +67,31 @@ class Category extends Model
     {
         return DB::delete('DELETE FROM ' . $this->table . ' WHERE id=?', [$id]);
     }
+    public function getDistinctNameCategory() {
+        $kinds = DB::table($this->table)
+                        ->select('kind')
+                        ->distinct()
+                        ->get();
+        return $kinds;
+    }
+    public function getBrand($kind){
+        $brands = DB::table($this->table)
+        ->select('brand')
+        ->where('kind', $kind)
+        ->distinct()
+        ->get();
+        return $brands;
+    }
+    public function getCategoryID($kind, $brand){
+        $category = DB::table($this->table)
+        ->select('id')
+        ->where('kind', $kind)
+        ->where('brand', $brand)
+        ->get();
+
+        return $category;
+    }
+    
+    
+    
 }

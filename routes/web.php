@@ -24,6 +24,8 @@ Route::get('/', [ClientsController::class, 'index'])->name('home');
 
 Route::get('/clients/products', [ClientsController::class, 'products']);
 
+
+
 Route::get('/clients/iphone', [ClientsController::class, 'iphone']);
 
 Route::get('/clients/laptop', [ClientsController::class, 'laptop']);
