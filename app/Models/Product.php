@@ -55,10 +55,14 @@ class Product extends Model
     {
         $product = DB::table($this->table)
             ->select('*')
-            ->where('id', '=', $id)
+            ->join('images', 'products.id', '=', 'images.product_id')
+            ->where('products.id', '=', $id) // Thêm 'products.' trước 'id'
             ->first();
+        
         return $product ? $product : null;
     }
+    
+    
 
     //update
     public function updateProduct($id, $data)
