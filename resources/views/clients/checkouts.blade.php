@@ -5,7 +5,7 @@
 <div class="container">
     <h1>Thanh toán</h1>
     <div class="frame m-0">
-        <form action="/text" method="post">
+        <form action="/checkout_order" method="post">
             @csrf
             <div class="row ms-3 mt-4 me-3">
                 <div class="col-6 pe-3">
@@ -55,24 +55,21 @@
                                     <th scope="col">Giá gốc</th>
                                     <th scope="col">Khuyến mãi</th>
                                     <th scope="col">Số lượng</th>
-                                    <th scope="col">Giá</th>
+                                    <th scope="col">Tổng giá</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $count = 1;
+                                @endphp
                                 @foreach ($products as $product)
                                     <tr>
-                                        <th scope="row">1</th>
+                                        <th scope="row">{{ $count++ }}</th>
                                         <td>{{ $product->name }}</td>
                                         <td>{{ $product->sell_price }}</td>
                                         <td class="w-2">{{ $product->discount }}%</td>
-                                        <td>
-                                            <div class="number d-flex gap-1">
-                                                <span class="minus sp pt-1">-</span>
-                                                <input type="number" class="form-control" value="{{ isset($quantity) ? $quantity : '1' }}" id="count" name="quantity" readonly />
-                                                <span class="plus sp pt-1">+</span>
-                                            </div>
-                                        </td>
-                                        <td>{{ $product->sell_price * (1 - $product->discount / 100) + $fee }}</td>
+                                        <td>{{ $product->product_quantity}}</td>
+                                        <td>{{ ($product->sell_price * (1 - $product->discount / 100)) * $product->product_quantity + $fee }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -80,7 +77,7 @@
                         <div class="col-6">
                             <label for="" class="form-label"><b>Phí vận chuyển</b></label>
                             <div class="input-group">
-                                <input type="number" class="form-control" readonly value="{{ $fee }}">
+                                <input type="number" class="form-control" name="fee" readonly value="{{ $fee }}">
                                 <span class="input-group-text">VND</span>
                             </div>
                         </div>
@@ -103,40 +100,3 @@
     </div>
 </div>
 @include('layouts.footer')
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        let minusButtons = document.querySelectorAll('.minus');
-        let plusButtons = document.querySelectorAll('.plus');
-        let count = 1;
-
-        minusButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
-                let input = this.parentElement.querySelector('input');
-                let total = document.getElementById('total_price');
-                let unfee = {{ $product->sell_price * (1 - $product->discount / 100) }};
-                let fee = {{ $fee }};
-                count = parseInt(input.value) - 1;
-                count = count < 1 ? 1 : count;
-                input.value = count;
-                input.dispatchEvent(new Event('change'));
-                let finalPrice = (unfee * count) + fee;
-                total.value = finalPrice;
-                return false;
-            });
-        });
-
-        plusButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
-                count = this.parentElement.querySelector('input');
-                let total = document.getElementById('total_price');
-                let unfee = {{ $product->sell_price * (1 - $product->discount / 100) }};
-                let fee = {{ $fee }};
-                count.value = parseInt(count.value) + 1;
-                count.dispatchEvent(new Event('change'));
-                let finalPrice = (unfee * parseInt(count.value)) + fee;
-                total.value = finalPrice;
-                return false;
-            });
-        });
-    });
-</script>
