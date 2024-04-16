@@ -13,6 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="{{asset('assets/css/client.css')}}">
 </head>
 <div class="row bg-dark bg-gradient text-white mt-4 m-0 p-0 ">
     <div class="col m-2">
@@ -51,6 +52,6 @@
     @if (session('logged_in'))
         <div class="col mt-4 m-2 p-0">
             <h5><a class="text-white" href="/logout" style="text-decoration: none">Đăng xuất</a></h5>
-        </div>
+        </div>  
     @endif
 </div>

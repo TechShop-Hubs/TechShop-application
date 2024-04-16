@@ -39,13 +39,21 @@ class ClientsController extends Controller
     {
         $data['title'] = 'Home Page';
         $banners = DB::table('banner')->get();
+        $phones = DB::table('products')
+        ->join('category', 'products.category_id', '=', 'category.id')
+        ->where('category.kind', 'Điện thoại')
+        ->join('images', 'products.id', '=', 'images.product_id')
+        ->inRandomOrder()
+        ->limit(5)
+        ->get();
         $products = DB::table('products')
-            ->where('discount', '>', 0)
-            ->join('images', 'products.id', '=', 'images.product_id')
-            ->paginate(5);
-        return view('clients.home', compact('data', 'products', 'banners'));
+        ->where('discount', '>=', 10)
+        ->join('images', 'products.id', '=', 'images.product_id')
+        ->inRandomOrder()
+        ->limit(5)
+        ->get();
+        return view('clients.home', compact('data', 'phones','products', 'banners'));
     }
-
     public function products(Request $request)
     {
         $data['title'] = 'Products Page';
