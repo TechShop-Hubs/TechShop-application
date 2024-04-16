@@ -81,7 +81,7 @@ Route::post('/wishlist',[ClientsController::class, 'destroyWishlist'])->name('de
 //ADMIN-------------------------------------------------------------------------------------------
 Route::prefix('admin')->group(function () {
     //DEFAULT PAGE-------------------------------------------------------------------------------------------
-    Route::get('/', [AdminController::class, 'index']);
+    Route::get('/', [AdminController::class, 'index'])->name('admin_home');
 
     //CATEGORY-------------------------------------------------------------------------------------------
     Route::get('/category', [AdminController::class, 'getCategories'])->name('categories');
@@ -122,6 +122,17 @@ Route::prefix('admin')->group(function () {
     Route::get('/contact', [AdminController::class, 'getContact'])->name('contact');
     Route::get('/contact/update/{id}', [AdminController::class, 'getUpdateContact'])->name('updateContact');
     Route::post('/contact/update/{id}', [AdminController::class, 'updateContact']);
-    Route::get('/banner', [AdminController::class, 'getBanner'])->name('banner');
+
+    //WHISLISH-------------------------------------------------------------------------------------------
     Route::get('/wishlist', [AdminController::class, 'getWishLish'])->name('wishList');
+
+    //BANNER-------------------------------------------------------------------------------------------
+    Route::get('/banner', [AdminController::class, 'getBanner'])->name('banner');
+    Route::get('banner/create', [AdminController::class, 'getCreateBanner'])->name('getCreateBanner');
+    Route::post('banner/create', [AdminController::class, 'postCreateBanner'])->name('postCreateBanner');
+    Route::get('banner/delete/{id}', [AdminController::class, 'getDeleteBanner'])->name('getDeleteBanner');
+    Route::post('banner/delete/{id}', [AdminController::class, 'postDeleteBanner'])->name('postDeleteBanner');
+    Route::get('banner/update/{id}', [AdminController::class, 'getUpdateBanner'])->name('getUpdateBanner');
+    Route::post('banner/update/{id}', [AdminController::class, 'postUpdateBanner'])->name('postUpdateBanner');
+
 });
