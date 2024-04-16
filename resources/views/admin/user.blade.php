@@ -11,14 +11,11 @@
             </div>
         </div>
     </div>
-    {{-- nav --}}
-    <div class="navbar container-fluid d-flex justify-content-between align-items-center pe-5">
-        <a href="{{route('createUser')}}"><button class="btn btn-success btn-lg" type="submit" name="create">Tạo mới</button></a>
-    </div>
+    
     @if (session('msg'))
         <div class="alert alert-success">{{ session('msg') }}</div>
     @endif
-    <!-- Hiển thị danh sách sản phẩm -->
+
     <div class="container-fluid pt-3">
         <table class="table">
             <thead>
@@ -38,13 +35,13 @@
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->phone_number }}</td>
-                        
+
                         @if ($user->status == 1)
                             <td>Hoạt động</td>
                         @else
                             <td>Không hoạt động</td>
                         @endif
-                    
+
                         <td>
                             <a href="{{ route('detailUser', ['id' => $user->id]) }}" class="btn btn-primary">Xem</a>
                             <a href="{{ route('updateUser', ['id' => $user->id]) }}" class="btn btn-warning">Cập nhật</a>

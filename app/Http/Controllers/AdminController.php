@@ -124,7 +124,7 @@ class AdminController extends Controller
         $data['title'] = 'Danh sách đơn hàng';
         $orders = DB::table('orders')
         ->where('destroy', '=', '0')
-        ->paginate(5); // Phân trang với mỗi trang chứa 10 sản phẩm
+        ->paginate(5);
         return view('admin.order', compact('data', 'orders'));
     }
     public function getFormCreateProduct(Request $request){
@@ -314,43 +314,23 @@ class AdminController extends Controller
     public function getDetailOrder($id){
         $data['title'] = 'Chi tiết đơn hàng';
         $order = $this->order->getDetailOrder($id);
-        $user = DB::table('users')
-            ->select('name', 'phone_number')
-            ->where('id', '=', $order->user_id)
-            ->first();
-        $carts = DB::table('carts')
-            ->select('product_id')
-            ->where('user_id', '=', $order->user_id)
-            ->get()
-            ->pluck('product_id');
-        $products = DB::table('products')
-            ->select('products.*', 'category.kind as kind', 'category.brand as brand')
-            ->join('category', 'products.category_id', '=', 'category.id')
-            ->whereIn('products.id', $carts->toArray())
+        $orderItems =  DB::table('orderitems')
+            ->join('products', 'orderitems.product_id', '=', 'products.id')
+            ->select(
+                'orderitems.*',
+                'products.name AS product_name',
+            )
+            ->where('orderitems.order_id', $id)
             ->get();
         $statusArr = ['Đơn hàng mới', 'Đơn hàng đang giao', 'Đơn hàng đã giao', 'Đơn hàng đã hủy'];
-        return view('admin.forms.detail_order', compact('data', 'products', 'order', 'statusArr', 'user'));
+        return view('admin.forms.detail_order', compact('data', 'order', 'orderItems', 'statusArr'));
     }
 
     public function getUpdateOrder($id){
         $data['title'] = 'Chỉnh sửa đơn hàng';
         $order = $this->order->getDetailOrder($id);
-        $user = DB::table('users')
-            ->select('name', 'phone_number')
-            ->where('id', '=', $order->user_id)
-            ->first();
-        $carts = DB::table('carts')
-            ->select('product_id')
-            ->where('user_id', '=', $order->user_id)
-            ->get()
-            ->pluck('product_id');
-        $products = DB::table('products')
-            ->select('products.*', 'category.kind as kind', 'category.brand as brand')
-            ->join('category', 'products.category_id', '=', 'category.id')
-            ->whereIn('products.id', $carts->toArray())
-            ->get();
         $statusArr = ['Đơn hàng mới', 'Đơn hàng đang giao', 'Đơn hàng đã giao', 'Đơn hàng đã hủy'];
-        return view('admin.forms.update_order', compact('data', 'products', 'order', 'statusArr', 'user'));
+        return view('admin.forms.update_order', compact('data', 'order', 'statusArr'));
     }
 
     public function getDeleteOrder($id){
@@ -364,14 +344,14 @@ class AdminController extends Controller
             'status' => $request->status,
         ];
         $this->order->updateOrder($id, $dataInsert);
-        return redirect()->route('orders')->with('msg',' Cập nhật thành công');
+        return redirect()->route('orders')->with('msg',' Cập nhật đơn hàng thành công');
     }
 
     public function postDeleteOrder($id){
         $data['title'] = 'Xóa đơn hàng';
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $this->order->deleteOrder($id);
-        return redirect()->route('orders')->with('msg',' Xóa thành công');
+        return redirect()->route('orders')->with('msg',' Xóa đơn hàng thành công');
     }
 
     public function getWishLish(){

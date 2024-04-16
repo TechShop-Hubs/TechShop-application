@@ -87,28 +87,6 @@ class UserController extends Controller
         return view('admin.user', compact('data', 'users'));
     }
 
-    //tạo mới người dùng admin
-    public function createUser(Request $request){
-        $request->validate([
-            'email' => 'required|email|unique:users',
-            'name' => 'required',
-            'phone' => 'required',
-            'password' => 'required',
-        ], [
-            'email.unique' => 'Email đã tồn tại trên hệ thống.',
-        ]);
-        $dataInsert = [
-            $request->email,
-            $request->name,
-            $request->password,
-            $this->setRole(0),
-            $request->phone,
-            $this->setStatus(1)
-        ];
-        $this->users->addUser($dataInsert);
-        return redirect()->route('users')->with('msg' ,'Thêm người dùng mới thành công');
-    }
-
     public function getDeleteUser($id) {
         $data['title'] = 'Xóa người dùng';
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
@@ -159,7 +137,7 @@ class UserController extends Controller
 
         return redirect()->route('login');
     }
-    
+
     public function destroy(User $user)
     {
         $user->delete();
