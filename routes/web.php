@@ -92,8 +92,6 @@ Route::prefix('admin')->group(function () {
 
     //USER-------------------------------------------------------------------------------------------
     Route::get('/user', [UserController::class, 'getAllUsers'])->name('users');
-    Route::get('/user/create', [UserController::class, 'getFormCreateUser'])->name('createUser');
-    Route::post('/user/create', [UserController::class, 'createUser']);
     Route::get('/user/delete/{id}', [UserController::class,'getDeleteUser'])->name('deleteUser');
     Route::post('/user/delete/{id}', [UserController::class,'postDeleteUser']);
     Route::get('/user/{id}', [UserController::class, 'getDetailUser'])->name('detailUser');
