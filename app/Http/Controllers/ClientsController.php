@@ -52,6 +52,7 @@ class ClientsController extends Controller
         ->inRandomOrder()
         ->limit(5)
         ->get();
+
         return view('clients.home', compact('data', 'phones','products', 'banners'));
     }
     public function products(Request $request)
@@ -224,16 +225,16 @@ class ClientsController extends Controller
 
 
 
-    public function wishlish($id)
-    {
-        $data['title'] = 'Giỏ hàng';
-        if (session('logged_in')) {
-            $user = $this->users->getUser(session('user_id'));
-            return view('clients.home');
-        } else {
-            return view('clients.detail_product');
-        }
-    }
+    // public function getWishlish()
+    // {
+    //     $data['title'] = 'Giỏ hàng';
+    //     if (session('logged_in')) {
+    //         $user = $this->users->getUser(session('user_id'));
+    //         return view('clients.home');
+    //     } else {
+    //         return view('clients.detail_product');
+    //     }
+    // }
     public function getContact()
     {
         $logged_in = session('logged_in');
@@ -559,5 +560,31 @@ class ClientsController extends Controller
         ];
         $this->orders->updateOrder($id, $dataInsert);
         return redirect()->route('historyOrder')->with('msg','Huỷ thành công');
+    }
+
+    public function getWishList(){
+        $data['title'] = "Thay đổi thông tin";
+        $user_id = session('user_id');
+        if(!$user_id){
+            return redirect()->back()->with('err','Please login to see wish list');
+        }else{
+            $wishlists = DB::table('wishlist')
+            ->select('wishlist.*', 'wishlist.id', 'users.name as user_name', 'products.name as product_name','image')
+            ->join('users', 'wishlist.user_id', '=', 'users.id')
+            ->join('products', 'wishlist.product_id', '=', 'products.id')
+            ->join('images', 'wishlist.product_id', '=', 'images.product_id')
+            ->where('wishlist.user_id', '=', $user_id)
+            ->paginate(5);
+        }
+        // dd($wishlists);
+        return view('clients.wishlist',compact('data','wishlists'));
+    }
+    function destroyWishlist(Request $request){
+        $wishlist_id = $request->wishlist;
+        $destroy = DB::table('wishlist')->delete($wishlist_id);
+        if($destroy){
+            return redirect()->route('getWishList')->with('msg',"Xóa yêu thích thành công");
+        }
+        return redirect()->route('getWishList')->with('err','Không thể xóa');
     }
 }

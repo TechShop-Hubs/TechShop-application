@@ -31,4 +31,8 @@ class WishList extends Model
             ->join('products', 'wishlist.product_id', '=', 'products.id')
             ->paginate(5);
     }    
+
+    
+    
+    
 }
