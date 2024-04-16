@@ -123,5 +123,5 @@ Route::prefix('admin')->group(function () {
     Route::get('/contact/update/{id}', [AdminController::class, 'getUpdateContact'])->name('updateContact');
     Route::post('/contact/update/{id}', [AdminController::class, 'updateContact']);
     Route::get('/banner', [AdminController::class, 'getBanner'])->name('banner');
-    Route::get('/wishlist', [AdminController::class, 'getWishList'])->name('wishList');
+    Route::get('/wishlist', [AdminController::class, 'getWishLish'])->name('wishList');
 });

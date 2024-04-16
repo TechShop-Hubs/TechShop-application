@@ -23,5 +23,12 @@ class WishList extends Model
     public function checkList($user_id, $product_id) {
         return DB::table($this->table)->where(['user_id' => $user_id, 'product_id' => $product_id])->exists();
     }
-    
+
+    public function getAllWishList() {
+        return DB::table($this->table)
+            ->select('wishlist.id as id','users.name as user_name', 'products.name as product_name')
+            ->join('users', 'wishlist.user_id', '=', 'users.id')
+            ->join('products', 'wishlist.product_id', '=', 'products.id')
+            ->paginate(5);
+    }    
 }
