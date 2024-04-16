@@ -38,9 +38,13 @@
                         <td>{{ $order->status }}</td>
                         <td>{{ $order->total_price }}</td>
                         <td>
+                            @php
+                                $disableLink = $order->status != 'Đơn hàng đã giao' && $order->status != 'Đơn hàng đã hủy';
+                                $disableUpdate = $order->status == 'Đơn hàng đã hủy';
+                            @endphp
                             <a href="{{ route('detailOrder', ['id' => $order->id]) }}" class="btn btn-primary">Xem</a>
-                            <a href="{{ route('updateOrder', ['id' => $order->id]) }}" class="btn btn-warning">Cập nhật</a>
-                            <a href="{{ route('deleteOrder', ['id' => $order->id])}}" class="btn btn-danger">Xóa</a>
+                            <a href="{{ route('updateOrder', ['id' => $order->id]) }}" class="btn btn-warning" @if ($disableUpdate) disabled style="pointer-events: none; cursor: default;" @endif>Cập nhật</a>
+                            <a href="{{ route('deleteOrder', ['id' => $order->id])}}" class="btn btn-danger" @if ($disableLink) disabled style="pointer-events: none; cursor: default;" @endif>Xóa</a>
                         </td>
                     </tr>
                 @endforeach
