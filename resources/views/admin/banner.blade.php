@@ -11,6 +11,9 @@
             </div>
         </div>
     </div>
+    @if (session('msg'))
+        <div class="alert alert-success">{{ session('msg') }}</div>
+    @endif
     {{-- nav --}}
     <div class="navbar container-fluid d-flex justify-content-between align-items-center pe-5">
         <button class="btn btn-success btn-lg" ><a href="banner/create" class="text-decoration-none text-white">Tạo mới</a></button>

@@ -399,6 +399,7 @@ class AdminController extends Controller
             File::delete("banner/".$banner->image);
         }
         DB::table('banner')->where('id', $id)->delete();
+        return redirect()->route('banner')->with('msg' ,'Xoá banner thành công');
     }
 
     public function getUpdateBanner($id){
@@ -432,6 +433,6 @@ class AdminController extends Controller
         }
 
         DB::table('banner')->where('id', $id)->update($dataUpdate);
-        return redirect()->route('banner')->with('msg' ,'Update banner thành công');
+        return redirect()->route('banner')->with('msg' ,'Cập nhật banner thành công');
     }
 }

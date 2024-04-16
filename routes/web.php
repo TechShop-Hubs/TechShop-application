@@ -79,7 +79,7 @@ Route::post('/wishlish/{id}', [ClientsController::class, 'postWishList'])->name(
 //ADMIN-------------------------------------------------------------------------------------------
 Route::prefix('admin')->group(function () {
     //DEFAULT PAGE-------------------------------------------------------------------------------------------
-    Route::get('/', [AdminController::class, 'index']);
+    Route::get('/', [AdminController::class, 'index'])->name('admin_home');
 
     //CATEGORY-------------------------------------------------------------------------------------------
     Route::get('/category', [AdminController::class, 'getCategories'])->name('categories');
