@@ -309,7 +309,8 @@ class ClientsController extends Controller
             foreach (session('arrayIDCart') as $cart_id) {
                 $cart = DB::table('carts')->where('id', $cart_id)->first();
                 $product = DB::table('products')->where('id', $cart->product_id)->first();
-                $total_price = ($product->sell_price * $cart->product_quantity) + $request->fee;
+                $total_price = (($product->sell_price * (1 - $product->discount / 100))  * $cart->product_quantity) + $request->fee;
+
                 $data = [
                     'order_id' => $order->id,
                     'product_id' => $cart->product_id,
@@ -414,7 +415,7 @@ class ClientsController extends Controller
             foreach (session('arrayIDCart') as $cart_id) {
                 $cart = DB::table('carts')->where('id', $cart_id)->first();
                 $product = DB::table('products')->where('id', $cart->product_id)->first();
-                $total_price = ($product->sell_price * $cart->product_quantity) + $request->fee;
+                $total_price = (($product->sell_price * (1 - $product->discount / 100))  * $cart->product_quantity) + $request->fee;
                 $data = [
                     'order_id' => $order->id,
                     'product_id' => $cart->product_id,
@@ -510,7 +511,6 @@ class ClientsController extends Controller
         ], [
             'email.required' => 'Email bắt buộc phải nhập',
             'email.unique' => 'Email đã tồn tại trên hệ thống.',
-            'email.email' => 'Email phải đúng định dạng.',
             'phone_number.required' => 'Số điện thoại bắt buộc phải nhập',
             'phone_number.min' => 'Số điện thoại phải từ :min kí tự trở lên',
             'name.required' => 'Tên bắt buộc phải nhập',
@@ -528,7 +528,28 @@ class ClientsController extends Controller
         if ($success) {
             return redirect()->route('historyOrder')->with('msg', 'Thay đổi thông tin thành công');
         } else {
-            return back()->withInput($request->all());
+            return back()->withInput($request->all())->with('msg', 'Thay đổi thông tin không thành công');
         }
+    }
+
+    public function getDetailOrders($id){
+        $data['title'] = "Các sản phẩm";
+        $orderItems =  DB::table('orderitems')
+            ->join('products', 'orderitems.product_id', '=', 'products.id')
+            ->select(
+                'orderitems.*',
+                'products.name AS product_name',
+            )
+            ->where('orderitems.order_id', $id)
+            ->get();
+        return view('clients.order_item', compact('orderItems', 'data'));
+    }
+
+    public function cancelOrder($id){
+        $dataInsert = [
+            'status' => 'Đơn hàng đã huỷ',
+        ];
+        $this->orders->updateOrder($id, $dataInsert);
+        return redirect()->route('historyOrder')->with('msg','Huỷ thành công');
     }
 }

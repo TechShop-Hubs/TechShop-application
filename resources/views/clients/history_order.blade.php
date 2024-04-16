@@ -28,7 +28,8 @@
                     </div>
                     <div class="col-12">
                         <label for="email" class="form-label"><b>Địa chỉ</b></label>
-                        <input type="text" class="form-control" id="email" name="email" value="{{ $user->email }}" readonly>
+                        <input type="text" class="form-control" id="email" name="email"
+                            value="{{ $user->email }}" readonly>
                     </div>
                     <div class="row gap-5 mt-4 d-flex justify-content-center align-items-center">
                         <a href="/change_password" class="btn btn-warning mb-3 col-4">Đổi mật khẩu</a>
@@ -47,16 +48,28 @@
                                 <th scope="col">Trạng thái</th>
                                 <th scope="col">Giá trị đơn hàng</th>
                                 <th scope="col">Thao tác</th>
+                                <th scope="col">Huỷ</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $count = 1;
+                            @endphp
                             @foreach ($listOrders as $order)
                                 <tr>
-                                    <th scope="row">1</th>
+                                    <th scope="row">{{ $count++ }}</th>
                                     <td>{{ $order->order_date }}</td>
                                     <td>{{ $order->status }}</td>
                                     <td>{{ $order->total_price }}</td>
-                                    <td><a href="/action_history/{{ $order->id}}"></a></td>
+                                    @php
+                                        $disableLink = $order->status !== 'Đơn hàng mới';
+                                    @endphp
+                                    <td><a href="/action_history/{{ $order->id }}">Xem chi tiết</a></td>
+                                    <td>
+                                        <a href="/cancel_order/{{ $order->id }}" class="btn btn-danger"
+                                            @if ($disableLink) disabled style="pointer-events: none; cursor: default;" @endif>Huỷ
+                                            đơn</a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
