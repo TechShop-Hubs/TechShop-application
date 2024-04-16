@@ -461,7 +461,7 @@ class ClientsController extends Controller
 
         if ($logged_in) {
             $user = DB::table('users')->where('id', $user_id)->first();
-            $listOrders = DB::table('orders')->where('id', $user_id)->get();
+            $listOrders = DB::table('orders')->where('user_id', $user_id)->get();
             $data['title'] = "Lịch sử đơn hàng";
             return view('clients.history_order', compact('data', 'user', 'listOrders'));
         } else {

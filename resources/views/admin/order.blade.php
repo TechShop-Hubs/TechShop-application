@@ -14,11 +14,7 @@
     @if (session('msg'))
         <div class="alert alert-success">{{ session('msg') }}</div>
     @endif
-    {{-- nav --}}
-    {{-- <div class="navbar container-fluid d-flex justify-content-between align-items-center pe-5">
-        <button class="btn btn-success btn-lg" type="submit" name="create">Tạo mới</button>
-    </div> --}}
-    <!-- Hiển thị danh sách sản phẩm -->
+
     <div class="container-fluid pt-3">
         <table class="table">
             <thead>
@@ -29,6 +25,7 @@
                     <th scope="col">Ngày đặt</th>
                     <th scope="col">Trạng thái</th>
                     <th scope="col">Giá trị đơn hàng</th>
+                    <th scope="col">Thao tác</th>
                 </tr>
             </thead>
             <tbody>
