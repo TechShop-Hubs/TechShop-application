@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Orders;
 use App\Models\Contact;
+use App\Models\WishList;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 class AdminController extends Controller
@@ -16,11 +17,13 @@ class AdminController extends Controller
     private $products;
     private $contacts;
     private $order;
+    private $wishlist;
     public function __construct(){
         $this->categories = new Category();
         $this->products = new Product();
         $this->contacts = new Contact();
         $this->order = new Orders();
+        $this->wishlist = new Wishlist();
     }
 
     public function index(Request $request)
@@ -349,5 +352,12 @@ class AdminController extends Controller
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $this->order->deleteOrder($id);
         return redirect()->route('orders')->with('msg',' Xóa đơn hàng thành công');
+    }
+
+    public function getWishLish(){
+        $data['title'] = 'Wishlist';
+        $wishlists = $this->wishlist->getAllWishList();
+        // dd($wishlists);
+        return view('admin.wishlist',compact('data','wishlists'));
     }
 }
