@@ -14,11 +14,7 @@
     @if (session('msg'))
         <div class="alert alert-success">{{ session('msg') }}</div>
     @endif
-    {{-- nav --}}
-    {{-- <div class="navbar container-fluid d-flex justify-content-between align-items-center pe-5">
-        <button class="btn btn-success btn-lg" type="submit" name="create">Tạo mới</button>
-    </div> --}}
-    <!-- Hiển thị danh sách sản phẩm -->
+
     <div class="container-fluid pt-3">
         <table class="table">
             <thead>
@@ -29,7 +25,7 @@
                     <th scope="col">Ngày đặt</th>
                     <th scope="col">Trạng thái</th>
                     <th scope="col">Giá trị đơn hàng</th>
-                    <th class="col">Thao tác</th>
+                    <th scope="col">Thao tác</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,17 +37,6 @@
                         <td>{{ $order->order_date }}</td>
                         <td>{{ $order->status }}</td>
                         <td>{{ $order->total_price }}</td>
-                        <td>
-                            <a href="/admin/order/{{ $order->id }}" class="btn btn-primary">Xem</a>
-                            @php
-                                $disableLink = $order->status != 'Đơn hàng đã giao' && $order->status != 'Đơn hàng đã hủy';
-                                $disableUpdate = $order->status == 'Đơn hàng đã hủy';
-                            @endphp
-                            <a href="/admin/order/update/{{ $order->id }}" class="btn btn-warning" @if ($disableUpdate) disabled style="pointer-events: none; cursor: default;" @endif>Cập nhật</a>
-                            <a href="/admin/order/delete/{{ $order->id }}" class="btn btn-danger"
-                                @if ($disableLink) disabled style="pointer-events: none; cursor: default;" @endif>
-                            Xóa</a>
-                        </td>
                     </tr>
                 @endforeach
             </tbody>

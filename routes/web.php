@@ -64,6 +64,15 @@ Route::post('/cart-increase', [CartController::class, 'increaseQuantity'])->name
 Route::post('/update-cart', [CartController::class, 'updateCart'])->name('updateCart');
 Route::post('/delete-cart/{id}', [CartController::class, 'deleteCart'])->name('deleteCart');
 
+//HISTORY_ORDER---------------------------------------------------------------------------------------------
+Route::get('/history_order', [ClientsController::class, 'historyOrder'])->name('historyOrder');
+Route::get('/change_password', [ClientsController::class, 'changePassword'])->name('changePassword');
+Route::post('/change_password', [ClientsController::class, 'postChangePassword']);
+Route::get('/update_information', [ClientsController::class, 'updateInformation'])->name('updateInformation');
+Route::post('/update_information', [ClientsController::class, 'postUpdateInfo']);
+Route::get('/action_history/{id}', [ClientsController::class, 'getDetailOrders']);
+Route::get('/cancel_order/{id}', [ClientsController::class, 'cancelOrder']);
+
 //WISHLIST-------------------------------------------------------------------------------------------
 Route::post('/wishlish/{id}', [ClientsController::class, 'postWishList'])->name('postWishList');
 
