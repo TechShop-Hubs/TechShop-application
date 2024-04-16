@@ -32,8 +32,8 @@
                     <tr>
                         <th scope="row">{{ $index + 1 }}</th>
                         <td>{{ $banner->name }}</td>
-                        <td><img src="{{ $banner->image }}" alt="img"></td>
-                        <td>{{ $banner->status }}</td>
+                        <td><img src="{{ asset('banner/'.$banner->image) }}" alt="img" style="max-width: 100%"></td>
+                        <td>{{ $banner->status==1? 'Đang hiển thị' : 'Không hiển thị' }}</td>
                         <td>
                             <a href="banner/update/{{$banner->id}}" class="btn btn-warning">Cập nhật</a>
                             <a href="banner/delete/{{$banner->id}}" class="btn btn-danger">Xóa</a>
