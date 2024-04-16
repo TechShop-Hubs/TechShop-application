@@ -37,6 +37,11 @@
                         <td>{{ $order->order_date }}</td>
                         <td>{{ $order->status }}</td>
                         <td>{{ $order->total_price }}</td>
+                        <td>
+                            <a href="{{ route('detailOrder', ['id' => $order->id]) }}" class="btn btn-primary">Xem</a>
+                            <a href="{{ route('updateOrder', ['id' => $order->id]) }}" class="btn btn-warning">Cập nhật</a>
+                            <a href="{{ route('deleteOrder', ['id' => $order->id])}}" class="btn btn-danger">Xóa</a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

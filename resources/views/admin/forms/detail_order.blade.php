@@ -16,15 +16,15 @@
             @csrf
             <input type="hidden" name="update">
             <div class="row">
-                <div class="col-6">
+                <div class="col-4">
                     <h2>Thông tin cơ bản</h2>
                     <div class="">
                         <label for="name" class="form-label">Tên khách hàng</label>
-                        <input type="text" class="form-control" name="name" id="name" value="{{ $user->name }}"  readonly>
+                        <input type="text" class="form-control" name="name" id="name" value="{{ $order->name }}"  readonly>
                     </div>
                     <div class="">
                         <label for="phone_number" class="form-label">Số điện thoại</label>
-                        <input type="text" class="form-control" name="phone_number" id="phone_number" value="{{ $user->phone_number }}" readonly >
+                        <input type="text" class="form-control" name="phone_number" id="phone_number" value="{{ $order->phone_number }}" readonly >
                     </div>
                     <div class="">
                         <label for="address" class="form-label">Địa chỉ</label>
@@ -33,10 +33,6 @@
                     <div class="">
                         <label for="payment_method" class="form-label">Phương thức thanh toán</label>
                         <input type="text" class="form-control" name="payment_method" id="payment_method" value="{{ $order->payment_method }}"  readonly>
-                    </div>
-                    <div class="">
-                        <label for="quantity" class="form-label">Số lượng</label>
-                        <input type="number" class="form-control" name="quantity" id="quantity" min="0" value="{{$order->quantity}}" readonly>
                     </div>
                     <div class="">
                         <label for="total_price" class="form-label">Tổng tiền</label>
@@ -51,24 +47,33 @@
                         <input type="text" class="form-control" value="{{$order->status}}" readonly>
                     </div>
                 </div>
-                <div class="col-6">
-                    <h2>Thông tin sản phẩm</h2>
-                    <?php $count = 1 ?>
-                    @foreach ($products as $product)
-                        <div class="">
-                            <label for="name" class="form-label">Tên sản phẩm {{ $count }}</label>
-                            <input type="text" class="form-control" name="name" id="name" value="{{ $product->name }}"  readonly>
-                        </div>
-                        <div class="">
-                            <label for="kind_brand" class="form-label">Loại sản phẩm</label>
-                            <input type="text" class="form-control" name="kind_brand" id="kind_brand" value="{{ $product->kind }}_{{$product->brand }}" readonly >
-                        </div>
-                        <div class="mb-3">
-                            <label for="sell_price" class="form-label">Giá</label>
-                            <input type="text" class="form-control" name="sell_price" id="sell_price" value="{{ $product->sell_price }}"  readonly>
-                        </div>
-                        <?php $count++; ?>
-                    @endforeach
+                <div class="col-8">
+                    <h2>Thông tin các sản phẩm</h2>
+                    <table class="table table-bordered border-primary">
+                        <thead>
+                            <tr class="text-center">
+                                <th scope="col">#</th>
+                                <th scope="col">Tên sản phẩm</th>
+                                <th scope="col">Giá</th>
+                                <th scope="col">Số lượng</th>
+                                <th scope="col">Tổng giá</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $count = 1;
+                            @endphp
+                            @foreach ($orderItems as $item)
+                                <tr>
+                                    <th scope="row">{{ $count++ }}</th>
+                                    <td>{{ $item->product_name }}</td>
+                                    <td>{{ $item->price }}</td>
+                                    <td>{{ $item->quantity }}</td>
+                                    <td>{{ $item->total_price }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </form>
