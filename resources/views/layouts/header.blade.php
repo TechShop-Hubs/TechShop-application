@@ -51,7 +51,11 @@
     </div>
     @if (session('logged_in'))
         <div class="col mt-4 m-2 p-0">
+            <h5><a class="text-white" href="/wishlist" style="text-decoration: none">Wishlist</a></h5>
+        </div>
+        <div class="col mt-4 m-2 p-0">
             <h5><a class="text-white" href="/logout" style="text-decoration: none">Đăng xuất</a></h5>
-        </div>  
+        </div>
+
     @endif
 </div>

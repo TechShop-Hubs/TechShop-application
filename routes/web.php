@@ -75,6 +75,8 @@ Route::get('/cancel_order/{id}', [ClientsController::class, 'cancelOrder']);
 
 //WISHLIST-------------------------------------------------------------------------------------------
 Route::post('/wishlish/{id}', [ClientsController::class, 'postWishList'])->name('postWishList');
+Route::get('/wishlist',[ClientsController::class, 'getWishList'])->name('getWishList');
+Route::post('/wishlist',[ClientsController::class, 'destroyWishlist'])->name('destroyWishlist');
 
 //ADMIN-------------------------------------------------------------------------------------------
 Route::prefix('admin')->group(function () {
