@@ -38,7 +38,7 @@ class ClientsController extends Controller
     public function index(Request $request)
     {
         $data['title'] = 'Home Page';
-        $banners = DB::table('banner')->get();
+        $banners = DB::table('banner')->where('status', '1')->get();
         $phones = DB::table('products')
         ->join('category', 'products.category_id', '=', 'category.id')
         ->where('category.kind', 'Điện thoại')

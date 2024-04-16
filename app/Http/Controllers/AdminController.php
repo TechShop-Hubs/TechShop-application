@@ -8,8 +8,8 @@ use App\Models\Product;
 use App\Models\Orders;
 use App\Models\Contact;
 use App\Models\WishList;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\File;
+
 class AdminController extends Controller
 {
     public $data = [];
@@ -359,5 +359,80 @@ class AdminController extends Controller
         $wishlists = $this->wishlist->getAllWishList();
         // dd($wishlists);
         return view('admin.wishlist',compact('data','wishlists'));
+    }
+
+    public function getCreateBanner(){
+        $data['title'] = 'Tạo mới banner';
+        return view('admin.forms.create_banner', compact('data'));
+    }
+
+    public function postCreateBanner(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'image' => 'required|image',
+        ], [
+            'name.required' => 'Tên bắt buộc nhập',
+            'image.required' => 'Bắt buộc phải chọn hình ảnh',
+        ]);
+
+        $file = $request->file("image");
+        $imageName = time()."_".$file->getClientOriginalName();
+        $file->move(\public_path("banner/"), $imageName);
+
+        $dataInsert = [
+            'name'=>$request->name,
+            'image'=>$imageName
+        ];
+        DB::table('banner')->insert($dataInsert);
+        return redirect()->route('banner')->with('msg' ,'Tạo banner thành công');
+    }
+
+    public function getDeleteBanner($id){
+        $data['title'] = 'Xóa banner';
+        $banner = DB::table('banner')->where('id', $id)->first();
+        return view('admin.forms.delete_banner', compact('data', 'banner'));
+    }
+
+    public function postDeleteBanner($id) {
+        $banner = DB::table('banner')->where('id', $id)->first();
+        if (File::exists("banner/".$banner->image)) {
+            File::delete("banner/".$banner->image);
+        }
+        DB::table('banner')->where('id', $id)->delete();
+        return redirect()->route('banner')->with('msg' ,'Xoá banner thành công');
+    }
+
+    public function getUpdateBanner($id){
+        $data['title'] = 'Cập nhật banner';
+        $banner = DB::table('banner')->where('id', $id)->first();
+        return view('admin.forms.update_banner', compact('data', 'banner'));
+    }
+
+    public function postUpdateBanner(Request $request, $id){
+        $request->validate([
+            'name' => 'required',
+        ], [
+            'name.required' => 'Tên bắt buộc nhập',
+        ]);
+
+        if ($request->image == null) {
+            $dataUpdate = [
+                'name' => $request->name,
+                'status' => $request->status
+            ];
+        }else {
+            $file = $request->file("image");
+            $imageName = time()."_".$file->getClientOriginalName();
+            $file->move(\public_path("banner/"), $imageName);
+
+            $dataUpdate = [
+                'name' => $request->name,
+                'image' => $imageName,
+                'status' => $request->status
+            ];
+        }
+
+        DB::table('banner')->where('id', $id)->update($dataUpdate);
+        return redirect()->route('banner')->with('msg' ,'Cập nhật banner thành công');
     }
 }
