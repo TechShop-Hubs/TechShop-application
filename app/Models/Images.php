@@ -9,6 +9,7 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 class Images extends Model
 {
     use HasFactory;
+    public $timestamps = false;
     public static function uploadImage($file, $folder)
     {
         $uploadResult = Cloudinary::upload($file->getRealPath());
