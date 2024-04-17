@@ -189,6 +189,7 @@ class AdminController extends Controller
         $image->updated_at = time();
         $image->save();
 
+        
         $request->validate([
             'category_id' => 'required',
             'name' => 'required',
