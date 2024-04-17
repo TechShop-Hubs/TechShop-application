@@ -79,7 +79,7 @@ Route::get('/wishlist',[ClientsController::class, 'getWishList'])->name('getWish
 Route::post('/wishlist',[ClientsController::class, 'destroyWishlist'])->name('destroyWishlist');
 
 //ADMIN-------------------------------------------------------------------------------------------
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('admin')->group(function () {
     //DEFAULT PAGE-------------------------------------------------------------------------------------------
     Route::get('/', [AdminController::class, 'index'])->name('admin_home');
 
