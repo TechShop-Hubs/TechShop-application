@@ -7,9 +7,10 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Orders;
 use App\Models\Contact;
+use App\Models\Images;
 use App\Models\WishList;
 use Illuminate\Support\Facades\File;
-
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 class AdminController extends Controller
 {
     public $data = [];
@@ -164,6 +165,30 @@ class AdminController extends Controller
     }
 
     public function postUpdateProduct(Request $request, $id){
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', 
+        ],[
+            'image.required' => 'Hình ảnh bắt buộc nhập',
+            'image.image' => 'Hình ảnh phải là ảnh',
+            'image.mimes' => 'Hình ảnh phải là ảnh',
+            'image.max' => 'Hình ảnh phải nhỏ hơn 2MB',
+        ]);
+
+        $uploadedFile = $request->file('image');
+        $folder = 'TechShop';
+        $imageUrl = Images::uploadImage($uploadedFile, $folder); //Up data to cloud
+
+        $pathId = $request->path();
+        $segments = explode('/', $pathId);//get id product
+        $id = end($segments);
+
+        $image = new Images();
+        $image->product_id = $id;
+        $image->image = $imageUrl;
+        $image->created_at = time();
+        $image->updated_at = time();
+        $image->save();
+
         $request->validate([
             'category_id' => 'required',
             'name' => 'required',
