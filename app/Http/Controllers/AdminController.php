@@ -30,7 +30,10 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         $data['title'] = 'Danh sách sản phẩm';
-        $products = DB::table('products')->where('status', '=', 1)->paginate(5); // Phân trang với mỗi trang chứa 10 sản phẩm
+        $products = DB::table('products')->where('status', '=', 1)
+        ->join('images', 'products.id', '=', 'images.product_id')
+        ->paginate(5); // Phân trang với mỗi trang chứa 10 sản phẩm
+        // dd($products);
         return view('admin.home', compact('data', 'products'));
     }
 
@@ -148,6 +151,7 @@ class AdminController extends Controller
         $data['title'] = 'Chỉnh sửa sản phẩm';
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $product = $this->products->getDetail($id);
+        // dd($product);
         $categoryName = $this->categories->getAllCategoriesName();
         return view('admin.forms.update_product', compact('data', 'product', 'categoryName'));
     }
@@ -165,8 +169,9 @@ class AdminController extends Controller
     }
 
     public function postUpdateProduct(Request $request, $id){
+
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', 
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', 
         ],[
             'image.required' => 'Hình ảnh bắt buộc nhập',
             'image.image' => 'Hình ảnh phải là ảnh',
@@ -174,20 +179,7 @@ class AdminController extends Controller
             'image.max' => 'Hình ảnh phải nhỏ hơn 2MB',
         ]);
 
-        $uploadedFile = $request->file('image');
-        $folder = 'TechShop';
-        $imageUrl = Images::uploadImage($uploadedFile, $folder); //Up data to cloud
 
-        $pathId = $request->path();
-        $segments = explode('/', $pathId);//get id product
-        $id = end($segments);
-
-        $image = new Images();
-        $image->product_id = $id;
-        $image->image = $imageUrl;
-        $image->created_at = time();
-        $image->updated_at = time();
-        $image->save();
 
         
         $request->validate([
@@ -218,6 +210,17 @@ class AdminController extends Controller
             'price.required' => 'Vui lòng nhập giá sản phẩm.'
         ]);
 
+        if ($request->image != null) {
+            
+            $uploadedFile = $request->file('image');
+            $folder = 'TechShop';
+            $imageUrl = Images::uploadImage($uploadedFile, $folder); //Up data to cloud
+    
+            $pathId = $request->path();
+            $segments = explode('/', $pathId);//get id product
+            $id = end($segments);
+            $image = DB::table('images')->where('product_id', $id)->update(['image' => $imageUrl]);
+        }
         $dataInsert = [
             'category_id' => $request->category_id,
             'name' => $request->name,
@@ -235,7 +238,7 @@ class AdminController extends Controller
 
         $this->products->updateProduct($id, $dataInsert);
 
-        return redirect()->route('product');
+        return redirect()->route('product')->with('msg','Chỉnh sửa sản phẩm thành công');
     }
 
     public function createProduct(Request $request){

@@ -71,8 +71,8 @@
                     <h2>Hình ảnh cho sản phẩm</h2>
                     <div class="">
                         <label for="image" class="form-label">Hình ảnh</label>
-                        <img class="form-control" src="" alt="Hình anh">
                     </div>
+                    <img style="height: 400px !important" class="form-control" src="{{ $product->image }}" alt="Hình anh">
                     <div id="image-container-wrapper"></div>
                 </div>
             </div>
