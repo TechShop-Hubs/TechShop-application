@@ -106,9 +106,10 @@ class UserController extends Controller
         if (!empty($user)) {
             $request->session()->put('user_id', $user->id);
             $request->session()->put('user_name', $user->name);
+            $request->session()->put('role', $user->role);
             $request->session()->put('logged_in', true);
             if ($user->role === 1) {
-                return redirect()->route('product');
+                return redirect()->route('admin_home');
             }
             return redirect()->route('home');
         }else {
