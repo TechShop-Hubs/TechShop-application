@@ -18,7 +18,6 @@ class Images extends Model
     protected $fillable = [
         'product_id',
         'image',
-        'created_at',
-        'updated_at'
+
     ];
 }

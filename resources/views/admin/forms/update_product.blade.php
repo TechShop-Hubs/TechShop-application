@@ -128,7 +128,7 @@
                         </script>
                     </div>
                 </div>
-                <img style="height:250px!important" id="output" />
+                <img style="height:250px!important" id="output"  src="{{ $product->image }}" />
                 <div id="image-container-wrapper"></div>
             </div>
         </div>
