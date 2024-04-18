@@ -48,9 +48,9 @@
                 <td>{{ $product->sell_price }}</td>
                 <td>{{ $product->quantity_product }}</td>
                 <td>
-                    <a href="{{route('detailProduct',['id'=>$product->id])}}" class="btn btn-primary">Xem</a>
-                    <a href="{{route('updateProduct',['id'=>$product->id])}}" class="btn btn-warning">Cập nhật</a>
-                    <a href="{{route('deleteProduct',['id'=>$product->id])}}" class="btn btn-danger">Xóa</a>
+                    <a href="{{route('detailProduct',['id'=>$product->product_id])}}" class="btn btn-primary">Xem</a>
+                    <a href="{{route('updateProduct',['id'=>$product->product_id])}}" class="btn btn-warning">Cập nhật</a>
+                    <a href="{{route('deleteProduct',['id'=>$product->product_id])}}" class="btn btn-danger">Xóa</a>
                 </td>
             </tr>
             @endforeach

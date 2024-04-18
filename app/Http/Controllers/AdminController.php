@@ -33,9 +33,12 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         $data['title'] = 'Danh sách sản phẩm';
-        $products = DB::table('products')->where('status', '=', 1)
+        $products = DB::table('products')
+            ->select('products.id AS product_id', 'products.name', 'products.sell_price', 'products.quantity_product', 'images.*', 'images.id AS images_id')
+            ->where('status', 1)
             ->join('images', 'products.id', '=', 'images.product_id')
-            ->paginate(5); // Phân trang với mỗi trang chứa 10 sản phẩm
+            ->paginate(5);
+        // Phân trang với mỗi trang chứa 5 sản phẩm
         // dd($products);
         return view('admin.home', compact('data', 'products'));
     }
@@ -140,6 +143,7 @@ class AdminController extends Controller
             ->paginate(5);
         return view('admin.order', compact('data', 'orders'));
     }
+
     public function getFormCreateProduct(Request $request)
     {
         $data['title'] = 'Tạo mới sản phẩm';
@@ -147,10 +151,10 @@ class AdminController extends Controller
         $categoryName = $this->categories->getAllCategoriesName();
         return view('admin.forms.create_product', compact('data', 'categoryName'));
     }
+
     public function getDetailProduct($id)
     {
         $data['title'] = 'Chi tiết sản phẩm';
-
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $product = $this->products->getDetail($id);
         $category = DB::table('category')->where('id', $product->category_id)->first();
@@ -170,6 +174,7 @@ class AdminController extends Controller
 
     public function postDeleteProduct($id)
     {
+        DB::table('images')->where('product_id', $id);
         $this->products->deleteProduct($id);
         return redirect()->route('product');
     }
@@ -184,9 +189,8 @@ class AdminController extends Controller
 
     public function postUpdateProduct(Request $request, $id)
     {
-
         $request->validate([
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048|required',
         ], [
             'image.required' => 'Hình ảnh bắt buộc nhập',
             'image.image' => 'Hình ảnh phải là ảnh',
@@ -255,15 +259,6 @@ class AdminController extends Controller
     public function createProduct(Request $request)
     {
         $request->validate([
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-        ], [
-            'image.required' => 'Hình ảnh bắt buộc nhập',
-            'image.image' => 'Hình ảnh phải là ảnh',
-            'image.mimes' => 'Hình ảnh phải là ảnh',
-            'image.max' => 'Hình ảnh phải nhỏ hơn 2MB',
-        ]);
-
-        $request->validate([
             'category_id' => 'required',
             'name' => 'required',
             'discount' => 'required',
@@ -275,7 +270,8 @@ class AdminController extends Controller
             'memory' => 'required',
             'cpu' => 'required',
             'weight' => 'required',
-            'price' => 'required'
+            'price' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048|required',
         ], [
             'category_id.required' => 'Vui lòng chọn danh mục.',
             'name.required' => 'Vui lòng nhập tên sản phẩm.',
@@ -288,7 +284,11 @@ class AdminController extends Controller
             'memory.required' => 'Vui lòng nhập dung lượng bộ nhớ.',
             'cpu.required' => 'Vui lòng nhập thông tin CPU.',
             'weight.required' => 'Vui lòng nhập trọng lượng sản phẩm.',
-            'price.required' => 'Vui lòng nhập giá sản phẩm.'
+            'price.required' => 'Vui lòng nhập giá sản phẩm.',
+            'image.required' => 'Hình ảnh bắt buộc nhập',
+            'image.image' => 'Hình ảnh phải là ảnh',
+            'image.mimes' => 'Hình ảnh phải là ảnh',
+            'image.max' => 'Hình ảnh phải nhỏ hơn 2MB',
         ]);
 
         $dataInsert = [
@@ -313,12 +313,16 @@ class AdminController extends Controller
 
             if ($request->image != null) {
                 $uploadedFile = $request->file('image');
-                
+
                 $folder = 'TechShop';
                 $imageUrl = Images::uploadImage($uploadedFile, $folder); //Up data to cloud
-                $productID = DB::table('products')->count();
+                $product = DB::table('products')
+                    ->select('id')
+                    ->orderByDesc('id')
+                    ->limit(1)
+                    ->first();
                 DB::table('images')->insert([
-                    'product_id' => $productID,
+                    'product_id' => $product->id,
                     'image' => $imageUrl
                 ]);
             }
