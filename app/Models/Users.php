@@ -37,6 +37,7 @@ class Users extends Model
         $user = DB::table($this->table)
             ->select('*')
             ->where('email', $email)
+            ->where('status', '=',1)
             ->first();
 
         if ($user) {
