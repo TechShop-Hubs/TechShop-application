@@ -33,15 +33,26 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         $data['title'] = 'Danh sách sản phẩm';
-        $products = DB::table('products')
-            ->select('products.id AS product_id', 'products.name', 'products.sell_price', 'products.quantity_product', 'images.*', 'images.id AS images_id')
-            ->where('status', 1)
-            ->join('images', 'products.id', '=', 'images.product_id')
-            ->paginate(5);
-        // Phân trang với mỗi trang chứa 5 sản phẩm
-        // dd($products);
-        return view('admin.home', compact('data', 'products'));
+
+        $search = $request->query('search');
+        $productsQuery =DB::table('products')
+        ->select('products.id AS product_id', 'products.name', 'products.sell_price', 'products.quantity_product', 'images.*', 'images.id AS images_id')
+        ->where('status', 1)
+        ->join('images', 'products.id', '=', 'images.product_id');
+        
+        if ($search) {
+            $productsQuery->where('name', 'like', '%' . $search . '%');
+        }
+        
+        $products = $productsQuery->paginate(8);
+        $products->appends(['search' => $search]); // Thêm tham số tìm kiếm vào URL
+        
+        return view('admin.home', compact('data', 'products', 'search'));
+
+
     }
+    
+    
 
     public function getCategories(Request $request)
     {
@@ -131,8 +142,14 @@ class AdminController extends Controller
     {
         $data['title'] = 'Xóa danh mục';
         $id = $request->id;
-        $this->categories->deleteCategory($id);
-        return redirect()->route('categories')->with('msg', ' Xóa thành công');
+
+        $delete = $this->categories->deleteCategory($id);
+        if($delete){
+            return redirect()->route('categories')->with('msg',' Xóa thành công');
+        }else{
+            return redirect()->route('categories')->with('err','Có một số sản phẩm đang tồn tại mục này, không thể xóa');
+        }
+
     }
 
     public function getAllOrders(Request $request)
