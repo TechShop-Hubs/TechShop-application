@@ -36,25 +36,30 @@ class Users extends Model
     {
         $user = DB::table($this->table)
             ->select('*')
-            ->where([
-                [
-                    'email',
-                    $email
-                ],
-                [
-                    'password',
-                    $password
-                ]
-            ])
+            ->where('email', $email)
             ->first();
-        return $user ? $user : null;
+
+        if ($user) {
+            if (Hash::check($password, $user->password)) {
+                return $user;
+            }
+        }
+        return null;
     }
 
     // register
     public function addUser($data)
     {
-        DB::insert('INSERT INTO users (email, name, password, role, phone_number, status) VALUES (?, ?, ?, ?, ?, ?)', $data);
+        // Chỉnh sửa dữ liệu trước khi chèn vào cơ sở dữ liệu nếu cần thiết
+    
+        // Chú ý rằng ta sử dụng trường 'name' thay vì 'username' trong mảng dữ liệu
+        // $data['name'] = $data['name'];
+    
+        // DB::insert('INSERT INTO users (email, name, password, role, phone_number, status) VALUES (?, ?, ?, ?, ?, ?)', $data);
+    
+        DB::table($this->table)->insert($data);
     }
+    
 
     public function deleteUser($id){
         return DB::table($this->table)
