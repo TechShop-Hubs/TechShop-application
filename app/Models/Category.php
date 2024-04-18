@@ -65,7 +65,14 @@ class Category extends Model
     }
     public function deleteCategory($id)
     {
-        return DB::delete('DELETE FROM ' . $this->table . ' WHERE id=?', [$id]);
+        try {
+            // Thực hiện xóa danh mục
+            DB::delete('DELETE FROM ' . $this->table . ' WHERE id=?', [$id]);
+            return true; // Trả về true nếu xóa thành công
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Xử lý ngoại lệ nếu có
+            return false; // Trả về false nếu có lỗi
+        }
     }
     public function getDistinctNameCategory() {
         $kinds = DB::table($this->table)
