@@ -32,12 +32,12 @@
                 <div class="login_background_1">
                     <form method="POST" class="login_form">
                         @csrf
-                        <input class="login_email" type="email" name="email" placeholder="Email - Tài khoản" value="{{old('email')}}" required>
-                        <input class="login_pass" type="password" name="password" placeholder="Mật khẩu" required minlength="8">
+                        <input class="login_email p-2 rounded ms-5" type="email" name="email" placeholder="Email - Tài khoản" value="{{old('email')}}" required>
+                        <input class="login_pass p-2 rounded ms-5" type="password" name="password" placeholder="Mật khẩu" required minlength="8">
                         @if (session('msg'))
                         <div class="alert alert-danger">{{ session('msg') }}</div>
                         @endif
-                        <button class="login_button" type="submit">Đăng nhập</button>
+                        <button class="login_button " type="submit">Đăng nhập</button>
                     </form>
                     <div class="login_another_choose">
                         <span>Bạn chưa có tài khoản?</span>
@@ -46,7 +46,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>3
 </body>
 <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
 

@@ -73,6 +73,7 @@
     position: absolute;
     background: linear-gradient(90deg, #FFE259 0%, #FFA751 100%);
     border-radius: 20px
+    
 }
 
 .login_email {
@@ -83,7 +84,7 @@
     font-weight: 700;
     position: absolute;
     top: 15%;
-    transform: translateX(18%);
+    transform: translateX(20%);
 }
 
 .login_pass {
@@ -94,13 +95,13 @@
     font-weight: 700;
     position: absolute;
     top: 30%;
-    transform: translateX(18%);
+    transform: translateX(20%);
 }
 
 .login_button {
     position: absolute;
-    top: 50%;
-    transform: translateX(75%);
+    top:45%;
+    transform: translateX(70%);
     width: 40%;
     color: #333333;
     font-size: 30px;
@@ -123,8 +124,8 @@
 
 .login_another_choose {
     position: absolute;
-    top: 75%;
-    transform: translateX(20%);
+    top: 65%;
+    transform: translateX(35%);
 }
 
 .login_another_choose span {
