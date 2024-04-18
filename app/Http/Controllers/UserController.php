@@ -55,7 +55,6 @@ class UserController extends Controller
             ],
             'name' => 'required',
             'phone' => 'required',
-            'password' => 'required',
         ], [
             'email.unique' => 'Email đã tồn tại trên hệ thống.',
         ]);
@@ -63,7 +62,6 @@ class UserController extends Controller
         $dataInsert = [
             'email' => $request->email,
             'name' => $request->name,
-            'password' => $request->password,
             'role' => $this->setRole(0),
             'phone_number' => $request->phone,
             'status' => $this->setStatus(1)

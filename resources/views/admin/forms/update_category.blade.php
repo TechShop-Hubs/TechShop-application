@@ -10,6 +10,9 @@
             </div>
         </div>
     </div>
+    @if (session('err'))
+    <div class="alert alert-danger">{{ session('err') }}</div>
+@endif
     <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('categories')}}">Về danh sách</a></div>
 
     <form action="" method="POST">

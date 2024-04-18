@@ -39,13 +39,6 @@
                 <span style="color:red">{{ $message }}</span>
             @enderror
             </div>
-            <div class="pb-5">
-                <label for="password" class="form-label">Mật khẩu</label>
-                <input type="text" class="form-control" name="password" id="" value="{{$user->password}}" >
-                @error('password')
-                <span style="color:red">{{ $message }}</span>
-            @enderror
-            </div>
             <button class="btn btn-success " type="submit">Lưu</button>
         </form>
 
