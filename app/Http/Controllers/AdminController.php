@@ -44,7 +44,7 @@ class AdminController extends Controller
             $productsQuery->where('name', 'like', '%' . $search . '%');
         }
         
-        $products = $productsQuery->paginate(8);
+        $products = $productsQuery->paginate(5);
         $products->appends(['search' => $search]); // Thêm tham số tìm kiếm vào URL
         
         return view('admin.home', compact('data', 'products', 'search'));
@@ -128,7 +128,7 @@ class AdminController extends Controller
             return redirect()->route('categories')->with('msg', 'Cập nhật thành công');
         } else {
             // Redirect back to the page with error message if data couldn't be updated
-            return redirect()->back()->with('msg', 'Cập nhật thất bại');
+            return redirect()->back()->with('err', 'Cập nhật thất bại');
         }
     }
     public function getDeleteCategory($id)
@@ -226,9 +226,8 @@ class AdminController extends Controller
     public function postUpdateProduct(Request $request, $id)
     {
         $request->validate([
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048|required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
-            'image.required' => 'Hình ảnh bắt buộc nhập',
             'image.image' => 'Hình ảnh phải là ảnh',
             'image.mimes' => 'Hình ảnh phải là ảnh',
             'image.max' => 'Hình ảnh phải nhỏ hơn 2MB',

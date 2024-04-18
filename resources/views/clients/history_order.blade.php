@@ -32,7 +32,6 @@
                             value="{{ $user->email }}" readonly>
                     </div>
                     <div class="row gap-5 mt-4 d-flex justify-content-center align-items-center">
-                        <a href="/change_password" class="btn btn-warning mb-3 col-4">Đổi mật khẩu</a>
                         <a href="/update_information" class="btn btn-info mb-3 col-4">Cập nhật thông tin</a>
                     </div>
                 </div>

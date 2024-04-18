@@ -21,13 +21,9 @@
             <label for="email" class="form-label">email</label>
             <input type="text" class="form-control" name="email" id="email" value="{{$user->email}}" disabled>
         </div>
-        <div class="">
+        <div class="pb-5">
             <label for="phone" class="form-label">Số điện thoại</label>
             <input type="text" class="form-control" name="phone" id="" value="{{$user->phone_number}}" disabled>
-        </div>
-        <div class="">
-            <label for="password" class="form-label">Mật khẩu</label>
-            <input type="text" class="form-control" name="password" id="" value="{{$user->password}}" disabled>
         </div>
         <button class="btn btn-success "><a class="text-decoration-none text-white" href="/admin/user">Quay lại</a></button>
     </div>

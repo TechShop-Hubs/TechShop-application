@@ -74,7 +74,7 @@ class Users extends Model
                  ->update([
                      'email' => $data['email'],
                      'name' => $data['name'],
-                     'password' => $data['password'],
+                    
                      'role' => $data['role'],
                      'phone_number' => $data['phone_number'],
                      'status' => $data['status']

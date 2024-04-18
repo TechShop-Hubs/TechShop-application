@@ -19,7 +19,7 @@
 
     {{-- nav --}}
     <div class="navbar container-fluid d-flex justify-content-between align-items-center pe-5">
-        <button class="btn btn-success btn-lg" ><a href="product/create" class="text-decoration-none text-white">Tạo mới</a></button>
+        <button class="btn btn-success btn-lg" ><a href="{{route('createProduct')}}" class="text-decoration-none text-white">Tạo mới</a></button>
         <form action="{{ route('product') }}" method="GET">
             <input class="rounded p-2" type="text" name="search" value="{{ $search }}" placeholder="Tìm kiếm...">
             <button class="btn btn-secondary" type="submit">Tìm kiếm</button>
