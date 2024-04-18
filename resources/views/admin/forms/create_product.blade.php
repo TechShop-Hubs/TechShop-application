@@ -12,11 +12,11 @@
     </div>
     <div class="btn btn-success mt-4 p-3"><a class="text-decoration-none text-white" href="{{ route('product') }}">Về danh
             sách</a></div>
-            @if ($errors->any())
-            <div class="alert alert-danger">Dữ liệu không hợp lệ vui lòng nhập lại</div>
-        @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">Dữ liệu không hợp lệ vui lòng nhập lại</div>
+    @endif
     <div class="container">
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="create">
             <div class="row">
@@ -51,8 +51,9 @@
                     </div>
                     <div class="">
                         <label for="quantity_product" class="form-label">Số lượng</label>
-                        <input type="number" class="form-control" name="quantity_product" id="quantity_product" min="0">
-                        @error('quantity')
+                        <input type="number" class="form-control" name="quantity_product" id="quantity_product"
+                            min="1">
+                        @error('quantity_product')
                             <span style="color:red">{{ $message }}</span>
                         @enderror
                     </div>
@@ -119,47 +120,29 @@
                 <div class="col-12 col-lg-4">
                     <h2>Hình ảnh cho sản phẩm</h2>
                     <div class="">
-                        <label for="image" class="form-label">Hình ảnh</label>
-                        <input type="file" class="form-control" name="image" id="">
+                        <div class="mb-3">
+                            <label for="upImage">Hình Ảnh</label>
+                            <input class="form-control" id="image" name="image" type="file" accept="image/*"
+                                onchange="loadFile(event)">
+                            @error('image')
+                                <span style="color:red">{{ $message }}</span>
+                            @enderror
+                            <script>
+                                var loadFile = function(event) {
+                                    var output = document.getElementById('output');
+                                    output.src = URL.createObjectURL(event.target.files[0]);
+                                    output.onload = function() {
+                                        URL.revokeObjectURL(output.src)
+                                    }
+                                };
+                            </script>
+                        </div>
                     </div>
+                    <img style="height:250px!important" id="output" />
                     <div id="image-container-wrapper"></div>
-                    <div class="image-field">
-                        <button type="button" id="addImageField">Add more</button>
-                    </div>
                 </div>
             </div>
             <button class="btn btn-success" type="submit">Tạo</button>
         </form>
     </div>
-@endsection
-@section('js')
-    <script>
-        const addImageField = document.getElementById('addImageField');
-
-        addImageField.addEventListener('click', () => {
-            // Tạo một div container mới
-            const newImageContainer = document.createElement('div');
-            newImageContainer.classList.add('mb-3');
-
-            // Tạo một label cho input
-            const label = document.createElement('label');
-            label.textContent = 'Image';
-            label.setAttribute('for', 'image-field');
-
-            // Tạo một input mới
-            const input = document.createElement('input');
-            input.setAttribute('type', 'file');
-            input.setAttribute('name', 'image');
-            input.setAttribute('id', 'image-field');
-            input.classList.add('form-control');
-
-            // Thêm label và input vào container
-            newImageContainer.appendChild(label);
-            newImageContainer.appendChild(input);
-
-            // Thêm container vào DOM, ví dụ như sau:
-            const imageContainerWrapper = document.getElementById('image-container-wrapper');
-            imageContainerWrapper.appendChild(newImageContainer);
-        });
-    </script>
 @endsection

@@ -62,8 +62,6 @@ class Product extends Model
         return $product ? $product : null;
     }
     
-    
-
     //update
     public function updateProduct($id, $data)
     {

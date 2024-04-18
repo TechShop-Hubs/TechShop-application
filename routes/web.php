@@ -7,7 +7,7 @@ use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
 use GuzzleHttp\Client;
-
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
