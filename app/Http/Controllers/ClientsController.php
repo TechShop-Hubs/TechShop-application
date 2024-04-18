@@ -67,7 +67,6 @@ class ClientsController extends Controller
         $products = DB::table('products')->get();
         $products = DB::table('products')
             ->join('images', 'products.id', '=', 'images.product_id')
-            ->where('status', 1)
             ->get();
 
         // dd($products);
