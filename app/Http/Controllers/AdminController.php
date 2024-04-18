@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
@@ -11,6 +12,7 @@ use App\Models\Images;
 use App\Models\WishList;
 use Illuminate\Support\Facades\File;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+
 class AdminController extends Controller
 {
     public $data = [];
@@ -19,7 +21,8 @@ class AdminController extends Controller
     private $contacts;
     private $order;
     private $wishlist;
-    public function __construct(){
+    public function __construct()
+    {
         $this->categories = new Category();
         $this->products = new Product();
         $this->contacts = new Contact();
@@ -30,30 +33,36 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         $data['title'] = 'Danh sách sản phẩm';
-        $products = DB::table('products')->where('status', '=', 1)->paginate(5); // Phân trang với mỗi trang chứa 10 sản phẩm
+        $products = DB::table('products')->where('status', '=', 1)
+            ->join('images', 'products.id', '=', 'images.product_id')
+            ->paginate(5); // Phân trang với mỗi trang chứa 10 sản phẩm
+        // dd($products);
         return view('admin.home', compact('data', 'products'));
     }
 
-    public function getCategories(Request $request){
+    public function getCategories(Request $request)
+    {
         $data['title'] = 'Danh sách danh mục';
         // $categories = DB::table('category')->paginate(5); // Phân trang với mỗi trang chứa 10 sản phẩm
         $categories = $this->categories->getAllCategorys();
         return view('admin.category', compact('data', 'categories'));
     }
-    public function getFormCreateCategory(){
+    public function getFormCreateCategory()
+    {
         $data['title'] = 'Tạo mới danh mục';
         return view('admin.forms.create_category', compact('data'));
     }
 
 
-    public function postCreateCategory(Request $request){
+    public function postCreateCategory(Request $request)
+    {
         // Thực hiện validate dữ liệu
         $request->validate([
-            'kind' =>'required',
-            'brand' =>'required',
-        ],[
-            'kind.required' =>'Loại sản phẩm bắt buộc phải nhập',
-            'brand.required' =>'Tên hãng bắt buộc nhập',
+            'kind' => 'required',
+            'brand' => 'required',
+        ], [
+            'kind.required' => 'Loại sản phẩm bắt buộc phải nhập',
+            'brand.required' => 'Tên hãng bắt buộc nhập',
         ]);
 
         // Xử lý thêm dữ liệu vào database
@@ -64,7 +73,7 @@ class AdminController extends Controller
 
         $success = $this->categories->createCategory($dataInsert);
 
-        if($success!=false){
+        if ($success != false) {
             // Chuyển hướng về route 'categories' với thông báo thành công
             return redirect()->route('categories')->with('msg', 'Thêm thành công danh mục thành công');
         } else {
@@ -73,7 +82,8 @@ class AdminController extends Controller
         }
     }
 
-    public function getUpdateCategory($id){
+    public function getUpdateCategory($id)
+    {
         $data['title'] = 'Chỉnh sửa thông tin danh mục';
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $category = DB::table('category')->where('id', $id)->first();
@@ -84,11 +94,11 @@ class AdminController extends Controller
     {
         // Validate request data
         $request->validate([
-            'kind' =>'required',
-            'brand' =>'required',
-        ],[
-            'kind.required' =>'Loại sản phẩm bắt buộc phải nhập',
-            'brand.required' =>'Tên hãng bắt buộc nhập',
+            'kind' => 'required',
+            'brand' => 'required',
+        ], [
+            'kind.required' => 'Loại sản phẩm bắt buộc phải nhập',
+            'brand.required' => 'Tên hãng bắt buộc nhập',
         ]);
 
         // Process data insertion into the database
@@ -99,7 +109,7 @@ class AdminController extends Controller
 
         $success = $this->categories->updateCategory($dataInsert, $request->id);
 
-        if($success){
+        if ($success) {
             // Redirect to the 'categories' route with success message
             return redirect()->route('categories')->with('msg', 'Cập nhật thành công');
         } else {
@@ -107,34 +117,38 @@ class AdminController extends Controller
             return redirect()->back()->with('msg', 'Cập nhật thất bại');
         }
     }
-    public function getDeleteCategory($id){
+    public function getDeleteCategory($id)
+    {
         $data['title'] = 'Xóa danh mục';
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $category = DB::table('category')->where('id', $id)->first();
         return view('admin.forms.delete_category', compact('data', 'category'));
     }
-    public function postDeleteCategory(Request $request){
+    public function postDeleteCategory(Request $request)
+    {
         $data['title'] = 'Xóa danh mục';
         $id = $request->id;
         $this->categories->deleteCategory($id);
-        return redirect()->route('categories')->with('msg',' Xóa thành công');
-
+        return redirect()->route('categories')->with('msg', ' Xóa thành công');
     }
 
-    public function getAllOrders(Request $request){
+    public function getAllOrders(Request $request)
+    {
         $data['title'] = 'Danh sách đơn hàng';
         $orders = DB::table('orders')
-        ->where('destroy', '=', '0')
-        ->paginate(5);
+            ->where('destroy', '=', '0')
+            ->paginate(5);
         return view('admin.order', compact('data', 'orders'));
     }
-    public function getFormCreateProduct(Request $request){
+    public function getFormCreateProduct(Request $request)
+    {
         $data['title'] = 'Tạo mới sản phẩm';
         // Lấy danh sách các danh mục không trùng lặp
         $categoryName = $this->categories->getAllCategoriesName();
         return view('admin.forms.create_product', compact('data', 'categoryName'));
     }
-    public function getDetailProduct($id){
+    public function getDetailProduct($id)
+    {
         $data['title'] = 'Chi tiết sản phẩm';
 
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
@@ -144,52 +158,42 @@ class AdminController extends Controller
         return view('admin.forms.detail_product', compact('data', 'product', 'category'));
     }
 
-    public function getUpdateProduct($id){
+    public function getUpdateProduct($id)
+    {
         $data['title'] = 'Chỉnh sửa sản phẩm';
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $product = $this->products->getDetail($id);
+        // dd($product);
         $categoryName = $this->categories->getAllCategoriesName();
         return view('admin.forms.update_product', compact('data', 'product', 'categoryName'));
     }
 
-    public function postDeleteProduct($id){
+    public function postDeleteProduct($id)
+    {
         $this->products->deleteProduct($id);
         return redirect()->route('product');
     }
 
-    public function getDeleteProduct($id){
+    public function getDeleteProduct($id)
+    {
         $data['title'] = 'Xóa sản phẩm';
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $product = DB::table('products')->where('id', $id)->first();
         return view('admin.forms.delete_product', compact('data', 'product'));
     }
 
-    public function postUpdateProduct(Request $request, $id){
+    public function postUpdateProduct(Request $request, $id)
+    {
+
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', 
-        ],[
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
             'image.required' => 'Hình ảnh bắt buộc nhập',
             'image.image' => 'Hình ảnh phải là ảnh',
             'image.mimes' => 'Hình ảnh phải là ảnh',
             'image.max' => 'Hình ảnh phải nhỏ hơn 2MB',
         ]);
 
-        $uploadedFile = $request->file('image');
-        $folder = 'TechShop';
-        $imageUrl = Images::uploadImage($uploadedFile, $folder); //Up data to cloud
-
-        $pathId = $request->path();
-        $segments = explode('/', $pathId);//get id product
-        $id = end($segments);
-
-        $image = new Images();
-        $image->product_id = $id;
-        $image->image = $imageUrl;
-        $image->created_at = time();
-        $image->updated_at = time();
-        $image->save();
-
-        
         $request->validate([
             'category_id' => 'required',
             'name' => 'required',
@@ -218,6 +222,16 @@ class AdminController extends Controller
             'price.required' => 'Vui lòng nhập giá sản phẩm.'
         ]);
 
+        if ($request->hasFile('image')) {
+            $uploadedFile = $request->file('image');
+            $folder = 'TechShop';
+            $imageUrl = Images::uploadImage($uploadedFile, $folder); //Up data to cloud
+
+            $pathId = $request->path();
+            $segments = explode('/', $pathId); //get id product
+            $id = end($segments);
+            $image = DB::table('images')->where('product_id', $id)->update(['image' => $imageUrl]);
+        }
         $dataInsert = [
             'category_id' => $request->category_id,
             'name' => $request->name,
@@ -235,10 +249,20 @@ class AdminController extends Controller
 
         $this->products->updateProduct($id, $dataInsert);
 
-        return redirect()->route('product');
+        return redirect()->route('product')->with('msg', 'Chỉnh sửa sản phẩm thành công');
     }
 
-    public function createProduct(Request $request){
+    public function createProduct(Request $request)
+    {
+        $request->validate([
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'image.required' => 'Hình ảnh bắt buộc nhập',
+            'image.image' => 'Hình ảnh phải là ảnh',
+            'image.mimes' => 'Hình ảnh phải là ảnh',
+            'image.max' => 'Hình ảnh phải nhỏ hơn 2MB',
+        ]);
+
         $request->validate([
             'category_id' => 'required',
             'name' => 'required',
@@ -283,19 +307,36 @@ class AdminController extends Controller
             'status' => 1
         ];
 
-        $this->products->createProduct($dataInsert);
+        $createdProduct = $this->products->createProduct($dataInsert);
 
-        return redirect()->route('product');
+        if($createdProduct){
+
+            if ($request->image != null) {
+                $uploadedFile = $request->file('image');
+                
+                $folder = 'TechShop';
+                $imageUrl = Images::uploadImage($uploadedFile, $folder); //Up data to cloud
+                $productID = DB::table('products')->count();
+                DB::table('images')->insert([
+                    'product_id' => $productID,
+                    'image' => $imageUrl
+                ]);
+            }
+            return redirect()->route('product')->with('msg', 'Tạo mới sản phẩm thành công');
+        }else{
+            return redirect()->back()->with('err', 'Tạo mới sản phẩm thất bại!');
+        }
     }
 
-
-    public function getContact(){
+    public function getContact()
+    {
         $data['title'] = 'Danh sách liên hệ';
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $contacts = DB::table('contact')->paginate(5);
         return view('admin.contact', compact('data', 'contacts'));
     }
-    public function getBanner(){
+    public function getBanner()
+    {
         $data['title'] = 'Danh sách banner';
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $banners = DB::table('banner')->paginate(5);
@@ -303,7 +344,8 @@ class AdminController extends Controller
     }
 
     // quản lý liên hệ
-    public function createContact(Request $request){
+    public function createContact(Request $request)
+    {
         $request->validate([
             'name' => 'required',
             'email' => 'required|email', // Kiểm tra định dạng email
@@ -318,26 +360,29 @@ class AdminController extends Controller
             'message.required' => 'Message bắt buộc nhập',
         ]);
         $dataInsert = [
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'phone'=>$request->phone,
-            'message'=>$request->message
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'message' => $request->message
         ];
         $this->contacts->createContact($dataInsert);
-        return redirect()->route('client.contact')->with('msg' ,'Cảm ơn bạn đã liên hệ');
+        return redirect()->route('client.contact')->with('msg', 'Cảm ơn bạn đã liên hệ');
     }
-    public function updateContact(Request $request){
-        $this->contacts->updateContact($request->id,$request->status);
+    public function updateContact(Request $request)
+    {
+        $this->contacts->updateContact($request->id, $request->status);
         return redirect()->route('contact')->with('msg', 'Chỉnh sửa trạng thái thành công');
     }
-    public function getUpdateContact($id){
+    public function getUpdateContact($id)
+    {
         $data['title'] = 'Chỉnh sửa sản phẩm';
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $contact = $this->contacts->getDetail($id);
         return view('admin.forms.update_contact', compact('data', 'contact'));
     }
 
-    public function getDetailOrder($id){
+    public function getDetailOrder($id)
+    {
         $data['title'] = 'Chi tiết đơn hàng';
         $order = $this->order->getDetailOrder($id);
         $orderItems =  DB::table('orderitems')
@@ -352,47 +397,54 @@ class AdminController extends Controller
         return view('admin.forms.detail_order', compact('data', 'order', 'orderItems', 'statusArr'));
     }
 
-    public function getUpdateOrder($id){
+    public function getUpdateOrder($id)
+    {
         $data['title'] = 'Chỉnh sửa đơn hàng';
         $order = $this->order->getDetailOrder($id);
         $statusArr = ['Đơn hàng mới', 'Đơn hàng đang giao', 'Đơn hàng đã giao', 'Đơn hàng đã hủy'];
         return view('admin.forms.update_order', compact('data', 'order', 'statusArr'));
     }
 
-    public function getDeleteOrder($id){
+    public function getDeleteOrder($id)
+    {
         $data['title'] = 'Xóa đơn hàng';
         $order = DB::table('orders')->where('id', $id)->first();
         return view('admin.forms.delete_order', compact('data', 'order'));
     }
 
-    public function postUpdateOrder(Request $request, $id){
+    public function postUpdateOrder(Request $request, $id)
+    {
         $dataInsert = [
             'status' => $request->status,
         ];
         $this->order->updateOrder($id, $dataInsert);
-        return redirect()->route('orders')->with('msg',' Cập nhật đơn hàng thành công');
+        return redirect()->route('orders')->with('msg', ' Cập nhật đơn hàng thành công');
     }
 
-    public function postDeleteOrder($id){
+    public function postDeleteOrder($id)
+    {
         $data['title'] = 'Xóa đơn hàng';
         // Lấy thông tin sản phẩm từ cơ sở dữ liệu với id đã cho
         $this->order->deleteOrder($id);
-        return redirect()->route('orders')->with('msg',' Xóa đơn hàng thành công');
+        return redirect()->route('orders')->with('msg', ' Xóa đơn hàng thành công');
     }
 
-    public function getWishLish(){
+    public function getWishLish()
+    {
         $data['title'] = 'Wishlist';
         $wishlists = $this->wishlist->getAllWishList();
         // dd($wishlists);
-        return view('admin.wishlist',compact('data','wishlists'));
+        return view('admin.wishlist', compact('data', 'wishlists'));
     }
 
-    public function getCreateBanner(){
+    public function getCreateBanner()
+    {
         $data['title'] = 'Tạo mới banner';
         return view('admin.forms.create_banner', compact('data'));
     }
 
-    public function postCreateBanner(Request $request){
+    public function postCreateBanner(Request $request)
+    {
         $request->validate([
             'name' => 'required',
             'image' => 'required|image',
@@ -402,39 +454,43 @@ class AdminController extends Controller
         ]);
 
         $file = $request->file("image");
-        $imageName = time()."_".$file->getClientOriginalName();
+        $imageName = time() . "_" . $file->getClientOriginalName();
         $file->move(\public_path("banner/"), $imageName);
 
         $dataInsert = [
-            'name'=>$request->name,
-            'image'=>$imageName
+            'name' => $request->name,
+            'image' => $imageName
         ];
         DB::table('banner')->insert($dataInsert);
-        return redirect()->route('banner')->with('msg' ,'Tạo banner thành công');
+        return redirect()->route('banner')->with('msg', 'Tạo banner thành công');
     }
 
-    public function getDeleteBanner($id){
+    public function getDeleteBanner($id)
+    {
         $data['title'] = 'Xóa banner';
         $banner = DB::table('banner')->where('id', $id)->first();
         return view('admin.forms.delete_banner', compact('data', 'banner'));
     }
 
-    public function postDeleteBanner($id) {
+    public function postDeleteBanner($id)
+    {
         $banner = DB::table('banner')->where('id', $id)->first();
-        if (File::exists("banner/".$banner->image)) {
-            File::delete("banner/".$banner->image);
+        if (File::exists("banner/" . $banner->image)) {
+            File::delete("banner/" . $banner->image);
         }
         DB::table('banner')->where('id', $id)->delete();
-        return redirect()->route('banner')->with('msg' ,'Xoá banner thành công');
+        return redirect()->route('banner')->with('msg', 'Xoá banner thành công');
     }
 
-    public function getUpdateBanner($id){
+    public function getUpdateBanner($id)
+    {
         $data['title'] = 'Cập nhật banner';
         $banner = DB::table('banner')->where('id', $id)->first();
         return view('admin.forms.update_banner', compact('data', 'banner'));
     }
 
-    public function postUpdateBanner(Request $request, $id){
+    public function postUpdateBanner(Request $request, $id)
+    {
         $request->validate([
             'name' => 'required',
         ], [
@@ -446,9 +502,9 @@ class AdminController extends Controller
                 'name' => $request->name,
                 'status' => $request->status
             ];
-        }else {
+        } else {
             $file = $request->file("image");
-            $imageName = time()."_".$file->getClientOriginalName();
+            $imageName = time() . "_" . $file->getClientOriginalName();
             $file->move(\public_path("banner/"), $imageName);
 
             $dataUpdate = [
@@ -459,6 +515,6 @@ class AdminController extends Controller
         }
 
         DB::table('banner')->where('id', $id)->update($dataUpdate);
-        return redirect()->route('banner')->with('msg' ,'Cập nhật banner thành công');
+        return redirect()->route('banner')->with('msg', 'Cập nhật banner thành công');
     }
 }
