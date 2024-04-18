@@ -114,7 +114,7 @@ class UserController extends Controller
             }
             return redirect()->route('home');
         }else {
-            return back()->withInput($request->only('email'));
+            return back()->withInput($request->only('email'))->with('msg', 'Sai tên đăng nhập hoặc mật khẩu!');
         }
     }
 
