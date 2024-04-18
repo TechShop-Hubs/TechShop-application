@@ -21,7 +21,6 @@
                     <tr>
                         <th scope="col">STT</th>
                         <th scope="col">Mô tả</th>
-                        <th scope="col">Hình ảnh</th>
                         <th scope="col">Số lượng</th>
                         <th scope="col">Giá</th>
                         <th scope="col">Tổng giá</th>
@@ -34,7 +33,6 @@
                         <tr>
                             <th scope="row">{{ $index + 1 }}</th>
                             <td>{{ $cart->product_name }}</td>
-                            <td>Hình ảnh lấy từ bảng image nha</td>
                             <td class="d-flex flex-row gap-3">
                                 <form action="{{ route('reduceQuantity') }}" method="post">
                                     @csrf
@@ -66,17 +64,9 @@
                                     <button type="submit" class="btn btn-danger">Xóa</button>
                                 </form>
                             </td>
-                            @php
-                                $total_price += $cart->product_quantity * $cart->sell_price * ($cart->discount / 100);
-                            @endphp
                         </tr>
                     @endforeach
-                    <tr>
-                        <td colspan="5"></td>
-                        <td><strong>{{ $total_price }}</strong></td>
-                        <td>
-                        </td>
-                    </tr>
+
                 </tbody>
             </table>
             <div class="redirect d-flex flex-row justify-content-between">
