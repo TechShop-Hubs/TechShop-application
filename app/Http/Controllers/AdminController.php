@@ -29,9 +29,20 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         $data['title'] = 'Danh sách sản phẩm';
-        $products = DB::table('products')->where('status', '=', 1)->paginate(5); // Phân trang với mỗi trang chứa 10 sản phẩm
-        return view('admin.home', compact('data', 'products'));
+        $search = $request->query('search');
+        $productsQuery = DB::table('products')->where('status', '=', 1);
+        
+        if ($search) {
+            $productsQuery->where('name', 'like', '%' . $search . '%');
+        }
+        
+        $products = $productsQuery->paginate(8);
+        $products->appends(['search' => $search]); // Thêm tham số tìm kiếm vào URL
+        
+        return view('admin.home', compact('data', 'products', 'search'));
     }
+    
+    
 
     public function getCategories(Request $request){
         $data['title'] = 'Danh sách danh mục';
@@ -115,9 +126,12 @@ class AdminController extends Controller
     public function postDeleteCategory(Request $request){
         $data['title'] = 'Xóa danh mục';
         $id = $request->id;
-        $this->categories->deleteCategory($id);
-        return redirect()->route('categories')->with('msg',' Xóa thành công');
-
+        $delete = $this->categories->deleteCategory($id);
+        if($delete){
+            return redirect()->route('categories')->with('msg',' Xóa thành công');
+        }else{
+            return redirect()->route('categories')->with('err','Có một số sản phẩm đang tồn tại mục này, không thể xóa');
+        }
     }
 
     public function getAllOrders(Request $request){

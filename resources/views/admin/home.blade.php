@@ -14,10 +14,11 @@
     {{-- nav --}}
     <div class="navbar container-fluid d-flex justify-content-between align-items-center pe-5">
         <button class="btn btn-success btn-lg" ><a href="product/create" class="text-decoration-none text-white">Tạo mới</a></button>
-        <form class="d-flex align-items-center">
-            <input class="form-control form-control-lg me-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
-            <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+        <form action="{{ route('product') }}" method="GET">
+            <input class="rounded p-2" type="text" name="search" value="{{ $search }}" placeholder="Tìm kiếm...">
+            <button class="btn btn-secondary" type="submit">Tìm kiếm</button>
         </form>
+        
         {{-- <button class="btn btn-secondary btn-lg" type="submit" name="reset">Đặt lại</button> --}}
     </div>
     <!-- Hiển thị danh sách sản phẩm -->
@@ -52,7 +53,8 @@
         </table>
         <!-- Hiển thị liên kết phân trang -->
         <div class="d-flex justify-content-center align-items-center">
-            {{$products->onEachSide(1)->links('admin.blocks.paginator') }}
+            {{$products->onEachSide(1)->appends(['search' => $search])->links('admin.blocks.paginator')}}
+            {{-- {{$products->onEachSide(1)->links('admin.blocks.paginator') }} --}}
         </div>
     </div>
 @endsection
