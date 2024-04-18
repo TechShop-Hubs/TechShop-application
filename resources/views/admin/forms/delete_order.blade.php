@@ -13,7 +13,7 @@
     <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('orders')}}">Về danh sách</a></div>
     <h3 class="pt-5">Bạn có chắc chắn muốn xóa đơn hàng này</h3>
     <div class="data">
-        <table>
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>ID</th>

@@ -13,7 +13,7 @@
     <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('product')}}">Về danh sách</a></div>
     <h3 class="pt-5">Bạn có chắc chắn muốn xóa sản phẩm này</h3>
     <div class="data">
-        <table>
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Tên</th>
@@ -23,7 +23,6 @@
             <tbody>
                 <tr>
                     <th>{{ $product->name }}</th>
-               
                     <td>{{ $product->price }}</td>
                 </tr>
             </tbody>

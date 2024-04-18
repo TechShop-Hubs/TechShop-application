@@ -13,7 +13,7 @@
     <div class="btn btn-success mt-4 p-3"  ><a class="text-decoration-none text-white" href="{{route('users')}}">Về danh sách</a></div>
     <h3 class="pt-5">Bạn có chắc chắn muốn xóa người dùng này</h3>
     <div class="data">
-        <table class="table table-colapse" >
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Tên</th>
@@ -24,7 +24,6 @@
             <tbody>
                 <tr>
                     <th>{{ $users->name }}</th>
-               
                     <td>{{ $users->email }}</td>
                     <td>{{ $users->phone_number }}</td>
                 </tr>

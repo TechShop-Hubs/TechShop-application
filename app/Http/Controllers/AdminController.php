@@ -173,11 +173,30 @@ class AdminController extends Controller
     }
 
     public function postDeleteProduct($id)
-    {
-        DB::table('images')->where('product_id', $id);
-        $this->products->deleteProduct($id);
-        return redirect()->route('product');
+{
+    $orderitems = DB::table('orderitems')->select('order_id')->where('product_id', $id)->get();
+
+    if (!$orderitems->isEmpty()) {
+        $orderIds = $orderitems->pluck('order_id')->toArray();
+
+        $orderExists = DB::table('orders')
+            ->whereIn('id', $orderIds)
+            ->whereIn('status', ['Đơn hàng mới', 'Đơn hàng đang giao'])
+            ->exists();
+
+        if ($orderExists) {
+            return redirect()->route('product')->with('err', 'Không thể xóa sản phẩm này vì đang có đơn hàng liên quan.');
+        } else {
+            DB::table('orderitems')->where('product_id', $id)->delete();
+            DB::table('orders')->whereIn('id', $orderIds)->delete();
+        }
     }
+    DB::table('images')->where('product_id', $id)->delete();
+    $this->products->deleteProduct($id);
+
+    return redirect()->route('product')->with('msg', 'Xóa sản phẩm thành công.');
+}
+
 
     public function getDeleteProduct($id)
     {
