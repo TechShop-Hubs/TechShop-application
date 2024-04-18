@@ -322,9 +322,9 @@ class AdminController extends Controller
                     'image' => $imageUrl
                 ]);
             }
-            return redirect()->route('product')->with('msg', 'Chỉnh sửa sản phẩm thành công');
+            return redirect()->route('product')->with('msg', 'Tạo mới sản phẩm thành công');
         }else{
-            return redirect()->route('product')->with('msg', 'Chỉnh sửa sản phẩm thất bại!');
+            return redirect()->back()->with('err', 'Tạo mới sản phẩm thất bại!');
         }
     }
 
