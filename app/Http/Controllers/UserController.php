@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use SebastianBergmann\Type\VoidType;
 use App\Models\User; // Assuming your User model is named User
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -126,16 +127,20 @@ class UserController extends Controller
             'email.unique' => 'Email đã tồn tại trên hệ thống.',
             'vnpassword.same' => 'Mật khẩu và mật khẩu xác nhận không khớp.'
         ]);
+    
+        $hashedPassword = Hash::make($request->password);
+    
         $dataInsert = [
-            $request->email,
-            $request->userName,
-            $request->password,
-            $this->setRole(0),
-            $request->phone,
-            $this->setStatus(1)
+            'email' => $request->email,
+            'name' => $request->userName,
+            'password' => $hashedPassword,
+            'role' => $this->setRole(0),
+            'phone_number' => $request->phone,
+            'status' => $this->setStatus(1)
         ];
+    
         $this->users->addUser($dataInsert);
-
+    
         return redirect()->route('login');
     }
 
