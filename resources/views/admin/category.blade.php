@@ -19,6 +19,9 @@
         @if (session('msg'))
         <div class="alert alert-success">{{ session('msg') }}</div>
     @endif
+        @if (session('err'))
+        <div class="alert alert-danger">{{ session('err') }}</div>
+    @endif
     </div>
     <!-- Hiển thị danh sách sản phẩm -->
     <div class="container-fluid pt-3">

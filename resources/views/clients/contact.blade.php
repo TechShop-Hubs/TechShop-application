@@ -33,7 +33,7 @@
                     <span style="color:red">{{ $message }}</span>
                 @enderror
             </div>
-            <div class="mb-3">
+            <div class="mb-3">  
                 <label for="message" class="form-label">Message</label>
                 <textarea class="form-control" name="message" id="message" rows="4" cols="50">{{ old('message') }}</textarea>
                 @error('message')
