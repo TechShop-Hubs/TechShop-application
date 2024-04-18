@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500&display=swap');
+
+.container {
+    font-family: Montserrat, Arial, Helvetica, sans-serif;
+    background-color: #333333;
+    box-sizing: border-box;
+    padding: 20px;
+    width: 500px;
+    border: 1px solid #333333;
+    border-radius: 10px;
+    -webkit-box-shadow: 2px 1px 21px -9px rgba(0, 0, 0, 0.38);
+    -moz-box-shadow: 2px 1px 21px -9px rgba(0, 0, 0, 0.38);
+    box-shadow: 2px 1px 21px -9px rgba(0, 0, 0, 0.38);
+}
+
+input[type=text],
+input[type=email],
+input[type=phone],
+input[type=password] {
+    width: 100%;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f7f7f7;
+    font-family: Montserrat, Arial, Helvetica, sans-serif;
+}
+
+input[type=text]:focus,
+input[type=email]:focus,
+input[type=password]:focus,
+input[type=phone]:focus,
+select:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+.container-fluid {
+    background: linear-gradient(90deg, #FFE259 0%, #FFA751 100%);
+}
+
+.register_logo {
+    margin-left: 3%;
+    padding-top: 5%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.register_logo p {
+    padding-top: 5%;
+    text-align: center;
+    color: black;
+    font-size: 36px;
+    font-family: Roboto;
+    font-weight: 700;
+}
+
+.register_background {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.register_form .container h1 {
+    color: white;
+    text-align: center
+}
+
+.register_back {
+    height: 15%;
+    background: linear-gradient(90deg, #FFE259 0%, #FFA751 100%);
+    border-radius: 2rem;
+    border: 1px black solid
+}
+
+.register_back a {
+    width: 100%;
+    color: #333333;
+    text-align: center;
+    font-size: 22px;
+    font-family: Roboto;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register_button {
+    height: 15%;
+    background: linear-gradient(90deg, #FFE259 0%, #FFA751 100%);
+    border-radius: 2rem;
+    border: 1px black solid
+}
+
+.register_button button {
+    width: 100%;
+    color: #333333;
+    text-align: center;
+    font-size: 22px;
+    font-family: Roboto;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
