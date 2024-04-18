@@ -33,9 +33,14 @@
                     <form method="POST" class="login_form">
                         @csrf
                         <input class="login_email" type="email" name="email" placeholder="Email - Tài khoản" value="{{old('email')}}"
-                            required>
+                            required> @error('email')
+                            <span style="color:red">{{ $message }}</span>
+                            @enderror
                         <input class="login_pass" type="password" name="password" placeholder="Mật khẩu" required
                             minlength="8">
+                            @error('password')
+                            <span style="color:red">{{ $message }}</span>
+                            @enderror
                         <button class="login_button" type="submit">Đăng nhập</button>
                     </form>
                     <a class="login_question" href="{{ route('home') }}">Bạn quên mật khẩu ?</a>

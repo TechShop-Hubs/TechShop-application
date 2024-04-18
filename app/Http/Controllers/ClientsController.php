@@ -42,6 +42,7 @@ class ClientsController extends Controller
         $phones = DB::table('products')
         ->join('category', 'products.category_id', '=', 'category.id')
         ->where('category.kind', 'Điện thoại')
+        ->where('status', 1)
         ->join('images', 'products.id', '=', 'images.product_id')
         ->inRandomOrder()
         ->limit(5)
@@ -66,6 +67,7 @@ class ClientsController extends Controller
         $products = DB::table('products')->get();
         $products = DB::table('products')
             ->join('images', 'products.id', '=', 'images.product_id')
+            ->where('status', 1)
             ->get();
 
         // dd($products);
